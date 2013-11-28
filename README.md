@@ -1,0 +1,4 @@
+elasticboard
+============
+
+ElasticSearch dashboard
