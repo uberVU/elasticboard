@@ -1,7 +1,7 @@
 elasticboard
 ============
 
-ElasticSearch dashboard
+ElasticSearch dashboard for github repository statistics.
 
 
 Prototype architecture:
