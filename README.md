@@ -49,7 +49,8 @@ Now fire up kibana and check out the data:
 
 1. Start a webserver in `dashboard/kibana-3.0.0milestone4`:
 
-    cd PATH_TO_KIBANA; python -m SimpleHTTPServer
+    cd PATH_TO_KIBANA
+    python -m SimpleHTTPServer
 
 2. Point your browser to `http://localhost:8000` (or whatever URL you are using).
 If you don't know your way around kibana, use the guided dashboard:
