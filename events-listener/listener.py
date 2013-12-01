@@ -27,7 +27,7 @@ fs_lock = Lock()
 
 @app.route('/', methods=['POST'])
 def got_event():
-    event = json.loads(request.form['payload'])
+    event = request.form['payload']
 
     fs_lock.acquire()
     with open(os.path.join(DATA_DIR, get_current_filename()), 'a') as f:
