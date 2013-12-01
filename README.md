@@ -52,6 +52,7 @@ Now fire up kibana and check out the data:
     cd PATH_TO_KIBANA
     python -m SimpleHTTPServer
 
+
 2. Point your browser to `http://localhost:8000` (or whatever URL you are using).
 If you don't know your way around kibana, use the guided dashboard:
 `http://localhost:8000/index.html#/dashboard/file/guided.json`
