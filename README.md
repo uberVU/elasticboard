@@ -4,7 +4,7 @@ elasticboard
 ElasticSearch dashboard for github repository statistics.
 
 
-Prototype architecture:
+##Prototype architecture:
 
 The **dashboard** provides the user with data visualization. It gets all the
 data it needs from the ElasticSearch service.
@@ -16,7 +16,7 @@ The **data-processor** parses github archive and events-listener data and dumps
 it to ElasticSearch.
 
 
-How to set up the demo:
+##Setting up the demo
 
 First, make sure you have elasticsearch running on `localhost:9200` (default).
 
