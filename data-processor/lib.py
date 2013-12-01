@@ -6,11 +6,11 @@ import urllib
 
 from pprint import pprint
 
-def parse_events(path, owner, name, gz=False):
+def parse_events(path, gz=False, predicate=None):
     """
     Takes in a .json[.gz] file with one json entry per line and
-    returns a list of events that match the given owner and
-    repository name
+    returns a list of events that match the given predicate or
+    all of them if no predicate is given
 
     example file: http://data.githubarchive.org/2013-06-11-15.json.gz
     """
@@ -30,8 +30,7 @@ def parse_events(path, owner, name, gz=False):
             if 'repository' not in obj:
                 continue
 
-            if obj['repository']['owner'] == owner and\
-               obj['repository']['name'] == name:
+            if predicate == None or predicate(obj):
                 events.append(obj)
 
     return events
