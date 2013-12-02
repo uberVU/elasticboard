@@ -24,8 +24,12 @@ def parse_events(path, gz=False, predicate=None):
     with fopen(path, 'rb') as f:
         json_line = f.readline()
         while json_line:
-            obj = json.loads(json_line)
-            json_line = f.readline()
+            try:
+                obj = json.loads(json_line)
+            except:
+                continue
+            finally:
+                json_line = f.readline()
 
             if 'repository' not in obj:
                 continue
