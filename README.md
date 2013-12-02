@@ -31,6 +31,7 @@ If you want to bootstrap yourself with some data from the
 [github archive](http://www.githubarchive.org/):
 
     # using code from data-processor
+    import datetime
     from lib import parse_events, get_archive_data
     from es import index_events
 
@@ -47,7 +48,7 @@ If you want to bootstrap yourself with some data from the
 
 Now fire up kibana and check out the data:
 
-1. Start a webserver in `dashboard/kibana-3.0.0milestone4`:
+1. Start a webserver in `dashboard/kibana-latest`:
 
     `cd PATH_TO_KIBANA; python -m SimpleHTTPServer`
 
