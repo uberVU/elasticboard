@@ -10,7 +10,7 @@ ES_NODE = {
 
 es = elasticsearch.Elasticsearch(hosts=[ES_NODE])
 
-def index_events(event_list):
+def index_events(event_list, doc_type=DOC_TYPE):
     for ev in event_list:
-        es.index(index=INDEX_NAME, doc_type=DOC_TYPE, body=ev)
+        es.index(index=INDEX_NAME, doc_type=doc_type, body=ev)
 
