@@ -73,24 +73,21 @@ def parse_header_link(header):
     rel = header.split(';')[1].split('=')[1][1:-1]
     return (url, rel)
 
-def write_events_chunk(fp, events):
+def write_events_chunk(fp, events, newer_than=None):
     for ev in events:
         if 'payload' not in ev:
             continue
+        if newer_than != None and make_datetime(ev['created_at']) < newer_than:
+            return False
         fp.write(unicode(json.dumps(ev)) + '\n')
-    print "Wrote %d events." % len(events)
+    return True
 
-def dump_repo_events(path, owner, repo, max_days=None, user='', password=''):
+def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
     """
-    max_days as an integer
+    newer_than should be datetime.datetime
     """
     api_url = 'https://api.github.com/repos/%s/%s/events' % (owner, repo)
     auth = (user, password)
-
-    if max_days == None:
-        oldest = datetime.datetime(year=1970, month=1, day=1)
-    else:
-        oldest = datetime.datetime.now() - datetime.timedelta(days=max_days)
 
     fp = open(path, 'w')
 
@@ -99,7 +96,7 @@ def dump_repo_events(path, owner, repo, max_days=None, user='', password=''):
         fp.close()
         return False
 
-    write_events_chunk(fp, response.json())
+    write_events_chunk(fp, response.json(), newer_than=newer_than)
     url, rel = parse_header_link(response.headers['link'])
 
     while rel != 'last':
@@ -109,18 +106,12 @@ def dump_repo_events(path, owner, repo, max_days=None, user='', password=''):
             return False
 
         events = response.json()
-        write_events_chunk(fp, events)
 
-        try:
-            if not events or make_datetime(events[-1]['created_at']) < oldest:
-                break
-        except:
-            print "trouble"
-            import pdb; pdb.set_trace()
+        need_more = write_events_chunk(fp, events, newer_than=newer_than)
+        if not need_more:
+            break
 
         url, rel = parse_header_link(response.headers['link'])
-
-    write_events_chunk(fp, response.json())
 
     fp.close()
     return True
