@@ -1,6 +1,7 @@
 import datetime
 import gzip
 import json
+import requests
 import sys
 import urllib
 
@@ -57,4 +58,71 @@ def get_archive_data(hour):
 
     path, headers = urllib.urlretrieve(url)
     return path
+
+def make_datetime(json_date):
+    return datetime.datetime.strptime(json_date, '%Y-%m-%dT%H:%M:%SZ')
+
+def parse_header_link(header):
+    """
+    '<https://api.github.com/repositories/2965476/events?page=2>; rel="next"'
+    -> (url, 'next')
+
+    ugly - can't change the header, unfortunately
+    """
+    url = header.split(';')[0][1:-1]
+    rel = header.split(';')[1].split('=')[1][1:-1]
+    return (url, rel)
+
+def write_events_chunk(fp, events):
+    for ev in events:
+        if 'payload' not in ev:
+            continue
+        fp.write(unicode(json.dumps(ev)) + '\n')
+    print "Wrote %d events." % len(events)
+
+def dump_repo_events(path, owner, repo, max_days=None, user='', password=''):
+    """
+    max_days as an integer
+    """
+    api_url = 'https://api.github.com/repos/%s/%s/events' % (owner, repo)
+    auth = (user, password)
+
+    if max_days == None:
+        oldest = datetime.datetime(year=1970, month=1, day=1)
+    else:
+        oldest = datetime.datetime.now() - datetime.timedelta(days=max_days)
+
+    fp = open(path, 'w')
+
+    response = requests.get(api_url, auth=auth)
+    if not response.ok:
+        fp.close()
+        return False
+
+    write_events_chunk(fp, response.json())
+    url, rel = parse_header_link(response.headers['link'])
+
+    while rel != 'last':
+        response = requests.get(url, auth=auth)
+        if not response.ok:
+            fp.close()
+            return False
+
+        events = response.json()
+        write_events_chunk(fp, events)
+
+        try:
+            if not events or make_datetime(events[-1]['created_at']) < oldest:
+                break
+        except:
+            print "trouble"
+            import pdb; pdb.set_trace()
+
+        url, rel = parse_header_link(response.headers['link'])
+
+    write_events_chunk(fp, response.json())
+
+    fp.close()
+    return True
+
 
