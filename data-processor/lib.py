@@ -32,9 +32,6 @@ def parse_events(path, gz=False, predicate=None):
             finally:
                 json_line = f.readline()
 
-            if 'repository' not in obj:
-                continue
-
             if predicate == None or predicate(obj):
                 events.append(obj)
 
