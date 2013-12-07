@@ -19,8 +19,6 @@ If you have an idea of a metric that is not covered in that list, please submit 
 
 ##Prototype architecture
 
-*Right now we support one repository per deployment.*
-
 The **dashboard** provides the user with data visualization. It gets all the
 data it needs from the elasticsearch service. Right now this is fulfilled by
 Kibana.

@@ -33,7 +33,7 @@ def timestamp_range_query(field, start, end):
                             'to': end_ts}}}}}}
     return body
 
-def most_active_people(start=None, end=None):
+def most_active_people(index, start=None, end=None):
     """
     Finds the most active users - as actors in all the events.
     Returns a list of dicts like:
@@ -47,6 +47,6 @@ def most_active_people(start=None, end=None):
                     'size': SIZE}}}
     body['size'] = 0
 
-    res = ES.search(body=body)
+    res = ES.search(index=index, body=body)
     return res['facets']['people']['terms']
 
