@@ -22,17 +22,17 @@ If you have an idea of a metric that is not covered in that list, please submit 
 *Right now we support one repository per deployment.*
 
 The **dashboard** provides the user with data visualization. It gets all the
-data it needs from the ElasticSearch service. Right now this is fulfilled by
+data it needs from the elasticsearch service. Right now this is fulfilled by
 Kibana.
 
 The **data_processor** parses raw data (from github archive, API or *events_listener*)
-and stores it in ElasticSearch.
+and stores it in elasticsearch.
 
 The **events_listener** listens for live events sent from github for a given repo
 (via hooks) and stores them as raw data.
 
 
-The data inside ElasticSearch is laid out as following - every repository get its own index, and event types are mapped to document types. Read more about it in [schema.md](https://github.com/uberVU/elasticboard/blob/master/schema.md).
+The data inside elasticsearch is laid out as following - every repository get its own index, and event types are mapped to document types. Read more about it in [schema.md](https://github.com/uberVU/elasticboard/blob/master/schema.md).
 
 
 ##Bootstrapping - get some data
