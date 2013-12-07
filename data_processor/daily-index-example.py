@@ -15,7 +15,7 @@ API_PASSWORD = "TODO"
 
 
 DATA_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)),
-    'events-listener',
+    'events_listener',
     'data'
 ))
 

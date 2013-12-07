@@ -21,10 +21,10 @@ The **dashboard** provides the user with data visualization. It gets all the
 data it needs from the ElasticSearch service. Right now this is fulfilled by
 Kibana.
 
-The **data-processor** parses raw data (from github archive, API or events-listener)
+The **data_processor** parses raw data (from github archive, API or *events_listener*)
 and stores it in ElasticSearch.
 
-The **events-listener** listens for live events sent from github for a given repo
+The **events_listener** listens for live events sent from github for a given repo
 (via hooks) and stores them as raw data.
 
 
@@ -33,12 +33,11 @@ The data inside ElasticSearch is laid out as following - every repository get it
 
 ##Bootstrapping - get some data
 
-    $ cd data-processor
-    ## assuming you set up the python requirements
+	$ pip install -r data_processor/requirements-pip
     $ python
-    >>> from es import *
-    >>> from lib import *
-    >>> events = parse_events('../contrib/1k-lettuce-events')
+    >>> from data_processor.es import index_events
+    >>> from data_processor.lib import parse_events
+    >>> events = parse_events('contrib/1k-lettuce-events')
     >>> index_events(events, index_name='gabrielfalcao-lettuce')
 
 
