@@ -17,6 +17,8 @@ Help us implement [queries](https://github.com/uberVU/elasticboard/issues?labels
 
 ##Prototype architecture
 
+*Right now we support one repository per deployment.*
+
 The **dashboard** provides the user with data visualization. It gets all the
 data it needs from the ElasticSearch service. Right now this is fulfilled by
 Kibana.
