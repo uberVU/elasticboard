@@ -1,25 +1,40 @@
 elasticboard
 ============
 
-ElasticSearch dashboard for github repository statistics.
+A dashboard that aggregates relevant metrics for Open Source projects. Helps with tracking status and evolution over time. Requires minimal set up and it's useful right away.
 
 
-##Prototype architecture:
+##Current status
+
+The project is just getting started. We have the data ingestion part covered and we are currently using Kibana to explore the data in order the observe relevant patterns.
+
+We are working on implementing [queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open) in order to provide relevant metrics.
+
+##How you can help
+
+Help us implement the necessary [queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)! Or if you have an idea of a metric that is not covered in that list, please submit it on the [issue tracker](https://github.com/uberVU/elasticboard/issues).
+
+
+##Prototype architecture
 
 The **dashboard** provides the user with data visualization. It gets all the
 data it needs from the ElasticSearch service. Right now this is fulfilled by
 Kibana.
 
+The **data-processor** parses raw data (from github archive, API or events-listener)
+and stores it in ElasticSearch.
+
 The **events-listener** listens for live events sent from github for a given repo
 (via hooks) and stores them as raw data.
 
-The **data-processor** parses raw data (from github archive, API or events-listener)
-and stores it in ElasticSearch.
+
+The data inside ElasticSearch is laid out as following - every repository get its own index, and event types are mapped to document types. Read more about it in [schema.md](https://github.com/uberVU/elasticboard/blob/master/schema.md).
 
 
 ##Bootstrapping - get some data
 
     $ cd data-processor
+    ## assuming you set up the python requirements
     $ python
     >>> from es import *
     >>> from lib import *
@@ -29,12 +44,12 @@ and stores it in ElasticSearch.
 
 ##Visually exploring the data
 
-1. Start a webserver in `dashboard/kibana-latest`:
+1.Start a webserver in `dashboard/kibana-latest`:
 
-    `cd PATH_TO_KIBANA; python -m SimpleHTTPServer`
+    cd PATH_TO_KIBANA; python -m SimpleHTTPServer
 
 
-2. Point your browser to `http://localhost:8000` (or whatever URL you are using).
-If you don't know your way around kibana, use the guided dashboard:
-`http://localhost:8000/index.html#/dashboard/file/guided.json`
+2.Point your browser to [http://localhost:8000](http://localhost:8000) (or whatever URL you are using).
+If you don't know your way around kibana, use the guided dashboard: 
+[http://localhost:8000/index.html#/dashboard/file/guided.json](http://localhost:8000/index.html#/dashboard/file/guided.json).
 
