@@ -7,7 +7,7 @@ ES_NODE = {
     'port': 9200,
 }
 
-es = elasticsearch.Elasticsearch(hosts=[ES_NODE])
+ES = elasticsearch.Elasticsearch(hosts=[ES_NODE])
 
 def index_events(event_list, index_name=INDEX_NAME):
     for ev in event_list:
@@ -15,5 +15,5 @@ def index_events(event_list, index_name=INDEX_NAME):
             doc_type = ev['type'].lower()
         except:
             doc_type = 'generic'
-        es.index(index=index_name, doc_type=doc_type, body=ev)
+        ES.index(index=index_name, doc_type=doc_type, body=ev)
 
