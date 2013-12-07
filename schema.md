@@ -24,4 +24,5 @@ Every event type gets its own document type (to lowercase):
 Extra types:
 
 * commitdata (from repos/:owner/:repo/commits/:sha)
+* issuedata (from repos/:owner/:repo/issues)
 
