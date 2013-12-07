@@ -12,8 +12,8 @@ es = elasticsearch.Elasticsearch(hosts=[ES_NODE])
 def index_events(event_list, index_name=INDEX_NAME):
     for ev in event_list:
         try:
-            doc_dype = ev['type'].lower()
+            doc_type = ev['type'].lower()
         except:
-            doc_dype = 'generic'
+            doc_type = 'generic'
         es.index(index=index_name, doc_type=doc_type, body=ev)
 
