@@ -12,7 +12,9 @@ We are working on implementing [queries](https://github.com/uberVU/elasticboard/
 
 ##How you can help
 
-Help us implement [queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)! You can start by looking at the existing [code](https://github.com/uberVU/elasticboard/blob/master/data_processor/queries.py). Or if you have an idea of a metric that is not covered in that list, please submit it on the [issue tracker](https://github.com/uberVU/elasticboard/issues).
+Help us implement [queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)! The [elasticsearch docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html), [existing code](https://github.com/uberVU/elasticboard/blob/master/data_processor/queries.py) and issue descriptions should help you get started. If you still need more info, please post a comment on the respective issue.
+
+If you have an idea of a metric that is not covered in that list, please submit it on the [issue tracker](https://github.com/uberVU/elasticboard/issues).
 
 
 ##Prototype architecture
