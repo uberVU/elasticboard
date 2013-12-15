@@ -36,3 +36,12 @@ def most_active_people(index, start=None, end=None):
     q = apply_time_filter(q, start, end)
     return q.facet('actor.login').facet_counts()['actor.login']
 
+def total_events(index, start=None, end=None):
+    """
+    Returns the number of total events for the given time
+    interval, or for all the data if no interval is given.
+    """
+    q = S().indexes(index)
+    q = apply_time_filter(q, start, end)
+    return q.count()
+
