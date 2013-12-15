@@ -18,6 +18,12 @@ def fit_time_range(start, end):
 
     return (start, end)
 
+def apply_time_filter(query, start, end):
+    start, end = fit_time_range(start, end)
+    if start and end:
+        return query.filter(created_at__range=(start, end))
+    return query
+
 def most_active_people(index, start=None, end=None):
     """
     Finds the most active users - as actors in all the events.
