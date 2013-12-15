@@ -1,6 +1,7 @@
 from es import ES
 from elasticutils import S
 
+import calendar
 import datetime
 import elasticsearch
 
@@ -23,6 +24,28 @@ def apply_time_filter(query, start, end):
     if start and end:
         return query.filter(created_at__range=(start, end))
     return query
+
+def past_n_months(index, query, n):
+    """
+    Maps a query over time intervals corresponding to the past n months.
+    Returns a list of objects like {'month': name, 'data': query_data}.
+    """
+    data = []
+    now = datetime.datetime.now()
+    year = now.year
+    month = now.month
+    for i in range(n):
+        m = month - i
+        start = datetime.date(year=year, month=m, day=1)
+        last_day = calendar.monthrange(year, m)[1]
+        end = datetime.date(year=year, month=m, day=last_day)
+
+        month_data = {
+                'month': start.strftime('%B'),
+                'data': query(index, start, end)
+        }
+        data.append(month_data)
+    return data
 
 def most_active_people(index, start=None, end=None):
     """
