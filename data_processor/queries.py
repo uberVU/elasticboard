@@ -33,10 +33,6 @@ def most_active_people(index, start=None, end=None):
     {'count': N, 'term': NAME}
     """
     q = S().indexes(index)
-
-    start, end = fit_time_range(start, end)
-    if start and end:
-        q = q.filter(created_at__range=(start, end))
-
+    q = apply_time_filter(q, start, end)
     return q.facet('actor.login').facet_counts()['actor.login']
 
