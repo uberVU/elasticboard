@@ -1,4 +1,4 @@
-var API_BASE = 'http://127.0.0.1:5000/';
+var API_BASE = 'http://' + window.location.hostname + ':5000/';
 
 function logFailure(fail) {
     console.log("Trouble getting data. API server down?");
