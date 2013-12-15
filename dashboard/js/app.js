@@ -5,37 +5,58 @@ function logFailure(fail) {
     console.log(fail);
 }
 
-// might have to extract a makeGraph function that takes in "bar" as a graph type
-function makeBarGraph(container, endpoint, keyName, valueName) {
-    $.getJSON(API_BASE + endpoint)
+
+function makeXYGraph(container, options) {
+    $.getJSON(API_BASE + options.endpoint)
         .done(function (json) {
             data = json.data;
             $(container).highcharts({
                 chart: {
-                    type: 'bar'
+                    type: options.type
                 },
                 title: {
-                    text: 'Most active people'
+                    text: options.title
+                },
+                subtitle: {
+                    text: options.subtitle
                 },
                 xAxis: {
-                    categories: data.map(function (e) { return e[keyName]; })
+                    categories: data.map(function (e) { return e[options.keyName]; })
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: "Events"
+                        text: options.yTitle
                     }
                 },
                 legend: {
                     enabled: false
                 },
                 series: [{
-                    name: "Events",
-                    data: data.map(function (e) { return e[valueName]; })
+                    name: options.label,
+                    data: data.map(function (e) { return e[options.valueName]; })
                 }]
             });
         })
         .fail(logFailure);
 }
 
-makeBarGraph('#most-active-people', 'gabrielfalcao/lettuce/most_active_people', 'term', 'count');
+makeXYGraph('#most-active-people', {
+    endpoint: 'gabrielfalcao/lettuce/most_active_people',
+    type: 'bar',
+    title: "Most active people",
+    keyName: 'term',
+    valueName: 'count',
+    yTitle: 'Events',
+    label: 'events'
+});
+makeXYGraph('#total-events-monthly', {
+    endpoint: 'gabrielfalcao/lettuce/total_events_monthly',
+    type: 'area',
+    title: "Activity",
+    subtitle: "Total monthly events",
+    keyName: 'month',
+    valueName: 'value',
+    yTitle: 'Events',
+    label: 'events'
+});
