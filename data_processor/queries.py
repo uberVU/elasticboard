@@ -34,7 +34,7 @@ def past_n_months(index, query, n):
     now = datetime.datetime.now()
     year = now.year
     month = now.month
-    for i in range(n):
+    for i in range(n - 1, -1, -1):
         m = month - i
         start = datetime.date(year=year, month=m, day=1)
         last_day = calendar.monthrange(year, m)[1]
@@ -42,7 +42,7 @@ def past_n_months(index, query, n):
 
         month_data = {
                 'month': start.strftime('%B'),
-                'data': query(index, start, end)
+                'value': query(index, start, end)
         }
         data.append(month_data)
     return data
