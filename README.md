@@ -14,6 +14,8 @@ We are working on implementing
 [queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)
 in order to provide relevant metrics.
 
+You can find a demo set up at [http://mihneadb.ubervu.com/](http://mihneadb.ubervu.com/).
+
 ##How you can help
 
 Help us implement
