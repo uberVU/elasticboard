@@ -1,4 +1,5 @@
 from es import ES
+from elasticutils import S
 
 import datetime
 import elasticsearch
@@ -6,32 +7,15 @@ import elasticsearch
 SIZE = 100
 DATEFORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
-def timestamp_range_query(field, start, end):
-    """
-    If both start and end are none, returns just an empty query.
-    Otherwise, returns an empty filtered query for the given
-    start and end datetimes on _field_.
-    """
+def fit_time_range(start, end):
     if start == None and end == None:
-        return {}
-
+        return (None, None)
     if start == None:
         start = datetime.datetime(year=1970, month=1, day=1)
     if end == None:
         end = datetime.datetime.now()
 
-    start_ts = start.strftime(DATEFORMAT)
-    end_ts = end.strftime(DATEFORMAT)
-
-    body = {
-        'query': {
-            'filtered': {
-                'filter': {
-                    'range': {
-                        field: {
-                            'from': start_ts,
-                            'to': end_ts}}}}}}
-    return body
+    return (start, end)
 
 def most_active_people(index, start=None, end=None):
     """
@@ -39,14 +23,11 @@ def most_active_people(index, start=None, end=None):
     Returns a list of dicts like:
     {'count': N, 'term': NAME}
     """
-    body = timestamp_range_query('created_at', start, end)
-    body['facets'] = {
-            'people': {
-                'terms': {
-                    'field': 'actor.login',
-                    'size': SIZE}}}
-    body['size'] = 0
+    q = S().indexes(index)
 
-    res = ES.search(index=index, body=body)
-    return res['facets']['people']['terms']
+    start, end = fit_time_range(start, end)
+    if start and end:
+        q = q.filter(created_at__range=(start, end))
+
+    return q.facet('actor.login').facet_counts()['actor.login']
 
