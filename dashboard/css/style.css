@@ -1,6 +1,7 @@
 .graph {
     border: solid #aaa 1px;
     padding: 5px;
+    margin-bottom: 10px;
 }
 
 .graphs-row {
