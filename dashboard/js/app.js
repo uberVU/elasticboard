@@ -1,66 +1,33 @@
-data = [
-  {
-    "count": 443,
-    "term": "gabrielfalcao"
-  },
-  {
-    "count": 50,
-    "term": "hectord"
-  },
-  {
-    "count": 36,
-    "term": "danni"
-  },
-  {
-    "count": 32,
-    "term": "koterpillar"
-  },
-  {
-    "count": 30,
-    "term": "starenka"
-  },
-  {
-    "count": 22,
-    "term": "tezro"
-  },
-  {
-    "count": 21,
-    "term": "dhrrgn"
-  },
-  {
-    "count": 20,
-    "term": "olemis"
-  },
-  {
-    "count": 9,
-    "term": "tonyqtran"
-  },
-  {
-    "count": 9,
-    "term": "cezor"
-  }
-];
+var API_BASE = 'http://127.0.0.1:5000/';
 
-$('#most-active-people').highcharts({
-    chart: {
-        type: 'bar'
-    },
-    title: {
-        text: 'Most active people'
-    },
-    xAxis: {
-        categories: data.map(function(e) { return e.term; })
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: "Events"
-        }
-    },
-    legend: {
-        enabled: false
-    },
-    series: [{
-        data: data.map(function(e) { return e.count; })
-    }]
-});
+function makeBarGraph(container, endpoint, keyName, valueName) {
+    $.getJSON(API_BASE + endpoint).done(function (json) {
+        data = json.data;
+        $(container).highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Most active people'
+            },
+            xAxis: {
+                categories: data.map(function (e) { return e[keyName]; })
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: "Events"
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: "Events",
+                data: data.map(function (e) { return e[valueName]; })
+            }]
+        });
+    });
+}
+
+makeBarGraph('#most-active-people', 'gabrielfalcao/lettuce/most_active_people', 'term', 'count');

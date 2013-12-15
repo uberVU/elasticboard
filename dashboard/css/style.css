@@ -1,8 +1,18 @@
 .graph {
     border: solid #aaa 1px;
+    padding: 5px;
 }
 
 .graphs-row {
     margin-left: 2em;
     margin-right: 2em;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
+}
+
+.muted {
+    opacity: 0.5;
 }
