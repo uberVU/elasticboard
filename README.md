@@ -38,7 +38,7 @@ The data inside elasticsearch is laid out as following - every repository get it
 	$ pip install -r data_processor/requirements-pip
     $ python
     >>> from data_processor.es import index_events
-    >>> from data_processor.lib import parse_events
+    >>> from data_processor.github import parse_events
     >>> events = parse_events('contrib/1k-lettuce-events')
     >>> index_events(events, index_name='gabrielfalcao-lettuce')
 
