@@ -5,7 +5,7 @@ import os
 import sys
 import tempfile
 
-from lib import parse_events, dump_repo_events
+from github import parse_events, dump_repo_events
 from es import index_events
 
 OWNER = "TODO"
