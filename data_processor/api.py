@@ -33,6 +33,13 @@ def most_active_issues(user, repo):
     data = queries.most_active_issues(index)
     return jsonify(data=data)
 
+@app.route('/<user>/<repo>/open_issues')
+@crossdomain(origin='*')
+def open_issues(user, repo):
+    index = index_name(user, repo)
+    data = queries.open_issues(index)
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
