@@ -5,6 +5,14 @@ function logFailure(fail) {
     console.log(fail);
 }
 
+function makeLink(url, text) {
+    var link = $('<a />', {
+        href: url,
+        text: text,
+    });
+    return $('<div />').append(link).html();
+}
+
 
 function makeXYGraph(container, options) {
     $.getJSON(API_BASE + options.endpoint)
