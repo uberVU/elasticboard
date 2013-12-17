@@ -4,6 +4,7 @@ from functools import update_wrapper
 
 
 # decorator for flask api methods to support cross domain stuff
+# http://flask.pocoo.org/snippets/56/
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
                 automatic_options=True):
