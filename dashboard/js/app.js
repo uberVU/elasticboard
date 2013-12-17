@@ -21,7 +21,12 @@ function makeXYGraph(container, options) {
                     text: options.subtitle
                 },
                 xAxis: {
-                    categories: data.map(function (e) { return e[options.keyName]; })
+                    categories: data.map(function (e) {
+                        if (typeof options.keyName === "function") {
+                            return options.keyName(e);
+                        }
+                        return e[options.keyName];
+                    })
                 },
                 yAxis: {
                     min: 0,
@@ -34,7 +39,12 @@ function makeXYGraph(container, options) {
                 },
                 series: [{
                     name: options.label,
-                    data: data.map(function (e) { return e[options.valueName]; })
+                    data: data.map(function (e) {
+                        if (typeof options.valueName === "function") {
+                            return options.valueName(e);
+                        }
+                        return e[options.valueName];
+                    })
                 }]
             });
         })
