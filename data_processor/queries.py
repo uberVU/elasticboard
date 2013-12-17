@@ -83,7 +83,7 @@ def open_issues(index):
     # get all opened issues
     q = S().indexes(index).doctypes('issuesevent')
     opened = q.filter(**{'payload.action': 'opened'})
-    issues = [i['payload']['issue']['number'] for i in opened]
+    issues = [i['payload']['issue']['number'] for i in opened.all()]
     issues = set(issues)
 
     # for every issue, find the latest event and see if it's closed
