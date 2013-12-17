@@ -68,3 +68,11 @@ def total_events(index, start=None, end=None):
     q = apply_time_filter(q, start, end)
     return q.count()
 
+def most_active_issues(index, start=None, end=None):
+    """
+    Finds the most active issues - by total number of events.
+    """
+    q = S().indexes(index).doctypes('issuesevent', 'issuecommentevent')
+    q = apply_time_filter(q, start, end)
+    return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
+
