@@ -52,7 +52,7 @@ function makeXYGraph(container, options) {
                 },
                 xAxis: {
                     categories: data.map(function (e) {
-                        if (typeof options.keyName === "function") {
+                        if (typeof options.keyName === 'function') {
                             return options.keyName(e);
                         }
                         return e[options.keyName];
@@ -70,7 +70,7 @@ function makeXYGraph(container, options) {
                 series: [{
                     name: options.label,
                     data: data.map(function (e) {
-                        if (typeof options.valueName === "function") {
+                        if (typeof options.valueName === 'function') {
                             return options.valueName(e);
                         }
                         return e[options.valueName];
