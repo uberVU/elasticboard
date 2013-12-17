@@ -26,6 +26,13 @@ def total_events_monthly(user, repo):
     data = queries.past_n_months(index, queries.total_events, 6)
     return jsonify(data=data)
 
+@app.route('/<user>/<repo>/most_active_issues')
+@crossdomain(origin='*')
+def most_active_issues(user, repo):
+    index = index_name(user, repo)
+    data = queries.most_active_issues(index)
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

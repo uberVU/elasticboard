@@ -81,3 +81,18 @@ makeXYGraph('#total-events-monthly', {
     yTitle: 'Events',
     label: 'events'
 });
+
+// second row
+makeXYGraph('#most-active-issues', {
+    endpoint: 'gabrielfalcao/lettuce/most_active_issues',
+    type: 'bar',
+    title: "Most active issues",
+    keyName: function (e) {
+        return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e.term,
+                        "#" + e.term);
+    },
+    valueName: 'count',
+    yTitle: 'Events',
+    label: 'events'
+});
+
