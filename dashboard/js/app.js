@@ -118,3 +118,12 @@ makeXYGraph('#most-active-issues', {
     label: 'events'
 });
 
+makeList('#open-issues', {
+    endpoint: 'gabrielfalcao/lettuce/open_issues',
+    title: "Open issues",
+    keyName: function (e) {
+        return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e,
+                        "#" + e);
+    }
+});
+
