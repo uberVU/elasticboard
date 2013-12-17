@@ -59,11 +59,14 @@ function makeXYGraph(container, options) {
         .fail(logFailure);
 }
 
+// first row
 makeXYGraph('#most-active-people', {
     endpoint: 'gabrielfalcao/lettuce/most_active_people',
     type: 'bar',
     title: "Most active people",
-    keyName: 'term',
+    keyName: function (e) {
+        return makeLink("http://github.com/" + e.term, e.term);
+    },
     valueName: 'count',
     yTitle: 'Events',
     label: 'events'
