@@ -76,3 +76,27 @@ def most_active_issues(index, start=None, end=None):
     q = apply_time_filter(q, start, end)
     return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
 
+def open_issues(index):
+    """
+    All open issues - even reopened ones.
+    """
+    # get all opened issues
+    q = S().indexes(index).doctypes('issuesevent')
+    opened = q.filter(**{'payload.action': 'opened'})
+    issues = [i['payload']['issue']['number'] for i in opened]
+    issues = set(issues)
+
+    # for every issue, find the latest event and see if it's closed
+    # we have to do this because an issue can be opened and reopened
+    # multiple times
+    to_remove = set()
+    for issue in issues:
+        events = q.filter(**{'payload.issue.number': issue})
+        events = events.order_by('-payload.issue.updated_at')[:1]
+        action = [e['payload']['action'] for e in events][0]
+        if action == 'closed':
+            to_remove.add(issue)
+    issues -= to_remove
+
+    return list(issues)
+
