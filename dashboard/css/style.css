@@ -1,12 +1,12 @@
 .graph {
     border: solid #aaa 1px;
     padding: 5px;
-    margin-bottom: 10px;
+    height: 100%;
 }
 
-.graphs-row {
-    margin-left: 2em;
-    margin-right: 2em;
+.graphs.row {
+    max-width: 90%;
+    margin-bottom: 30px;
 }
 
 .full-width {
