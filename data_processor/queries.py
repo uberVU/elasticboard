@@ -100,3 +100,18 @@ def open_issues(index):
 
     return list(issues)
 
+def issues_without_comments(index):
+    """
+    Open issues with no comments.
+    """
+    # todo - facet count needs to be bigger than 10
+    issues = open_issues(index)
+
+    with_comments = S().indexes(index).doctypes('issuecommentevent')
+    with_comments = with_comments.facet('payload.issue.number').all()
+    with_comments = with_comments.facet_counts()['payload.issue.number']
+
+    with_comments = [r['term'] for r in with_comments]
+
+    return list(set(issues) - set(with_comments))
+
