@@ -4,6 +4,10 @@ from elasticutils import S
 import calendar
 import datetime
 import elasticsearch
+import sys
+
+# count for getting all facet terms back
+ALL = 2**31 - 1 # es/java maxint
 
 def fit_time_range(start, end):
     """
@@ -107,8 +111,11 @@ def issues_without_comments(index):
     issues = open_issues(index)
 
     with_comments = S().indexes(index).doctypes('issuecommentevent')
-    with_comments = with_comments.facet('payload.issue.number').all()
-    with_comments = with_comments.facet_counts()['payload.issue.number']
+    with_comments = with_comments.facet_raw(nums={
+        'terms': {
+            'field': 'payload.issue.number',
+            'size': ALL}})
+    with_comments = with_comments.facet_counts()['nums']
 
     with_comments = [r['term'] for r in with_comments]
 
