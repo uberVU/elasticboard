@@ -56,12 +56,17 @@ def facet_counts_all(query, field):
     """
     # https://github.com/mozilla/fjord/blob/master/fjord/analytics/views.py#L527
     ALL = 2**31 - 1 # es/java maxint
-    return query.facet_raw(f={
+    facet = {
         'terms': {
             'field': field,
             'size': ALL
-        },
-        'facet_filter': query._build_query()['filter']}).facet_counts()['f']
+        }
+    }
+    q = query._build_query()
+    if 'filter' in q:
+        facet['facet_filter'] = q['filter']
+
+    return query.facet_raw(f=facet).facet_counts()['f']
 
 def most_active_people(index, start=None, end=None):
     """
