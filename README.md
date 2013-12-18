@@ -54,8 +54,12 @@ about it in [schema.md](https://github.com/uberVU/elasticboard/blob/master/schem
 
 ##Bootstrapping
 
+Make sure you have [elasticsearch](http://www.elasticsearch.org/download)
+up and running on the default 9200 port.
+
 ###Get some data
 
+	$ # probably in a virtualenv
 	$ pip install -r data_processor/requirements-pip
     $ python
     >>> from data_processor.es import index_events
