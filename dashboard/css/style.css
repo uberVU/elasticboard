@@ -5,6 +5,10 @@
     margin-bottom: 30px;
 }
 
+.graph ul {
+    margin-left: 2em;
+}
+
 .graphs.row {
     max-width: 90%;
 }
