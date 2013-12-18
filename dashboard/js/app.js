@@ -22,7 +22,6 @@ function makeList(container, options) {
 
             data = json.data;
             data.forEach(function (e) {
-                console.log(e);
                 $item = $('<li />');
                 if (typeof options.keyName === 'function') {
                     $item.html(options.keyName(e));
