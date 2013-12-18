@@ -10,6 +10,13 @@ ES_NODE = {
 ES = elasticsearch.Elasticsearch(hosts=[ES_NODE])
 
 def index_events(event_list, index_name=INDEX_NAME):
+    """
+    Indexes the list of events in the given index. Events should
+    have a "type" field to help bucketize them into different
+    doctypes.
+
+    -- index looks like "USER-REPO"
+    """
     for ev in event_list:
         try:
             doc_type = ev['type'].lower()

@@ -50,7 +50,6 @@ def past_n_months(index, query, n):
 def most_active_people(index, start=None, end=None):
     """
     Finds the most active users - as actors in all the events.
-    -- index looks like "USER-REPO"
 
     Returns a list of dicts like:
     {'count': N, 'term': NAME}
