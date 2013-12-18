@@ -40,6 +40,13 @@ def open_issues(user, repo):
     data = queries.open_issues(index)
     return jsonify(data=data)
 
+@app.route('/<user>/<repo>/issues_without_comments')
+@crossdomain(origin='*')
+def issues_without_comments(user, repo):
+    index = index_name(user, repo)
+    data = queries.issues_without_comments(index)
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
