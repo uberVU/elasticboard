@@ -2,11 +2,11 @@
     border: solid #aaa 1px;
     padding: 5px;
     height: 412px;
+    margin-bottom: 30px;
 }
 
 .graphs.row {
     max-width: 90%;
-    margin-bottom: 30px;
 }
 
 .full-width {
