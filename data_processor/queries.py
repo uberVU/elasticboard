@@ -6,8 +6,6 @@ import datetime
 import elasticsearch
 import sys
 
-# count for getting all facet terms back
-ALL = 2**31 - 1 # es/java maxint
 
 def fit_time_range(start, end):
     """
@@ -50,6 +48,17 @@ def past_n_months(index, query, n):
         }
         data.append(month_data)
     return data
+
+def facet_counts_all(query, field):
+    """
+    Returns the facet counts for the equivalent .facet(field) query
+    but grabs all the results (size = big).
+    """
+    ALL = 2**31 - 1 # es/java maxint
+    return query.facet_raw(f={
+        'terms': {
+            'field': field,
+            'size': ALL}}).facet_counts()['f']
 
 def most_active_people(index, start=None, end=None):
     """
@@ -111,12 +120,7 @@ def issues_without_comments(index):
     issues = open_issues(index)
 
     with_comments = S().indexes(index).doctypes('issuecommentevent')
-    with_comments = with_comments.facet_raw(nums={
-        'terms': {
-            'field': 'payload.issue.number',
-            'size': ALL}})
-    with_comments = with_comments.facet_counts()['nums']
-
+    with_comments = facet_counts_all(with_comments, 'payload.issue.number')
     with_comments = [r['term'] for r in with_comments]
 
     return list(set(issues) - set(with_comments))
