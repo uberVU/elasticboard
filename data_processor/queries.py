@@ -58,7 +58,9 @@ def facet_counts_all(query, field):
     return query.facet_raw(f={
         'terms': {
             'field': field,
-            'size': ALL}}).facet_counts()['f']
+            'size': ALL
+        },
+        'facet_filter': query._build_query()['filter']}).facet_counts()['f']
 
 def most_active_people(index, start=None, end=None):
     """
