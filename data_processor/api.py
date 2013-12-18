@@ -47,10 +47,10 @@ def issues_without_comments(user, repo):
     data = queries.issues_without_comments(index)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/<login>/issues_assigned')
+@app.route('/<owner>/<repo>/<login>/issues_assigned')
 @crossdomain(origin='*')
-def issues_assigned_to(user, repo, login):
-    index = index_name(user, repo)
+def issues_assigned_to(owner, repo, login):
+    index = index_name(owner, repo)
     data = queries.issues_assigned_to(index, login)
     return jsonify(data=data)
 
