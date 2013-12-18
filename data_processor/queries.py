@@ -128,3 +128,16 @@ def issues_without_comments(index):
 
     return list(set(issues) - set(with_comments))
 
+def issues_assigned_to(index, login):
+    """
+    List of open issues assigned to {{ login }}.
+    """
+    q = S().indexes(index).doctypes('issuesevent', 'issuecommentevent')
+    assigned = q.filter(**{'payload.issue.assignee.login': login})
+    assigned = facet_counts_all(assigned, 'payload.issue.number')
+    assigned = [r['term'] for r in assigned]
+
+    # keep open ones
+    issues = open_issues(index)
+    return list(set(assigned).intersection(set(issues)))
+
