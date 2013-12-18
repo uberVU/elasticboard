@@ -54,6 +54,7 @@ def facet_counts_all(query, field):
     Returns the facet counts for the equivalent .facet(field) query
     but grabs all the results (size = big).
     """
+    # https://github.com/mozilla/fjord/blob/master/fjord/analytics/views.py#L527
     ALL = 2**31 - 1 # es/java maxint
     return query.facet_raw(f={
         'terms': {
