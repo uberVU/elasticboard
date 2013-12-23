@@ -1,3 +1,4 @@
+elasticsearch==0.4.3
 elasticutils==0.8.1
 requests==2.0.1
 Flask==0.10.1
