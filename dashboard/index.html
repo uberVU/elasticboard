@@ -44,10 +44,23 @@
     <div class="small-12 large-6 columns">
         <div class="graph" id="issues-without-comments"></div>
     </div>
+    <div class="small-12 large-6 columns">
+        <div class="graph">
+            <h3 class="text-center">Assigned issues</h3>
+            <p><input type="text" placeholder="GitHub username" class="js-handler--github-username"></p>
+            <div class="template-user-issues"></div>
+        </div>
+    </div>
 </div>
+
+<script id="user-issues" type="text/x-handlebars-template">
+    <p>All issues assigned to {{user}}</p>
+    <ul>{{list}}</ul>
+</script>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="js/handlebars-v1.1.2.js"></script>
 <script src="js/app.js"></script>
 
 <!-- gh ribbon -->

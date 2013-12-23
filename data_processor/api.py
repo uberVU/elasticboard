@@ -12,45 +12,45 @@ def index_name(user, repo):
 
 # api endpoints that call the queries
 
-@app.route('/<user>/<repo>/most_active_people')
+@app.route('/<owner>/<repo>/most_active_people')
 @crossdomain(origin='*')
-def most_active_people(user, repo):
-    index = index_name(user, repo)
+def most_active_people(owner, repo):
+    index = index_name(owner, repo)
     data = queries.most_active_people(index)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/total_events_monthly')
+@app.route('/<owner>/<repo>/total_events_monthly')
 @crossdomain(origin='*')
-def total_events_monthly(user, repo):
-    index = index_name(user, repo)
+def total_events_monthly(owner, repo):
+    index = index_name(owner, repo)
     data = queries.past_n_months(index, queries.total_events, 6)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/most_active_issues')
+@app.route('/<owner>/<repo>/most_active_issues')
 @crossdomain(origin='*')
-def most_active_issues(user, repo):
-    index = index_name(user, repo)
+def most_active_issues(owner, repo):
+    index = index_name(owner, repo)
     data = queries.most_active_issues(index)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/open_issues')
+@app.route('/<owner>/<repo>/open_issues')
 @crossdomain(origin='*')
-def open_issues(user, repo):
-    index = index_name(user, repo)
+def open_issues(owner, repo):
+    index = index_name(owner, repo)
     data = queries.open_issues(index)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/issues_without_comments')
+@app.route('/<owner>/<repo>/issues_without_comments')
 @crossdomain(origin='*')
-def issues_without_comments(user, repo):
-    index = index_name(user, repo)
+def issues_without_comments(owner, repo):
+    index = index_name(owner, repo)
     data = queries.issues_without_comments(index)
     return jsonify(data=data)
 
-@app.route('/<user>/<repo>/<login>/issues_assigned')
+@app.route('/<owner>/<repo>/<login>/issues_assigned')
 @crossdomain(origin='*')
-def issues_assigned_to(user, repo, login):
-    index = index_name(user, repo)
+def issues_assigned_to(owner, repo, login):
+    index = index_name(owner, repo)
     data = queries.issues_assigned_to(index, login)
     return jsonify(data=data)
 
