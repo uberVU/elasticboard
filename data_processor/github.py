@@ -148,7 +148,8 @@ def dump_archive_events(owner, repo, path, count):
         os.remove(tmp)
         interval -= hour
 
-        print "Got %d/%d events." % (num, count)
+        if events:
+            print "Got %d/%d events." % (num, count)
 
     fp.close()
 
