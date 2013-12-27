@@ -1,6 +1,7 @@
 import datetime
 import gzip
 import json
+import os
 import requests
 import sys
 import urllib
@@ -113,4 +114,41 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
     fp.close()
     return True
 
+def dump_archive_events(owner, repo, path, count):
+    """
+    Looks in the gh archive for events matching owner/repo and downloads
+    approx count events (might be a bit more than count).
+    """
+    interval = datetime.datetime.now()
+    hour = datetime.timedelta(hours=1)
+
+    def check(obj):
+        if 'repository' not in obj:
+            return False
+        return obj['repository']['owner'] == owner and\
+               obj['repository']['name'] == repo
+
+    num = 0
+    fp = open(path, 'w')
+    while num < count:
+        tmp = get_archive_data(interval)
+
+        try:
+            events = parse_events(tmp, gz=True, predicate=check)
+        except IOError:
+            # no data yet
+            os.remove(tmp)
+            interval -= hour
+            continue
+
+        for ev in events:
+            fp.write(unicode(json.dumps(ev)) + '\n')
+            num += 1
+
+        os.remove(tmp)
+        interval -= hour
+
+        print "Got %d/%d events." % (num, count)
+
+    fp.close()
 
