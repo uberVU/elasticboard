@@ -17,7 +17,6 @@ def parse_events(path, gz=False, predicate=None):
 
     example file: http://data.githubarchive.org/2013-06-11-15.json.gz
     """
-
     events = []
     if gz:
         fopen = gzip.open
