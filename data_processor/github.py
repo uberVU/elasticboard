@@ -5,6 +5,7 @@ import os
 import requests
 import sys
 import urllib
+import re
 
 from pprint import pprint
 
@@ -63,13 +64,10 @@ def make_datetime(json_date):
 def parse_header_link(header):
     """
     '<https://api.github.com/repositories/2965476/events?page=2>; rel="next"'
-    -> (url, 'next')
-':':
-
+    -> (url, 'next', 2)
 
     ugly - can't change the header, unfortunately
     """
-    import re
     urlpage_rel = '\<(?P<url>[a-z/0-9:\.]+\?page=(?P<page>[0-9]{1,3}))\>;[\srel\=\"]+(?P<rel>[elnrxt]{1,3})'
     urlpage_rel_data = re.match(urlpage_rel, header).groupdict()
     page = int(urlpage_rel_data['page'])
@@ -102,8 +100,9 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
 
     write_events_chunk(fp, response.json(), newer_than=newer_than)
     url, rel, page = parse_header_link(response.headers['link'])
-
-    while rel != 'last' and page < 11:
+    # The page check is required to obey the github API event request
+    # limitations when they fix it we should take this out.
+    while rel != 'last' and page < 11: 
         response = requests.get(url, auth=auth)
         if not response.ok:
             fp.close()
