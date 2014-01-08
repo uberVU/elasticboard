@@ -38,25 +38,6 @@ def parse_events(path, gz=False, predicate=None):
 
     return events
 
-def get_archive_data(hour):
-    """
-    Takes in a datetime.datetime object and returns
-    a path on the local filesystem to the downloaded github archive
-    raw file for the given hour.
-    """
-
-    # we don't support files before August 12, 2012
-    # https://github.com/igrigorik/githubarchive.org/issues/9#issuecomment-7670455
-    oldest = datetime.datetime(year=2012, month=8, day=12)
-    if hour < oldest:
-        raise ValueError("We don't support dates older than August 12, 2012.")
-
-    url = "http://data.githubarchive.org/%4d-%02d-%02d-%d.json.gz"
-    url = url % (hour.year, hour.month, hour.day, hour.hour)
-
-    path, headers = urllib.urlretrieve(url)
-    return path
-
 def make_datetime(json_date):
     return datetime.datetime.strptime(json_date, '%Y-%m-%dT%H:%M:%SZ')
 
@@ -113,43 +94,4 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
 
     fp.close()
     return True
-
-def dump_archive_events(owner, repo, path, count):
-    """
-    Looks in the gh archive for events matching owner/repo and downloads
-    approx count events (might be a bit more than count).
-    """
-    interval = datetime.datetime.now()
-    hour = datetime.timedelta(hours=1)
-
-    def check(obj):
-        if 'repository' not in obj:
-            return False
-        return obj['repository']['owner'] == owner and\
-               obj['repository']['name'] == repo
-
-    num = 0
-    fp = open(path, 'w')
-    while num < count:
-        tmp = get_archive_data(interval)
-
-        try:
-            events = parse_events(tmp, gz=True, predicate=check)
-        except IOError:
-            # no data yet
-            os.remove(tmp)
-            interval -= hour
-            continue
-
-        for ev in events:
-            fp.write(unicode(json.dumps(ev)) + '\n')
-            num += 1
-
-        os.remove(tmp)
-        interval -= hour
-
-        if events:
-            print "Got %d/%d events." % (num, count)
-
-    fp.close()
 
