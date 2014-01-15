@@ -92,7 +92,7 @@ def most_active_issues(index, start=None, end=None):
     """
     Finds the most active issues - by total number of events.
     """
-    q = S().indexes(index).doctypes('issuesevent', 'issuecommentevent')
+    q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q = apply_time_filter(q, start, end)
     return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
 
@@ -101,7 +101,7 @@ def open_issues(index):
     All open issues - even reopened ones.
     """
     # get all opened issues
-    q = S().indexes(index).doctypes('issuesevent')
+    q = S().indexes(index).doctypes('IssuesEvent')
     opened = q.filter(**{'payload.action': 'opened'})
     issues = [i['payload']['issue']['number'] for i in opened.all()]
     issues = set(issues)
@@ -127,7 +127,7 @@ def issues_without_comments(index):
     # todo - facet count needs to be bigger than 10
     issues = open_issues(index)
 
-    with_comments = S().indexes(index).doctypes('issuecommentevent')
+    with_comments = S().indexes(index).doctypes('IssueCommentEvent')
     with_comments = facet_counts_all(with_comments, 'payload.issue.number')
     with_comments = [r['term'] for r in with_comments]
 
@@ -137,7 +137,7 @@ def issues_assigned_to(index, login):
     """
     List of open issues assigned to {{ login }}.
     """
-    q = S().indexes(index).doctypes('issuesevent', 'issuecommentevent')
+    q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     assigned = q.filter(**{'payload.issue.assignee.login': login})
     assigned = facet_counts_all(assigned, 'payload.issue.number')
     assigned = [r['term'] for r in assigned]
