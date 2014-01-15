@@ -5,6 +5,7 @@ import os
 import requests
 import sys
 import urllib
+import re
 
 from pprint import pprint
 
@@ -44,13 +45,16 @@ def make_datetime(json_date):
 def parse_header_link(header):
     """
     '<https://api.github.com/repositories/2965476/events?page=2>; rel="next"'
-    -> (url, 'next')
+    -> (url, 'next', 2)
 
     ugly - can't change the header, unfortunately
     """
-    url = header.split(';')[0][1:-1]
-    rel = header.split(';')[1].split('=')[1][1:-1]
-    return (url, rel)
+    urlpage_rel = '\<(?P<url>[a-z/0-9:\.]+\?page=(?P<page>[0-9]{1,3}))\>;[\srel\=\"]+(?P<rel>[elnrxt]{1,3})'
+    urlpage_rel_data = re.match(urlpage_rel, header).groupdict()
+    page = int(urlpage_rel_data['page'])
+    url = urlpage_rel_data['url']
+    rel = urlpage_rel_data['rel']
+    return (url, rel, page)
 
 def write_events_chunk(fp, events, newer_than=None):
     for ev in events:
@@ -76,9 +80,10 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
         return False
 
     write_events_chunk(fp, response.json(), newer_than=newer_than)
-    url, rel = parse_header_link(response.headers['link'])
-
-    while rel != 'last':
+    url, rel, page = parse_header_link(response.headers['link'])
+    # The page check is required to obey the github API event request
+    # limitations when they fix it we should take this out.
+    while rel != 'last' and page < 11: 
         response = requests.get(url, auth=auth)
         if not response.ok:
             fp.close()
@@ -90,7 +95,7 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
         if not need_more:
             break
 
-        url, rel = parse_header_link(response.headers['link'])
+        url, rel, page = parse_header_link(response.headers['link'])
 
     fp.close()
     return True
