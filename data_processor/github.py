@@ -82,7 +82,7 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
     url, rel, page = parse_header_link(response.headers['link'])
     # The page check is required to obey the github API event request
     # limitations when they fix it we should take this out.
-    while rel != 'last' and page < 11: 
+    while rel != 'last' and page < 11:
         response = requests.get(url, auth=auth)
         if not response.ok:
             fp.close()
