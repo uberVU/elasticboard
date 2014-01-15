@@ -81,7 +81,8 @@ def dump_repo_events(path, owner, repo, newer_than=None, user='', password=''):
     write_events_chunk(fp, response.json(), newer_than=newer_than)
     url, rel, page = parse_header_link(response.headers['link'])
     # The page check is required to obey the github API event request
-    # limitations when they fix it we should take this out.
+    # limitations. When they fix it we should take this out.
+    # https://github.com/uberVU/elasticboard/issues/42
     while rel != 'last' and page < 11:
         response = requests.get(url, auth=auth)
         if not response.ok:
