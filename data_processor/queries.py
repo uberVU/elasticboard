@@ -36,11 +36,14 @@ def past_n_months(index, query, n):
     now = datetime.datetime.now()
     year = now.year
     month = now.month
-    for i in range(n - 1, -1, -1):
-        m = month - i
-        start = datetime.date(year=year, month=m, day=1)
-        last_day = calendar.monthrange(year, m)[1]
-        end = datetime.date(year=year, month=m, day=last_day)
+    for i in range(n):
+        month = month - 1
+        # handle first months of the year special case
+        if  month == 0:
+            month = 12
+        start = datetime.date(year=year, month=month, day=1)
+        last_day = calendar.monthrange(year, month)[1]
+        end = datetime.date(year=year, month=month, day=last_day)
 
         month_data = {
                 'month': start.strftime('%B'),
