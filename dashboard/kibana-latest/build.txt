@@ -2,9 +2,10 @@
 app/app.js
 ----------------
 vendor/jquery/jquery-1.8.0.js
-vendor/angular/angular.js
 vendor/underscore.js
 app/components/underscore.extended.js
+app/components/settings.js
+vendor/angular/angular.js
 app/../vendor/elasticjs/elastic.js
 vendor/elasticjs/elastic-angular-client.js
 vendor/bootstrap/bootstrap.js
@@ -14,8 +15,9 @@ vendor/angular/datepicker.js
 vendor/angular/angular-strap.js
 vendor/jquery/jquery-ui-1.10.3.js
 vendor/angular/angular-dragdrop.js
+vendor/angular/angular-cookies.js
 app/components/extend-jquery.js
-app/components/settings.js
+vendor/angular/bindonce.js
 app/services/alertSrv.js
 vendor/moment.js
 vendor/chromath.js
@@ -46,6 +48,7 @@ app/directives/ngModelOnBlur.js
 app/directives/tip.js
 app/directives/confirmClick.js
 app/directives/esVersion.js
+app/directives/configModal.js
 app/directives/all.js
 app/filters/all.js
 app/app.js
@@ -86,6 +89,7 @@ app/panels/histogram/module.js
 ----------------
 app/panels/histogram/interval.js
 app/panels/histogram/timeSeries.js
+vendor/numeral.js
 vendor/jquery/jquery.flot.events.js
 vendor/jquery/jquery.flot.selection.js
 vendor/jquery/jquery.flot.time.js
@@ -118,6 +122,11 @@ app/panels/sparklines/interval.js
 app/panels/sparklines/timeSeries.js
 vendor/jquery/jquery.flot.time.js
 app/panels/sparklines/module.js
+
+app/panels/stats/module.js
+----------------
+vendor/numeral.js
+app/panels/stats/module.js
 
 app/panels/table/module.js
 ----------------
