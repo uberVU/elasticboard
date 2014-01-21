@@ -41,6 +41,7 @@ def past_n_months(index, query, n):
         # handle first months of the year special case
         if  month == 0:
             month = 12
+            year -= 1
         start = datetime.date(year=year, month=month, day=1)
         last_day = calendar.monthrange(year, month)[1]
         end = datetime.date(year=year, month=month, day=last_day)
