@@ -64,7 +64,7 @@ up and running on the default 9200 port.
     $ python
     >>> from data_processor.es import index_events
     >>> from data_processor.github import parse_events
-    >>> events = parse_events('contrib/1k-lettuce-events')
+    >>> events = parse_events('contrib/lettuce-events')
     >>> index_events(events, index_name='gabrielfalcao-lettuce')
 
 
