@@ -36,18 +36,14 @@ data it needs from the elasticsearch service. We are working on building
 our own dashboard, but in the meantime you can also explore the data using
 Kibana.
 
-The **data_processor** is where all the magic happens. It downloads and parses
-github data and then stores it into elasticsearch. From there, the data is
-processed through
-[queries](https://github.com/uberVU/elasticboard/blob/master/data_processor/queries.py)
-and exposed to the dashboard through an
-[API](https://github.com/uberVU/elasticboard/blob/master/data_processor/api.py).
+The **data_processor** is where all querying happens. It accesses data stored in
+elasticsearch using [elasticutils](http://elasticutils.readthedocs.org/en/latest/)
+and exposes the results through a simple API server that the dashboard calls.
 
-The **events_listener** listens for live events sent from github for a given repo
-(via hooks) and stores them as raw data which the data_processor can then use.
+Data flows directly into elasticsearch through the
+[GitHub river](https://github.com/uberVU/elasticsearch-river-github).
 
-
-The data inside elasticsearch is laid out as following - every repository get
+The data inside elasticsearch is laid out as following - every repository gets
 its own index, and event types are mapped to document types. Read more
 about it in [schema.md](https://github.com/uberVU/elasticboard/blob/master/schema.md).
 
