@@ -1,7 +1,7 @@
 elasticboard
 ============
 
-Dashboard that aggregates relevant metrics for Open Source projects. Helps with tracking status and evolution over time. Requires minimal set up and it's useful right away.
+Dashboard that aggregates relevant metrics for Open Source projects. Helps with tracking status and evolution over time. Requires minimal setup and it's useful right away.
 
 
 ##Current status
