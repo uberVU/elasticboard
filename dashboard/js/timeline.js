@@ -108,6 +108,14 @@ var TIMELINE_MAPPING = {
             var user = e.payload.member;
             return formatLink(user.html_url, user.login) + " as a collaborator";
         }
+    },
+    'PublicEvent': {
+        action: function(e) {
+            return "open sourced";
+        },
+        object: function(e) {
+            return "the repository";
+        }
     }
 };
 
