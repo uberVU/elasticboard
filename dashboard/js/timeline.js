@@ -67,13 +67,6 @@ var TIMELINE_MAPPING = {
             return e.payload.ref;
         },
     },
-    'IssueCommentEvent': {
-        action: function(e) {
-            return "commented on";
-        },
-        object: formatIssue,
-        link: formatComment
-    },
     'ForkEvent': {
         action: function(e) {
             return "forked to";
@@ -94,5 +87,12 @@ var TIMELINE_MAPPING = {
             return formatLink(page.html_url, page.page_name);
         }
     },
+    'IssueCommentEvent': {
+        action: function(e) {
+            return "commented on";
+        },
+        object: formatIssue,
+        link: formatComment
+    }
 };
 
