@@ -116,6 +116,15 @@ var TIMELINE_MAPPING = {
         object: function(e) {
             return "the repository";
         }
+    },
+    'PullRequestEvent': {
+        action: function(e) {
+            return e.payload.action;
+        },
+        object: function(e) {
+            var pullReq = e.payload.pull_request;
+            return "pull request " + formatLink(pullReq.html_url, pullReq.number);
+        }
     }
 };
 
