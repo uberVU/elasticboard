@@ -144,7 +144,7 @@ function getUserIssues () {
     $this.data('timeout-id', '');
     var username = $this.val().trim();
     if (username) {
-        $.get(API_BASE + '/gabrielfalcao/lettuce/'+ username +'/issues_assigned')
+        $.get(API_BASE + 'gabrielfalcao/lettuce/'+ username +'/issues_assigned')
             .success(function (data) {
                 console.log(data);
                 var source   = $("#user-issues").html();
