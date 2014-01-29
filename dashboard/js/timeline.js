@@ -41,11 +41,25 @@ var TIMELINE_MAPPING = {
     },
     'CreateEvent': {
         action: function(e) {
-            var s = "created ";
+            var s = "created";
             if (e.payload.ref_type == 'branch') {
-                return s + "branch";
+                return s + " branch";
             } else if (e.payload.ref_type == 'tag') {
-                return s + "tag";
+                return s + " tag";
+            }
+            return s;
+        },
+        object: function(e) {
+            return e.payload.ref;
+        },
+    },
+    'DeleteEvent': {
+        action: function(e) {
+            var s = "deleted";
+            if (e.payload.ref_type == 'branch') {
+                return s + " branch";
+            } else if (e.payload.ref_type == 'tag') {
+                return s + " tag";
             }
             return s;
         },
