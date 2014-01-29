@@ -20,13 +20,18 @@ function formatIssue(event) {
     return formatLink(issue.html_url, '#' + issue.number);
 }
 
+function formatComment(event) {
+    return formatLink(event.payload.comment.html_url, 'link');
+}
+
 
 var TIMELINE_MAPPING = {
     'IssueCommentEvent': {
         action: function(e) {
             return 'commented on';
         },
-        object: formatIssue
+        object: formatIssue,
+        link: formatComment
     }
 };
 

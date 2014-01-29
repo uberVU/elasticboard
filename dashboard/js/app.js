@@ -186,15 +186,20 @@ function populateTimeline(count, starting_from) {
           {count: count, starting_from: starting_from})
           .success(function(data) {
               data.data.forEach(function(e) {
-                  if (!TIMELINE_MAPPING[e.type]) {
+                  mapping = TIMELINE_MAPPING[e.type];
+                  if (!mapping) {
                       return;
                   }
-                  $timeline.append(template({
+                  context = {
                       author: formatAuthor(e.actor),
-                      action: TIMELINE_MAPPING[e.type].action(e),
-                      object: TIMELINE_MAPPING[e.type].object(e),
+                      action: mapping.action(e),
+                      object: mapping.object(e),
                       timestamp: e.created_at
-                  }));
+                  };
+                  if (mapping.link) {
+                      context.link = mapping.link(e);
+                  }
+                  $timeline.append(template(context));
               });
           });
 }
