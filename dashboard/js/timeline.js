@@ -99,6 +99,15 @@ var TIMELINE_MAPPING = {
             return e.payload.action;
         },
         object: formatIssue
+    },
+    'MemberEvent': {
+        action: function(e) {
+            return "added";
+        },
+        object: function(e) {
+            var user = e.payload.member;
+            return formatLink(user.html_url, user.login) + " as a collaborator";
+        }
     }
 };
 
