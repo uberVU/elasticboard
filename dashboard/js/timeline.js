@@ -11,13 +11,15 @@ function formatAuthor(author) {
     });
 }
 
-function formatLink(href, text) {
+function formatLink(href, text, title) {
+    if (title) {
+        return '<a href="' + href + '" title="' + title + '">' + text + '</a>';
+    }
     return '<a href="' + href + '">' + text + '</a>';
 }
 
-function formatIssue(event) {
-    var issue = event.payload.issue;
-    return formatLink(issue.html_url, '#' + issue.number);
+function formatIssue(issue) {
+    return formatLink(issue.html_url, '#' + issue.number, issue.title);
 }
 
 
@@ -89,7 +91,9 @@ var TIMELINE_MAPPING = {
         action: function(e) {
             return "commented on";
         },
-        object: formatIssue,
+        object: function(e) {
+            return formatIssue(e.payload.issue);
+        },
         link: function(e) {
             return e.payload.comment.html_url;
         }
@@ -98,7 +102,9 @@ var TIMELINE_MAPPING = {
         action: function(e) {
             return e.payload.action;
         },
-        object: formatIssue
+        object: function(e) {
+            return formatIssue(e.payload.issue);
+        }
     },
     'MemberEvent': {
         action: function(e) {
@@ -123,7 +129,7 @@ var TIMELINE_MAPPING = {
         },
         object: function(e) {
             var pullReq = e.payload.pull_request;
-            return "pull request " + formatLink(pullReq.html_url, '#' + pullReq.number);
+            return "pull request " + formatIssue(pullReq);
         }
     },
     'PullRequestReviewCommentEvent': {
