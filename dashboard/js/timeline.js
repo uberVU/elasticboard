@@ -123,7 +123,22 @@ var TIMELINE_MAPPING = {
         },
         object: function(e) {
             var pullReq = e.payload.pull_request;
-            return "pull request " + formatLink(pullReq.html_url, pullReq.number);
+            return "pull request #" + formatLink(pullReq.html_url, pullReq.number);
+        }
+    },
+    'PullRequestReviewCommentEvent': {
+        action: function(e) {
+            return "reviewed";
+        },
+        object: function(e) {
+            var url = e.payload.comment.pull_request_url;
+            var number = url.substring(url.lastIndexOf('/') + 1);
+            var htmlURL = e.payload.comment.html_url;
+            var pullReqURL = htmlURL.substring(0, htmlURL.lastIndexOf('#'));
+            return "pull request #" + makeLink(pullReqURL, number);
+        },
+        link: function(e) {
+            return makeLink(e.payload.comment.html_url, 'link');
         }
     }
 };
