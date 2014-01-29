@@ -177,7 +177,6 @@ $('.js-handler--github-username').on('keyup', function () {
 });
 
 
-
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
     var template = Handlebars.compile($('#timeline-item-template').html());
@@ -194,7 +193,7 @@ function populateTimeline(count, starting_from) {
                       author: formatAuthor(e.actor),
                       action: mapping.action(e),
                       object: mapping.object(e),
-                      timestamp: e.created_at
+                      timestamp: moment(e.created_at).fromNow()
                   };
                   if (mapping.link) {
                       context.link = mapping.link(e);

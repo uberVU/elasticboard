@@ -65,7 +65,13 @@
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
-        <p>{{{ author }}} {{ action }} {{{ object }}} at {{ timestamp }} {{{ link }}}</p>
+        <div class="small-8 columns">
+            <p>{{{ author }}} {{ action }} {{{ object }}} {{{ link }}}</p>
+        </div>
+        <div class="small-4 columns text-right">
+            <p class="timestamp muted">{{ timestamp }}</p>
+        </div>
+        <hr/>
     </div>
 </script>
 
@@ -79,6 +85,7 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="js/handlebars-v1.1.2.js"></script>
+<script src="js/moment.min.js"></script>
 <script src="js/timeline.js"></script>
 <script src="js/app.js"></script>
 

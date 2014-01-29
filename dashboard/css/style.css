@@ -35,3 +35,7 @@
     border-radius: 50%;
 }
 
+.timeline-item p {
+    line-height: 40px;
+}
+
