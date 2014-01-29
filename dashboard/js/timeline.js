@@ -140,6 +140,21 @@ var TIMELINE_MAPPING = {
         link: function(e) {
             return makeLink(e.payload.comment.html_url, 'link');
         }
+    },
+    'PushEvent': {
+        action: function(e) {
+            return "pushed";
+        },
+        object: function(e) {
+            var count = e.payload.size;
+            return count + " commits";
+        },
+        link: function(e) {
+            var head = e.payload.head;
+            var repo = e.repo.name;
+            var url = 'http://github.com/' + repo + '/commit/' + head;
+            return makeLink(url, 'link');
+        }
     }
 };
 
