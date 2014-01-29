@@ -198,7 +198,8 @@ function populateTimeline(count, starting_from) {
                   if (mapping.link) {
                       context.link = mapping.link(e);
                   }
-                  $timeline.append(template(context));
+                  var $item = $(template(context));
+                  $timeline.append($item);
               });
           });
 }
