@@ -150,3 +150,13 @@ def issues_assigned_to(index, login):
     issues = open_issues(index)
     return list(set(assigned).intersection(set(issues)))
 
+def recent_events(index, count=200, starting_from=0):
+    """
+    Returns the <count> most recent events, starting from
+    index <starting_from>.
+    """
+    q = S().indexes(index)
+    q = q[starting_from : starting_from + count]
+    q = q.values_dict()
+    return list(q)
+

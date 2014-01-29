@@ -1,7 +1,7 @@
 import queries
 
 from utils import crossdomain
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 app.debug = True
@@ -52,6 +52,15 @@ def issues_without_comments(owner, repo):
 def issues_assigned_to(owner, repo, login):
     index = index_name(owner, repo)
     data = queries.issues_assigned_to(index, login)
+    return jsonify(data=data)
+
+@app.route('/<owner>/<repo>/recent_events')
+@crossdomain(origin='*')
+def recent_events(owner, repo):
+    index = index_name(owner, repo)
+    count = int(request.args.get('count', 200))
+    starting_from = int(request.args.get('starting_from', 0))
+    data = queries.recent_events(index, count, starting_from)
     return jsonify(data=data)
 
 if __name__ == '__main__':

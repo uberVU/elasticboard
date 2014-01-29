@@ -21,3 +21,17 @@
 .muted {
     opacity: 0.5;
 }
+
+#timeline {
+    border: solid #aaa 1px;
+    height: 412px;
+    overflow: auto;
+    margin-bottom: 30px;
+    padding: 20px 40px;
+}
+
+.timeline-author img {
+    width: 40px;
+    border-radius: 50%;
+}
+

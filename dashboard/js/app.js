@@ -157,12 +157,12 @@ function getUserIssues () {
             })
             .fail(function (data) {
                 $('.template-user-issues').empty().text('Failed to retrieve data');
-            })
+            });
     }
 
 }
 
-/* 
+/*
 * Listen for keyup events and fetch data for specified user
 * has a 200ms delay between keyup and actual GET request
 * to prevent firing a cascade of requests
@@ -175,3 +175,29 @@ $('.js-handler--github-username').on('keyup', function () {
     $(this).data('timeout-id', timeout_id);
 
 });
+
+
+
+function populateTimeline(count, starting_from) {
+    var $timeline = $('#timeline');
+    var template = Handlebars.compile($('#timeline-item-template').html());
+
+    $.get(API_BASE + 'gabrielfalcao/lettuce/recent_events',
+          {count: count, starting_from: starting_from})
+          .success(function(data) {
+              data.data.forEach(function(e) {
+                  if (!TIMELINE_MAPPING[e.type]) {
+                      return;
+                  }
+                  $timeline.append(template({
+                      author: formatAuthor(e.actor),
+                      action: TIMELINE_MAPPING[e.type].action(e),
+                      object: TIMELINE_MAPPING[e.type].object(e),
+                      timestamp: e.created_at
+                  }));
+              });
+          });
+}
+
+populateTimeline(200, 0);
+

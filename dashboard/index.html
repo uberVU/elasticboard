@@ -22,6 +22,11 @@
 </div>
 
 <div class="graphs row">
+    <div id="timeline" class="small-12 large-8 columns large-centered">
+    </div>
+</div>
+
+<div class="graphs row">
     <div class="small-12 large-6 columns">
         <div class="graph" id="most-active-people"></div>
     </div>
@@ -58,9 +63,23 @@
     <ul>{{list}}</ul>
 </script>
 
+<script id="timeline-item-template" type="text/x-handlebars-template">
+    <div class="timeline-item row">
+        <p>{{{ author }}} {{ action }} {{{ object }}} at {{ timestamp }}</p>
+    </div>
+</script>
+
+<script id="timeline-author-template" type="text/x-handlebars-template">
+    <span class="timeline-author">
+        <img src="{{ avatarURL }}"/>
+        <a href="{{ githubURL }}">{{ login }}</a>
+    </span>
+</script>
+
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="js/handlebars-v1.1.2.js"></script>
+<script src="js/timeline.js"></script>
 <script src="js/app.js"></script>
 
 <!-- gh ribbon -->
