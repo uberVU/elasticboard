@@ -26,6 +26,19 @@ function formatComment(event) {
 
 
 var TIMELINE_MAPPING = {
+    'CommitCommentEvent': {
+        action: function(e) {
+            return 'commented on';
+        },
+        object: function(e) {
+            var url = e.payload.comment.html_url;
+            url = url.substring(0, url.lastIndexOf('#'));
+
+            var sha = url.substring(url.lastIndexOf('/') + 1);
+            return formatLink(url, sha.substring(0, 7));
+        },
+        link: formatComment
+    },
     'IssueCommentEvent': {
         action: function(e) {
             return 'commented on';
