@@ -169,6 +169,14 @@ var TIMELINE_MAPPING = {
         object: function(e) {
             return "the repository";
         }
+    },
+    'EndOfTimeline': {
+        action: function (e) {
+            return "No more events available";
+        },
+        object: function (e) {
+            return;
+        }
     }
 };
 
@@ -197,5 +205,27 @@ function populateTimeline(count, starting_from) {
                   $timeline.append($item);
               });
           });
+
+        if (!data.data.length) {
+                mapping = TIMELINE_MAPPING['EndOfTimeline'];
+                context = {
+                    author: "Sorry!",
+                    action: mapping.action(),
+                    object: mapping.object(),
+                    timestamp: ""
+                }
+                var $item = $(template(context));
+                $timeline.append($item);
+                $timeline.off('scroll');
+            }
+          });
+
+        if (!starting_from) {
+            $timeline.on('scroll', function () {
+                if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                    populateTimeline(200, $timeline.children('.timeline-item').length);
+                }
+            })
+        }
 }
 
