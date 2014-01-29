@@ -155,6 +155,14 @@ var TIMELINE_MAPPING = {
             var url = 'http://github.com/' + repo + '/commit/' + head;
             return makeLink(url, 'link');
         }
+    },
+    'WatchEvent': {
+        action: function(e) {
+            return "starred";
+        },
+        object: function(e) {
+            return "the repository";
+        }
     }
 };
 
