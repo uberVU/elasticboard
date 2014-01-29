@@ -66,7 +66,11 @@
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
         <div class="small-8 columns">
-            <p>{{{ author }}} {{ action }} {{{ object }}} {{{ link }}}</p>
+            <p>{{{ author }}} {{ action }} {{{ object }}}
+               {{#if link}}
+                    - see <a href="{{ link }}">here</a>.
+               {{/if}}
+            </p>
         </div>
         <div class="small-4 columns text-right">
             <p class="timestamp muted">{{ timestamp }}</p>

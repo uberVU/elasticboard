@@ -20,10 +20,6 @@ function formatIssue(event) {
     return formatLink(issue.html_url, '#' + issue.number);
 }
 
-function formatComment(event) {
-    return formatLink(event.payload.comment.html_url, 'link');
-}
-
 
 var TIMELINE_MAPPING = {
     'CommitCommentEvent': {
@@ -37,7 +33,9 @@ var TIMELINE_MAPPING = {
             var sha = url.substring(url.lastIndexOf('/') + 1);
             return formatLink(url, sha.substring(0, 7));
         },
-        link: formatComment
+        link: function(e) {
+            return e.payload.comment.html_url;
+        }
     },
     'CreateEvent': {
         action: function(e) {
@@ -92,7 +90,9 @@ var TIMELINE_MAPPING = {
             return "commented on";
         },
         object: formatIssue,
-        link: formatComment
+        link: function(e) {
+            return e.payload.comment.html_url;
+        }
     },
     'IssuesEvent': {
         action: function(e) {
@@ -138,7 +138,7 @@ var TIMELINE_MAPPING = {
             return "pull request " + makeLink(pullReqURL, '#' + number);
         },
         link: function(e) {
-            return makeLink(e.payload.comment.html_url, 'link');
+            return e.payload.comment.html_url;
         }
     },
     'PushEvent': {
@@ -153,7 +153,7 @@ var TIMELINE_MAPPING = {
             var head = e.payload.head;
             var repo = e.repo.name;
             var url = 'http://github.com/' + repo + '/commit/' + head;
-            return makeLink(url, 'link');
+            return url;
         }
     },
     'WatchEvent': {
