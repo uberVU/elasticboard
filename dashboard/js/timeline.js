@@ -73,6 +73,16 @@ var TIMELINE_MAPPING = {
         },
         object: formatIssue,
         link: formatComment
+    },
+    'ForkEvent': {
+        action: function(e) {
+            return "forked to";
+        },
+        object: function(e) {
+            var name = e.payload.forkee.full_name;
+            var url = e.payload.forkee.html_url;
+            return formatLink(url, name);
+        }
     }
 };
 
