@@ -177,32 +177,5 @@ $('.js-handler--github-username').on('keyup', function () {
 });
 
 
-function populateTimeline(count, starting_from) {
-    var $timeline = $('#timeline');
-    var template = Handlebars.compile($('#timeline-item-template').html());
-
-    $.get(API_BASE + 'gabrielfalcao/lettuce/recent_events',
-          {count: count, starting_from: starting_from})
-          .success(function(data) {
-              data.data.forEach(function(e) {
-                  mapping = TIMELINE_MAPPING[e.type];
-                  if (!mapping) {
-                      return;
-                  }
-                  context = {
-                      author: formatAuthor(e.actor),
-                      action: mapping.action(e),
-                      object: mapping.object(e),
-                      timestamp: moment(e.created_at).fromNow()
-                  };
-                  if (mapping.link) {
-                      context.link = mapping.link(e);
-                  }
-                  var $item = $(template(context));
-                  $timeline.append($item);
-              });
-          });
-}
-
 populateTimeline(200, 0);
 
