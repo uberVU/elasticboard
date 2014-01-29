@@ -32,6 +32,8 @@
 
 .timeline-item {
     padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin: 1.25rem 0 1.1875rem;
 }
 
 .timeline-author img {
