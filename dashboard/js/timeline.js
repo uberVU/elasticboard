@@ -80,11 +80,11 @@ var TIMELINE_MAPPING = {
     'GollumEvent': {
         action: function(e) {
             var page = e.payload.pages[0];
-            return page.action + " wiki page";
+            return page.action;
         },
         object: function(e) {
             var page = e.payload.pages[0];
-            return formatLink(page.html_url, page.page_name);
+            return "wiki page " + formatLink(page.html_url, page.page_name);
         }
     },
     'IssueCommentEvent': {
