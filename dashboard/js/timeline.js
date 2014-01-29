@@ -93,6 +93,12 @@ var TIMELINE_MAPPING = {
         },
         object: formatIssue,
         link: formatComment
+    },
+    'IssuesEvent': {
+        action: function(e) {
+            return e.payload.action;
+        },
+        object: formatIssue
     }
 };
 
