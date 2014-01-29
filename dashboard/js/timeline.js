@@ -83,6 +83,16 @@ var TIMELINE_MAPPING = {
             var url = e.payload.forkee.html_url;
             return formatLink(url, name);
         }
-    }
+    },
+    'GollumEvent': {
+        action: function(e) {
+            var page = e.payload.pages[0];
+            return page.action + " wiki page";
+        },
+        object: function(e) {
+            var page = e.payload.pages[0];
+            return formatLink(page.html_url, page.page_name);
+        }
+    },
 };
 
