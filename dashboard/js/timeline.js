@@ -123,7 +123,7 @@ var TIMELINE_MAPPING = {
         },
         object: function(e) {
             var pullReq = e.payload.pull_request;
-            return "pull request #" + formatLink(pullReq.html_url, pullReq.number);
+            return "pull request " + formatLink(pullReq.html_url, '#' + pullReq.number);
         }
     },
     'PullRequestReviewCommentEvent': {
@@ -135,7 +135,7 @@ var TIMELINE_MAPPING = {
             var number = url.substring(url.lastIndexOf('/') + 1);
             var htmlURL = e.payload.comment.html_url;
             var pullReqURL = htmlURL.substring(0, htmlURL.lastIndexOf('#'));
-            return "pull request #" + makeLink(pullReqURL, number);
+            return "pull request " + makeLink(pullReqURL, '#' + number);
         },
         link: function(e) {
             return makeLink(e.payload.comment.html_url, 'link');
