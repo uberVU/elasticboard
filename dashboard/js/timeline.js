@@ -28,7 +28,7 @@ function formatComment(event) {
 var TIMELINE_MAPPING = {
     'CommitCommentEvent': {
         action: function(e) {
-            return 'commented on';
+            return "commented on";
         },
         object: function(e) {
             var url = e.payload.comment.html_url;
@@ -39,9 +39,23 @@ var TIMELINE_MAPPING = {
         },
         link: formatComment
     },
+    'CreateEvent': {
+        action: function(e) {
+            var s = "created ";
+            if (e.payload.ref_type == 'branch') {
+                return s + "branch";
+            } else if (e.payload.ref_type == 'tag') {
+                return s + "tag";
+            }
+            return s;
+        },
+        object: function(e) {
+            return e.payload.ref;
+        },
+    },
     'IssueCommentEvent': {
         action: function(e) {
-            return 'commented on';
+            return "commented on";
         },
         object: formatIssue,
         link: formatComment
