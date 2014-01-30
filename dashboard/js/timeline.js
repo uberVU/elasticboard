@@ -185,6 +185,7 @@ var TIMELINE_MAPPING = {
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
     var template = Handlebars.compile($('#timeline-item-template').html());
+    var $loading = $('#timeline-loading');
 
     $.get(API_BASE + 'gabrielfalcao/lettuce/recent_events',
           {count: count, starting_from: starting_from})
@@ -204,7 +205,7 @@ function populateTimeline(count, starting_from) {
                       context.link = mapping.link(e);
                   }
                   var $item = $(template(context));
-                  $timeline.append($item);
+                  $item.insertBefore($loading);
               });
 
               if (!data.data.length) {
@@ -216,6 +217,7 @@ function populateTimeline(count, starting_from) {
                       timestamp: ""
                   }
                   var $item = $(template(context));
+                  $loading.remove();
                   $timeline.append($item);
                   $timeline.off('scroll');
               }
