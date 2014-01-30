@@ -63,6 +63,13 @@ def recent_events(owner, repo):
     data = queries.recent_events(index, count, starting_from)
     return jsonify(data=data)
 
+@app.route('/available_repos')
+@crossdomain(origin='*')
+def available_repos():
+    data = queries.available_repos()
+    return jsonify(data=data)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 

@@ -160,3 +160,16 @@ def recent_events(index, count=200, starting_from=0):
     q = q.values_dict()
     return list(q)
 
+def available_repos():
+    EXCLUDED = ['kibana-int']
+    # get all indices
+    indices = ES.indices.get_aliases().keys()
+    # filter out those that don't look as repos
+    indices = [i for i in indices if len(i.split('-')) == 2]
+    # there are some that still sneak by
+    indices = [i for i in indices if i not in EXCLUDED]
+
+    # format them as github repos (slashes)
+    formatted = [i.replace('/', '-') for i in indices]
+    return formatted
+
