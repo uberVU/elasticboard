@@ -204,28 +204,27 @@ function populateTimeline(count, starting_from) {
                   var $item = $(template(context));
                   $timeline.append($item);
               });
+
+              if (!data.data.length) {
+                  mapping = TIMELINE_MAPPING['EndOfTimeline'];
+                  context = {
+                      author: "Sorry!",
+                      action: mapping.action(),
+                      object: mapping.object(),
+                      timestamp: ""
+                  }
+                  var $item = $(template(context));
+                  $timeline.append($item);
+                  $timeline.off('scroll');
+              }
           });
 
-        if (!data.data.length) {
-                mapping = TIMELINE_MAPPING['EndOfTimeline'];
-                context = {
-                    author: "Sorry!",
-                    action: mapping.action(),
-                    object: mapping.object(),
-                    timestamp: ""
-                }
-                var $item = $(template(context));
-                $timeline.append($item);
-                $timeline.off('scroll');
-            }
-          });
-
-        if (!starting_from) {
-            $timeline.on('scroll', function () {
-                if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                    populateTimeline(200, $timeline.children('.timeline-item').length);
-                }
-            })
-        }
+    if (!starting_from) {
+      $timeline.on('scroll', function () {
+          if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+              populateTimeline(200, $timeline.children('.timeline-item').length);
+          }
+      })
+    }
 }
 
