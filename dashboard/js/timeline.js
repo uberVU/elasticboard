@@ -1,3 +1,5 @@
+PER_PAGE = 100;
+
 var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
 function formatAuthor(author) {
     var login = author.login;
@@ -222,7 +224,7 @@ function populateTimeline(count, starting_from) {
     if (!starting_from) {
       $timeline.on('scroll', function () {
           if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-              populateTimeline(200, $timeline.children('.timeline-item').length);
+              populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
           }
       })
     }

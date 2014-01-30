@@ -177,5 +177,5 @@ $('.js-handler--github-username').on('keyup', function () {
 });
 
 
-populateTimeline(200, 0);
+populateTimeline(PER_PAGE, 0);
 
