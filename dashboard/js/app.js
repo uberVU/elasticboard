@@ -18,7 +18,7 @@ if (hash.length > 1) var REPO = hash[1] + '/' + hash[2];
 else getDefaultRepo();
 
 $('#user-repo').text(REPO);
-$('.cog').on('click', function () {
+$('#repo-select-trigger').on('click', function () {
 
     var $container = $('.repo-select');
     var $repoList = $('ul', $container);
@@ -27,13 +27,12 @@ $('.cog').on('click', function () {
     $repoList.toggleClass('show--fade-in');
 
     if (!$container.hasClass('hidden')) {
-            getAvailableRepos(addRepos);
-        } else {
-            setTimeout(function () {
-                $repoList.empty();
-            }, 100);
-        }
-
+        getAvailableRepos(addRepos);
+    } else {
+        setTimeout(function () {
+            $repoList.empty();
+        }, 200);
+    }
 });
 
 function getAvailableRepos (cb) {
