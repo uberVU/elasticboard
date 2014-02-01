@@ -9,10 +9,6 @@
     margin-left: 2em;
 }
 
-.graphs.row {
-    max-width: 90%;
-}
-
 .full-width {
     width: 100%;
     max-width: 100%;
@@ -22,13 +18,25 @@
     opacity: 0.5;
 }
 
+.tab {
+    overflow-y: auto;
+    height: 600px;
+}
+
+ul.menu li {
+    cursor: pointer;
+    height: 40px;
+    background: rgb(245, 245, 245);
+    list-style-type: none;
+    margin-bottom: 5px;
+}
 #timeline {
     border: solid #aaa 1px;
-    height: 600px;
     overflow: auto;
     margin-bottom: 30px;
     padding: 20px 40px;
 }
+
 
 .timeline-item {
     padding: 10px;

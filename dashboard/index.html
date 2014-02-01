@@ -21,43 +21,38 @@
     <p>Explore the data using <a href="kibana-latest/index.html">Kibana</a>.</p>
 </div>
 
-<div class="graphs row">
-    <div id="timeline" class="small-12 large-8 columns large-centered">
-        <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+<div class="container row full-width">
+    <div class="small-0 large-2 columns" id="side-menu">
+        <ul class="menu">
+            <li data-tab="tab-1">Timeline</li>
+            <li data-tab="tab-2">Graphs</li>
+        </ul>
     </div>
-</div>
 
-<div class="graphs row">
-    <div class="small-12 large-6 columns">
-        <div class="graph" id="most-active-people"></div>
-    </div>
-    <div class="small-12 large-6 columns">
-        <div class="graph" id="total-events-monthly"></div>
-    </div>
-</div>
-
-<div class="graphs row">
-    <div class="small-12 large-6 columns">
-        <div class="graph" id="most-active-issues"></div>
-    </div>
-    <div class="small-12 large-6 columns">
-        <div class="graph" id="open-issues">
+    <div class="small-12 large-10 columns" id="tab-container">
+        <div class="tab" id="tab-1">
+            <div id="timeline" class="large-centered">
+                <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+            </div>
+        </div>
+        <div class="tab hide" id="tab-2">
+            <div class="small-8 columns small-centered">
+                <div class="graph" id="most-active-people"></div>
+                <div class="graph" id="total-events-monthly"></div>
+                <div class="graph" id="most-active-issues"></div>
+                <div class="graph" id="open-issues"></div>
+                <div class="graph" id="issues-without-comments"></div>
+                <div class="graph">
+                    <h3 class="text-center">Assigned issues</h3>
+                    <p><input type="text" placeholder="GitHub username" class="js-handler--github-username"></p>
+                    <div class="template-user-issues"></div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
-<div class="graphs row">
-    <div class="small-12 large-6 columns">
-        <div class="graph" id="issues-without-comments"></div>
-    </div>
-    <div class="small-12 large-6 columns">
-        <div class="graph">
-            <h3 class="text-center">Assigned issues</h3>
-            <p><input type="text" placeholder="GitHub username" class="js-handler--github-username"></p>
-            <div class="template-user-issues"></div>
-        </div>
-    </div>
-</div>
 
 <script id="user-issues" type="text/x-handlebars-template">
     <p>All issues assigned to {{user}}</p>
@@ -68,9 +63,9 @@
     <div class="timeline-item row">
         <div class="small-8 columns">
             <p>{{{ author }}} {{ action }} {{{ object }}}
-               {{#if link}}
-                    - see <a href="{{ link }}">here</a>.
-               {{/if}}
+                {{#if link}}
+                - see <a href="{{ link }}">here</a>.
+                {{/if}}
             </p>
         </div>
         <div class="small-4 columns text-right">
@@ -80,10 +75,10 @@
 </script>
 
 <script id="timeline-author-template" type="text/x-handlebars-template">
-    <span class="timeline-author">
-        <img src="{{ avatarURL }}"/>
-        <a href="{{ githubURL }}">{{ login }}</a>
-    </span>
+        <span class="timeline-author">
+            <img src="{{ avatarURL }}"/>
+            <a href="{{ githubURL }}">{{ login }}</a>
+        </span>
 </script>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -91,6 +86,7 @@
 <script src="js/handlebars-v1.1.2.js"></script>
 <script src="js/moment.min.js"></script>
 <script src="js/timeline.js"></script>
+<script src="js/tabs.js"></script>
 <script src="js/app.js"></script>
 
 <!-- gh ribbon -->
