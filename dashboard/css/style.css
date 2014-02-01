@@ -1,5 +1,19 @@
+body {
+    background: rgb(51, 51, 51);
+    color: white;
+}
+
+#topbar {
+    background: rgb(31, 31, 31);
+    color: white;
+    margin-bottom: 20px;
+}
+
+#topbar h1 {
+    color: white;
+}
+
 .graph {
-    border: solid #aaa 1px;
     padding: 5px;
     height: 36rem;
     margin-bottom: 30px;
@@ -28,13 +42,22 @@
     height: 100%;
 }
 
+ul.menu {
+    background: rgb(31, 31, 31);
+}
+
 ul.menu li {
     cursor: pointer;
     height: 40px;
-    background: rgb(245, 245, 245);
+    line-height: 40px;
     list-style-type: none;
-    margin-bottom: 5px;
+    border-bottom: 1px solid #777;
 }
+
+ul.menu li:hover {
+    background: rgb(180, 180, 180);
+}
+
 #timeline {
     overflow: auto;
     margin-bottom: 30px;
@@ -45,7 +68,7 @@ ul.menu li {
 
 .timeline-item {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #777;
     margin: 1.25rem 0 1.1875rem;
 }
     
