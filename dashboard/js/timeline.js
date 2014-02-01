@@ -1,4 +1,4 @@
-PER_PAGE = 100;
+PER_PAGE = 50;
 
 var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
 function formatAuthor(author) {
