@@ -182,8 +182,6 @@ var TIMELINE_MAPPING = {
     }
 };
 
-$('#tab-container').height($(document).height() - $('.panel').height() - 80);
-
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
     var template = Handlebars.compile($('#timeline-item-template').html());
