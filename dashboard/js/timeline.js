@@ -228,12 +228,11 @@ function populateTimeline(count, starting_from) {
           });
 
     if (!starting_from) {
-      $('#tab-1').on('scroll', function () {
-          console.log('scroll')
-          if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-              populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
-          }
-      })
+        $('#tab-1').on('scroll', function () {
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
+            }
+        });
     }
 }
 

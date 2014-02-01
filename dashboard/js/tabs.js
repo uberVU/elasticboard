@@ -9,7 +9,7 @@ $('ul.menu li').click(function (e) {
     $newTab.show();
     $crtTab = $newTab;
 
-    $(window).scrollTop(0);
+    $newTab.scrollTop(0);
 
     // call function (if any)
     var fname = $t.data('function');
