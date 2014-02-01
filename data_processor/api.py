@@ -66,7 +66,7 @@ def recent_events(owner, repo):
 @app.route('/available_repos')
 @crossdomain(origin='*')
 def available_repos():
-    data = queries.available_repos()
+    data = sorted(queries.available_repos())
     return jsonify(data=data)
 
 
