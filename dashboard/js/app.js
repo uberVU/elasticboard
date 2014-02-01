@@ -14,8 +14,11 @@ fitTabContainer();
 var API_HOST = 'http://' + window.location.hostname + ':5000/';
 var API_BASE = API_HOST;
     API_BASE += hash[1] + '/' + hash[2];
-if (hash.length > 1) var REPO = hash[1] + '/' + hash[2];
-else getDefaultRepo();
+if (hash.length > 1) {
+    var REPO = hash[1] + '/' + hash[2];
+} else {
+    getDefaultRepo();
+}
 
 $('#user-repo').text(REPO);
 $('#repo-select-trigger').on('click', function () {
