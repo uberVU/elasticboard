@@ -72,8 +72,6 @@ function getDefaultRepo() {
 }
 
 function loadDashboard (newlocation) {
-
     location.href = newlocation;
     location.reload();
-
 }
