@@ -1,23 +1,23 @@
 elasticboard
 ============
 
-Dashboard that aggregates relevant metrics for Open Source projects. Helps with tracking status and evolution over time. Requires minimal setup and it's useful right away.
+A dashboard that provides an easy way to track a GitHub repo's evolution. There's a timeline to quickly bring you up to
+speed, graphs to view aggregated statistics and useful insights
+so that you never miss an issue again.
 
 
 ##Current status
 
-The project is just getting started. We have the data ingestion part covered
-and we are currently using Kibana to explore the data in order the
-observe relevant patterns and build a custom dashboard.
+Working prototype. We have the timeline and some graphs.
 
 We are working on implementing
-[queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)
-in order to provide relevant metrics.
+[queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open) and [insights](https://github.com/uberVU/elasticboard/wiki/Insights)
+in order to provide relevant information.
 
 ##How you can help
 
 Help us implement
-[queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open)!
+[queries](https://github.com/uberVU/elasticboard/issues?labels=query&page=1&state=open) and [insights](https://github.com/uberVU/elasticboard/wiki/Insights)!
 We are using the friendly
 [elasticutils](http://elasticutils.readthedocs.org/en/latest/) library for this.
 The
@@ -31,10 +31,8 @@ please submit it on the [issue tracker](https://github.com/uberVU/elasticboard/i
 
 ##Prototype architecture
 
-The **dashboard** provides the user with data visualization. It gets all the
-data it needs from the elasticsearch service. We are working on building
-our own dashboard, but in the meantime you can also explore the data using
-Kibana.
+The **dashboard** takes care of the visualization aspect. You can even
+use the embedded Kibana instance to manually explore the data.
 
 The **data_processor** is where all querying happens. It accesses data stored in
 elasticsearch using [elasticutils](http://elasticutils.readthedocs.org/en/latest/)
@@ -79,6 +77,4 @@ Start a webserver in `dashboard`:
     cd dashboard; python -m SimpleHTTPServer
 
 Point your browser to [http://localhost:8000](http://localhost:8000)
-(or whatever URL you are using). You'll see the current version of the
-dashboard. If you want to visually explore the data, there's also a link
-to Kibana on that page.
+(or whatever URL you are using) and you are good to go!
