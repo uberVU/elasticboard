@@ -24,7 +24,6 @@ $('#repo-select-trigger').on('click', function () {
     var $repoList = $('ul', $container);
 
     $container.toggleClass('hidden');
-    $repoList.toggleClass('show--fade-in');
 
     if (!$container.hasClass('hidden')) {
         getAvailableRepos(addRepos);
@@ -45,10 +44,9 @@ function getAvailableRepos (cb) {
 }
 
 function addRepos (data) {
-
     var $container = $('.repo-select');
-    var $repoList = $('ul', $container);
 
+    var $repoList = $('ul', $container);
     data.data.forEach(function (repo) {
         var repoLink = document.createElement('a');
         var repoLI = document.createElement('li');
@@ -63,6 +61,8 @@ function addRepos (data) {
         });
         $repoList.append(repoLI);
     });
+
+    $repoList.toggleClass('show--fade-in');
 }
 
 function getDefaultRepo() {
