@@ -8,4 +8,12 @@ $('ul.menu li').click(function (e) {
     $crtTab.hide();
     $newTab.show();
     $crtTab = $newTab;
+
+    $(window).scrollTop(0);
+
+    // call function (if any)
+    var fname = $t.data('function');
+    if (fname) {
+        window[fname]();
+    }
 });
