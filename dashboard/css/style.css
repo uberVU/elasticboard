@@ -161,6 +161,10 @@ ul.menu li:hover {
             -moz-transform: rotate(45deg);
             border-top: 1px solid #ddd;
             border-left: 1px solid #ddd;
+            opacity: 0;
+            -webkit-transition-duration: .3s;
+            -moz-transition-duration: .3s;
+            transition-duration: .3s;
         }
 
     .repo-select ul li {
@@ -181,6 +185,13 @@ ul.menu li:hover {
     -moz-transition-duration: .3s;
     transition-duration: .3s;
 }
+
+    .show--fade-in:after {
+        opacity: 1 !important;
+        -webkit-transition-duration: .3s;
+        -moz-transition-duration: .3s;
+        transition-duration: .3s;
+    }
 
 @-webkit-keyframes spinner {
     0% {-webkit-transform: rotate(0deg);}
