@@ -90,6 +90,22 @@ ul.menu li:hover {
     margin-bottom: 0;
 }
 
+.inline {
+    display: inline-block;
+}
+
+.cog {
+    display: inline-block;
+    margin: 0 0 1.2rem 0;
+}
+    
+    .cog:hover {
+        -webkit-transform: rotate(180deg);
+        -webkit-transition-duration: .5s;
+        -moz-transform: rotate(180deg);
+        -moz-transition-duration: .5s;
+    }
+
 .loading {
     text-align: center;
     font-weight: bold;
@@ -111,6 +127,56 @@ ul.menu li:hover {
         -moz-animation: spinner .4s infinite linear;
     }
 
+.repo-select {
+    position: relative;
+}
+
+    .repo-select ul {
+        position: absolute;
+        right:0;
+        top:-20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        z-index: 1;
+        opacity: 0;
+        -webkit-transition-duration: .3s;
+        -moz-transition-duration: .3s;
+        transition-duration: .3s;
+    }
+
+        .repo-select ul:after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            background: #fff;
+            top: -.5rem;
+            right: 1px;
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            border-top: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+        }
+
+    .repo-select ul li {
+        list-style: none;
+        font-size: 1.2rem;
+        padding: .5rem 1rem;
+    }
+
+.hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.show--fade-in {
+    opacity: 1 !important;
+    top: 0 !important;
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    transition-duration: .3s;
+}
 
 @-webkit-keyframes spinner {
     0% {-webkit-transform: rotate(0deg);}
