@@ -54,6 +54,10 @@ ul.menu li {
     border-bottom: 1px solid #777;
 }
 
+ul.menu li:last-child {
+    border-bottom: none;
+}
+
 ul.menu li:hover {
     background: rgb(180, 180, 180);
 }

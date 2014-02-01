@@ -7,4 +7,3 @@ window.onresize = fitTabContainer;
 fitTabContainer();
 
 populateTimeline(PER_PAGE, 0);
-
