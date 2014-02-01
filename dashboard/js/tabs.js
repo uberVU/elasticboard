@@ -11,6 +11,11 @@ $('ul.menu li').click(function (e) {
     var $newTab = $('#' + tabID);
     var $tabContainer = $('#tab-container');
 
+    if (tabID == 'github') {
+        window.location.href = "https://github.com/ubervu/elasticboard/";
+        return;
+    }
+
     var scroll = $crtTab.scrollTop();
     $crtTab.data('scroll', scroll);
 
