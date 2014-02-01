@@ -182,6 +182,8 @@ var TIMELINE_MAPPING = {
     }
 };
 
+$('#tab-container').height($(document).height() - $('.panel').height() - 80);
+
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
     var template = Handlebars.compile($('#timeline-item-template').html());
@@ -221,12 +223,13 @@ function populateTimeline(count, starting_from) {
                   var $item = $(template(context));
                   $loading.remove();
                   $timeline.append($item);
-                  $timeline.off('scroll');
+                  $('#tab-1').off('scroll');
               }
           });
 
     if (!starting_from) {
-      $timeline.on('scroll', function () {
+      $('#tab-1').on('scroll', function () {
+          console.log('scroll')
           if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
               populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
           }
