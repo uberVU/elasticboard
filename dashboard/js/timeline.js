@@ -187,7 +187,7 @@ function populateTimeline(count, starting_from) {
     var template = Handlebars.compile($('#timeline-item-template').html());
     var $loading = $('#timeline-loading');
 
-    $.get(API_BASE + 'gabrielfalcao/lettuce/recent_events',
+    $.get(API_BASE + '/recent_events',
           {count: count, starting_from: starting_from})
           .success(function(data) {
               var fragment = document.createDocumentFragment();
@@ -234,3 +234,4 @@ function populateTimeline(count, starting_from) {
     }
 }
 
+populateTimeline(PER_PAGE, 0);

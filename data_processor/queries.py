@@ -170,6 +170,6 @@ def available_repos():
     indices = [i for i in indices if i not in EXCLUDED]
 
     # format them as github repos (slashes)
-    formatted = [i.replace('/', '-') for i in indices]
+    formatted = [i.replace('-', '/') for i in indices]
     return formatted
 
