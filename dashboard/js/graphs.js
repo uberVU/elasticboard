@@ -134,7 +134,7 @@ function drawGraphs() {
         type: 'bar',
         title: "Most active issues",
         keyName: function (e) {
-            return makeLink('http://github.com/' + REPO + e.term,
+            return makeLink('http://github.com/' + REPO + e.term + '/',
                             "#" + e.term);
         },
         valueName: 'count',
@@ -147,7 +147,7 @@ function drawGraphs() {
         endpoint: 'gabrielfalcao/lettuce/open_issues',
         title: "Open issues",
         keyName: function (e) {
-            return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e,
+            return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e + "/",
                             "#" + e);
         }
     });
@@ -156,7 +156,7 @@ function drawGraphs() {
         endpoint: 'gabrielfalcao/lettuce/issues_without_comments',
         title: "Issues without comments",
         keyName: function (e) {
-            return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e,
+            return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e + "/",
                             "#" + e);
         }
     });
