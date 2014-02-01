@@ -32,3 +32,4 @@ $('ul.menu li').click(function (e) {
 
     $crtTab = $newTab;
 });
+

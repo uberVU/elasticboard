@@ -22,7 +22,7 @@
         <ul class="menu">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
-            <li>Explore the data using <a href="kibana-latest/index.html">Kibana</a></li>
+            <li data-tab="tab-3">Kibana</li>
         </ul>
     </div>
 
@@ -32,6 +32,7 @@
                 <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
             </div>
         </div>
+
         <div class="tab hide" id="tab-2">
             <div class="small-8 columns small-centered">
                 <div class="graph" id="most-active-people"></div>
@@ -45,6 +46,10 @@
                     <!--<div class="template-user-issues"></div>-->
                 <!--</div>-->
             </div>
+        </div>
+
+        <div class="tab hide" id="tab-3">
+            <iframe src="kibana-latest/index.html" frameborder="0"></iframe>
         </div>
     </div>
 
