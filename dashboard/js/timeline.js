@@ -187,6 +187,18 @@ function populateTimeline(count, starting_from) {
     var template = Handlebars.compile($('#timeline-item-template').html());
     var $loading = $('#timeline-loading');
 
+    // if we don't have a specified index, don't do anythin
+    if (API_BASE.indexOf('undefined/undefined') >= 0) {
+        return;
+    }
+
+    if (!count) {
+        count = PER_PAGE;
+    }
+    if (!starting_from) {
+        starting_from = 0;
+    }
+
     $.get(API_BASE + '/recent_events',
           {count: count, starting_from: starting_from})
           .success(function(data) {
@@ -234,4 +246,4 @@ function populateTimeline(count, starting_from) {
     }
 }
 
-populateTimeline(PER_PAGE, 0);
+populateTimeline();
