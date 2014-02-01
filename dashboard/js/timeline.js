@@ -190,6 +190,7 @@ function populateTimeline(count, starting_from) {
     $.get(API_BASE + 'gabrielfalcao/lettuce/recent_events',
           {count: count, starting_from: starting_from})
           .success(function(data) {
+              var fragment = document.createDocumentFragment();
               data.data.forEach(function(e) {
                   mapping = TIMELINE_MAPPING[e.type];
                   if (!mapping) {
@@ -205,8 +206,9 @@ function populateTimeline(count, starting_from) {
                       context.link = mapping.link(e);
                   }
                   var $item = $(template(context));
-                  $item.insertBefore($loading);
+                  fragment.appendChild($item[0]);
               });
+              $(fragment).insertBefore($loading);
 
               if (!data.data.length) {
                   mapping = TIMELINE_MAPPING['EndOfTimeline'];
