@@ -64,11 +64,8 @@ up and running on the default 9200 port.
 
 ###Fire up the API server
 
-Run `data_processor/api.py`:
+	gunicorn -w 4 -b 0.0.0.0:5000 data_processor.api:app
 
-	python data_processor/api.py
-
-This will start the API server listening on `127.0.0.1:5000`.
 
 ###Serve the dashboard
 
