@@ -31,6 +31,7 @@ $('#repo-select-trigger').on('click', function () {
     if (!$container.hasClass('hidden')) {
         getAvailableRepos(addRepos);
     } else {
+        $('.show--fade-in').removeClass('show--fade-in');
         setTimeout(function () {
             $repoList.empty();
         }, 200);
@@ -41,7 +42,6 @@ function getAvailableRepos (cb) {
     $.get(API_HOST + 'available_repos')
         .success(cb)
     .fail(function (data) {
-        console.log(data.reponseText);
         console.log('An error has occured');
     });
 }
