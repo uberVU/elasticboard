@@ -33,3 +33,4 @@ def index_events(event_list, index_name=INDEX_NAME):
 def index_other(items, index_name=INDEX_NAME, doc_type='generic'):
     for item in items:
         ES.index(index=index_name, doc_type=doc_type, body=item)
+
