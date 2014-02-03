@@ -3,3 +3,6 @@ elasticutils==0.8.1
 requests==2.0.1
 Flask==0.10.1
 gunicorn==18.0
+greenlet
+eventlet
+gevent
