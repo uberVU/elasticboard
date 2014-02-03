@@ -1,0 +1,40 @@
+# http://stackoverflow.com/a/14120342
+server {
+    listen       9200;
+    server_name  _;
+
+    error_log   elasticsearch-errors.log;
+    access_log  elasticsearch.log;
+
+    location / {
+        if ($request_method !~ "GET") {
+            return 403;
+            break;
+        }
+
+        proxy_pass http://localhost:9200;
+        proxy_redirect off;
+
+        proxy_set_header  X-Real-IP  $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  Host $http_host;
+    }
+}
+
+server {
+    listen       9200;
+    server_name  127.0.0.1;
+
+    error_log   elasticsearch-errors.log;
+    access_log  elasticsearch.log;
+
+    location / {
+        proxy_pass http://localhost:9200;
+        proxy_redirect off;
+
+        proxy_set_header  X-Real-IP  $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  Host $http_host;
+    }
+}
+

@@ -1,0 +1,10 @@
+server {
+    listen 80 default_server;
+    root /tmp/elasticboard/dashboard;
+    index index.html;
+    autoindex on;
+
+    location / {
+    }
+}
+
