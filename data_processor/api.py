@@ -79,6 +79,15 @@ def issues_activity(owner, repo):
     data = {'opened': opened, 'closed': closed}
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/issues_count')
+@crossdomain(origin='*')
+def issues_count(owner, repo):
+    index = index_name(owner, repo)
+    open = queries.issues_count(index, 'open')
+    closed =  queries.issues_count(index, 'closed')
+    data = {'open': open, 'closed': closed}
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

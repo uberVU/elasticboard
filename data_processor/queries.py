@@ -178,3 +178,9 @@ def issue_events_count(index, action, start=None, end=None):
     q = apply_time_filter(q, start, end)
     q = q.filter(**{'payload.action': action})
     return q.count()
+
+def issues_count(index, state):
+    # state can be 'open' or 'closed'
+    q = S().indexes(index).doctypes('IssueData')
+    q = q.filter(state=state)
+    return q.count()
