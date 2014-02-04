@@ -47,7 +47,7 @@ def past_n_months(index, query, n):
 
         month_data = {
                 'month': start.strftime('%B'),
-                'value': query(index, start, end)
+                'value': query(index=index, start=start, end=end)
         }
         data.append(month_data)
     return data
@@ -172,3 +172,9 @@ def available_repos():
     formatted = [i.replace('-', '/') for i in indices]
     return formatted
 
+def issue_events_count(index, action, start=None, end=None):
+    # action can be 'opened' or 'closed'
+    q = S().indexes(index).doctypes('IssuesEvent')
+    q = apply_time_filter(q, start, end)
+    q = q.filter(**{'payload.action': action})
+    return q.count()
