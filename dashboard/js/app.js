@@ -97,3 +97,22 @@ function populateOpenIssues() {
     });
 }
 populateOpenIssues();
+
+function populateOpenPulls() {
+    $.get(API_BASE + "/pulls_count").success(function (data) {
+        var count = data.data.open;
+        $('#open-pulls-count').text(count);
+
+        if (!count) {
+            return;
+        }
+
+        var $p = $('#open-pulls');
+        $p.click(function () {
+            var url = 'http://github.com/' + REPO + '/pulls?state=open';
+            window.location.href = url;
+        });
+        $p.addClass('clickable');
+    });
+}
+populateOpenPulls();

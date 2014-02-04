@@ -160,3 +160,8 @@ def issues_count(index, state):
     q = S().indexes(index).doctypes('IssueData')
     q = q.filter(state=state)
     return q.count()
+
+def pulls_count(index):
+    # we only have open pull requests
+    q = S().indexes(index).doctypes('PullRequestData')
+    return q.count()

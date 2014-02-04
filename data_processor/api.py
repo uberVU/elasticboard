@@ -81,6 +81,14 @@ def issues_count(owner, repo):
     data = {'open': open, 'closed': closed}
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/pulls_count')
+@crossdomain(origin='*')
+def pulls_count(owner, repo):
+    index = index_name(owner, repo)
+    count = queries.pulls_count(index)
+    data = {'open': count}
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

@@ -202,6 +202,10 @@ ul.menu li:hover {
     color: red;
 }
 
+#open-pulls-count {
+    color: green;
+}
+
 .clickable {
     cursor: pointer;
 }
