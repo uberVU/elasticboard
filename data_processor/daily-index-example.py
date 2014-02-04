@@ -5,7 +5,7 @@ import os
 import sys
 import tempfile
 
-from github import parse_events, dump_repo_events
+from github import parse_json_file, dump_repo_events
 from es import index_events
 
 OWNER = "TODO"
@@ -36,7 +36,7 @@ def index_received_events():
         print >>sys.stderr, "Yesterday file does not exist (%s)." % f
         return False
 
-    events = parse_events(f)
+    events = parse_json_file(f)
     index_events(events)
     return True
 
@@ -50,7 +50,7 @@ def index_api_events():
 
     dump_repo_events(path, owner=OWNER, repo=REPO, user=API_USER,
                      password=API_PASSWORD, newer_than=yesterday)
-    events = parse_events(path)
+    events = parse_json_file(path)
 
     index_name = '%s-%s' % (OWNER, REPO)
     index_events(events, index_name=index_name)

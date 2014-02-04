@@ -56,10 +56,12 @@ up and running on the default 9200 port.
 	$ # probably in a virtualenv
 	$ pip install -r data_processor/requirements-pip
     $ python
-    >>> from data_processor.es import index_events
-    >>> from data_processor.github import parse_events
-    >>> events = parse_events('contrib/lettuce-events')
+    >>> from data_processor.es import index_events, index_issues
+    >>> from data_processor.github import parse_json_file
+    >>> events = parse_json_file('contrib/lettuce-events')
     >>> index_events(events, index_name='gabrielfalcao-lettuce')
+    >>> issues = parse_json_file('contrib/lettuce-issues')
+    >>> index_issues(issues, index_name='gabrielfalcao-lettuce')
 
 
 ###Fire up the API server

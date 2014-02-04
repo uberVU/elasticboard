@@ -1,6 +1,6 @@
 import elasticsearch
 
-INDEX_NAME = 'demo'
+INDEX_NAME = 'demo-demo'
 
 ES_NODE = {
     'host': 'localhost',
@@ -24,3 +24,6 @@ def index_events(event_list, index_name=INDEX_NAME):
             doc_type = 'generic'
         ES.index(index=index_name, doc_type=doc_type, body=ev)
 
+def index_issues(issue_list, index_name=INDEX_NAME):
+    for issue in issue_list:
+        ES.index(index=index_name, doc_type='IssueData', body=issue)
