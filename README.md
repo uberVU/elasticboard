@@ -61,7 +61,9 @@ up and running on the default 9200 port.
     >>> events = parse_json_file('contrib/lettuce-events')
     >>> index_events(events, index_name='gabrielfalcao-lettuce')
     >>> issues = parse_json_file('contrib/lettuce-issues')
-    >>> index_issues(issues, index_name='gabrielfalcao-lettuce')
+    >>> index_other(issues, index_name='gabrielfalcao-lettuce', doc_type='IssueData')
+    >>> pulls = parse_json_file('contrib/lettuce-pulls')
+    >>> index_other(pulls, index_name='gabrielfalcao-lettuce', doc_type='PullRequestData')
 
 
 ###Fire up the API server
