@@ -129,6 +129,9 @@ ul.menu li:hover {
 
 #repo-select-trigger {
     cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .repo-select {
