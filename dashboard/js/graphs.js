@@ -143,15 +143,6 @@ function drawGraphs() {
     });
 
     /*
-    makeList('#open-issues', {
-        endpoint: 'gabrielfalcao/lettuce/open_issues',
-        title: "Open issues",
-        keyName: function (e) {
-            return makeLink("http://github.com/gabrielfalcao/lettuce/issues/" + e,
-                            "#" + e);
-        }
-    });
-
     makeList('#issues-without-comments', {
         endpoint: 'gabrielfalcao/lettuce/issues_without_comments',
         title: "Issues without comments",
