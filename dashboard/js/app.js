@@ -78,3 +78,22 @@ function loadDashboard (newlocation) {
     location.href = newlocation;
     location.reload();
 }
+
+function populateOpenIssues() {
+    $.get(API_BASE + "/issues_count").success(function (data) {
+        var count = data.data.open;
+        $('#open-issues-count').text(count);
+
+        if (!count) {
+            return;
+        }
+
+        var $p = $('#open-issues');
+        $p.click(function () {
+            var url = 'http://github.com/' + REPO + '/issues?state=open';
+            window.location.href = url;
+        });
+        $p.addClass('clickable');
+    });
+}
+populateOpenIssues();
