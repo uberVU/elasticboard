@@ -1,10 +1,9 @@
-from es import ES
-from elasticutils import S
-
 import calendar
 import datetime
-import elasticsearch
-import sys
+
+from elasticutils import S
+
+from es import ES
 
 
 def fit_time_range(start, end):
