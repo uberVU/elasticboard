@@ -37,6 +37,8 @@ function makeXYGraph(container, options) {
     $.getJSON(API_BASE + options.endpoint)
         .done(function (json) {
             data = json.data;
+            var opened = data.opened;
+            var closed = data.closed;
             $(container).highcharts({
                 chart: {
                     type: options.type
@@ -48,12 +50,20 @@ function makeXYGraph(container, options) {
                     text: options.subtitle
                 },
                 xAxis: {
-                    categories: data.map(function (e) {
+                    categories: (function () {
+                        if (opened) {
+                            return opened.reduceRight(function (arr, el) {
+                                arr.push(el.month);
+                                return arr;
+                            }, [])
+                        }
+                        return data.map(function (e) {
                         if (typeof options.keyName === 'function') {
                             return options.keyName(e);
                         }
                         return e[options.keyName];
                     })
+                    })()
                 },
                 yAxis: {
                     min: 0,
@@ -64,15 +74,36 @@ function makeXYGraph(container, options) {
                 legend: {
                     enabled: false
                 },
-                series: [{
-                    name: options.label,
-                    data: data.map(function (e) {
-                        if (typeof options.valueName === 'function') {
-                            return options.valueName(e);
-                        }
-                        return e[options.valueName];
-                    })
-                }]
+                series: (function () {
+                    if (opened) {
+                        return [{
+                            name: 'Opened',
+                            data: opened.reduceRight(function (arr, el) {
+                                arr.push(el.value);
+                                return arr;
+                            }, []),
+                            lineColor: '#FF4E50',
+                            color: '#FF4E50'
+                        }, {
+                            name: 'Closed',
+                            data: closed.reduceRight(function (arr, el) {
+                                arr.push(el.value);
+                                return arr;
+                            }, []),
+                            lineColor: '#88C425',
+                            color: '#88C425'
+                        }]
+                    }
+                    return [{
+                        name: options.label,
+                        data: data.map(function (e) {
+                            if (typeof options.valueName === 'function') {
+                                return options.valueName(e);
+                            }
+                            return e[options.valueName];
+                        })
+                    }]
+                })()
             });
         })
         .fail(logFailure);
@@ -133,6 +164,19 @@ function drawGraphs() {
         endpoint: '/most_active_issues',
         type: 'bar',
         title: "Most active issues",
+        keyName: function (e) {
+            return makeLink('http://github.com/' + REPO + '/issues/' + e.term,
+                            "#" + e.term);
+        },
+        valueName: 'count',
+        yTitle: 'Events',
+        label: 'events'
+    });
+
+    makeXYGraph('#issues-activity', {
+        endpoint: '/issues_activity',
+        type: 'areaspline',
+        title: "Issues activity",
         keyName: function (e) {
             return makeLink('http://github.com/' + REPO + '/issues/' + e.term,
                             "#" + e.term);
