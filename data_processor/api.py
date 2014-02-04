@@ -70,9 +70,9 @@ def available_repos():
     data = sorted(queries.available_repos())
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/issue_activity')
+@app.route('/<owner>/<repo>/issues_activity')
 @crossdomain(origin='*')
-def issue_activity(owner, repo):
+def issues_activity(owner, repo):
     index = index_name(owner, repo)
     opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), 6)
     closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), 6)
