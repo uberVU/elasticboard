@@ -34,13 +34,6 @@ def most_active_issues(owner, repo):
     data = queries.most_active_issues(index)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/open_issues')
-@crossdomain(origin='*')
-def open_issues(owner, repo):
-    index = index_name(owner, repo)
-    data = queries.open_issues(index)
-    return jsonify(data=data)
-
 @app.route('/<owner>/<repo>/issues_without_comments')
 @crossdomain(origin='*')
 def issues_without_comments(owner, repo):
@@ -77,6 +70,23 @@ def issues_activity(owner, repo):
     opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), 6)
     closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), 6)
     data = {'opened': opened, 'closed': closed}
+    return jsonify(data=data)
+
+@app.route('/<owner>/<repo>/issues_count')
+@crossdomain(origin='*')
+def issues_count(owner, repo):
+    index = index_name(owner, repo)
+    open = queries.issues_count(index, 'open')
+    closed =  queries.issues_count(index, 'closed')
+    data = {'open': open, 'closed': closed}
+    return jsonify(data=data)
+
+@app.route('/<owner>/<repo>/pulls_count')
+@crossdomain(origin='*')
+def pulls_count(owner, repo):
+    index = index_name(owner, repo)
+    count = queries.pulls_count(index)
+    data = {'open': count}
     return jsonify(data=data)
 
 

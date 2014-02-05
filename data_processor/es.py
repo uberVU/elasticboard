@@ -1,10 +1,16 @@
 import elasticsearch
+import json
 
-INDEX_NAME = 'demo'
+INDEX_NAME = 'demo-demo'
+
+
+with open('config.json') as f:
+    CONFIG = json.load(f)
+
 
 ES_NODE = {
-    'host': 'localhost',
-    'port': 9200,
+    'host': CONFIG['elasticsearch']['host'],
+    'port': CONFIG['elasticsearch']['port'],
 }
 
 ES = elasticsearch.Elasticsearch(hosts=[ES_NODE])
@@ -24,3 +30,6 @@ def index_events(event_list, index_name=INDEX_NAME):
             doc_type = 'generic'
         ES.index(index=index_name, doc_type=doc_type, body=ev)
 
+def index_other(items, index_name=INDEX_NAME, doc_type='generic'):
+    for item in items:
+        ES.index(index=index_name, doc_type=doc_type, body=item)

@@ -197,3 +197,15 @@ ul.menu li:hover {
     50% {-moz-transform: rotate(180deg);}
     100% {-moz-transform: rotate(360deg);}
 }
+
+#open-issues-count {
+    color: red;
+}
+
+#open-pulls-count {
+    color: green;
+}
+
+.clickable {
+    cursor: pointer;
+}

@@ -1,0 +1,13 @@
+{
+    "elasticsearch": {
+        "host": "localhost",
+        "port": 9200
+    },
+    "repositories": [
+        {
+            "owner": "gabrielfalcao",
+            "repository": "lettuce",
+            "interval": 3600
+        }
+    ]
+}

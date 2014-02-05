@@ -5,7 +5,8 @@ function loadKibana() {
 }
 
 function fitTabContainer () {
-    $('#tab-container').height($(window).height() - $('#topbar').height() - 30);
+    var $container = $('#tab-container');
+    $container.height($(window).height() - $container.offset().top - 20);
 }
 
 window.onresize = fitTabContainer;
@@ -78,3 +79,41 @@ function loadDashboard (newlocation) {
     location.href = newlocation;
     location.reload();
 }
+
+function populateOpenIssues() {
+    $.get(API_BASE + "/issues_count").success(function (data) {
+        var count = data.data.open;
+        $('#open-issues-count').text(count);
+
+        if (!count) {
+            return;
+        }
+
+        var $p = $('#open-issues');
+        $p.click(function () {
+            var url = 'http://github.com/' + REPO + '/issues?state=open';
+            window.location.href = url;
+        });
+        $p.addClass('clickable');
+    });
+}
+populateOpenIssues();
+
+function populateOpenPulls() {
+    $.get(API_BASE + "/pulls_count").success(function (data) {
+        var count = data.data.open;
+        $('#open-pulls-count').text(count);
+
+        if (!count) {
+            return;
+        }
+
+        var $p = $('#open-pulls');
+        $p.click(function () {
+            var url = 'http://github.com/' + REPO + '/pulls?state=open';
+            window.location.href = url;
+        });
+        $p.addClass('clickable');
+    });
+}
+populateOpenPulls();

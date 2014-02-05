@@ -9,7 +9,7 @@ import re
 
 from pprint import pprint
 
-def parse_events(path, gz=False, predicate=None):
+def parse_json_file(path, gz=False, predicate=None):
     """
     Takes in a .json[.gz] file with one json entry per line and
     returns a list of events that match the given predicate or
