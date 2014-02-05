@@ -1,7 +1,7 @@
 elasticboard
 ============
 
-A dashboard that provides an easy way to track a GitHub repo's evolution. There's a timeline to quickly bring you up to
+Dashboard providing an easy way to track a GitHub repo's evolution. There's a timeline to quickly bring you up to
 speed, graphs to view aggregated statistics and useful insights
 so that you never miss an issue again.
 
