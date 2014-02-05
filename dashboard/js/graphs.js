@@ -117,7 +117,7 @@ function drawInsights () {
                     type: 'areaspline'
                 },
                 title: {
-                    text: 'Issues activity'
+                    text: 'Issues Burndown'
                 },
                 xAxis: {
                     categories: opened.reduceRight(function (arr, el) {
