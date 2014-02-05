@@ -41,8 +41,10 @@ with some sample data, like this:
 
 Otherwise, we suggest you use the GitHub [river](https://github.com/uberVU/elasticsearch-river-github)
 so you can always have up-to-date data. After installing the river plugin, feel free to add
-the repositories that interest you in the `config.json` file. You can also add authentication
-data in there, if you want to access private repos or to make more requests, more often.
+the repositories that interest you in the `config.json` file.
+
+You can also add authentication
+data in there, if you want to access private repos or to make more requests:
 
 ```json
 {
