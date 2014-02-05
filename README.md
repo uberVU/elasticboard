@@ -6,7 +6,7 @@ speed, graphs to view aggregated statistics and useful insights
 so that you never miss an issue again.
 
 You can view a running demo at
-[http://elasticboard.mihneadb.net/#/lighttable/lighttable](http://elasticboard.mihneadb.net/#/lighttable/lighttable).
+[http://elasticboard.mihneadb.net/#/gabrielfalcao/lettuce](http://elasticboard.mihneadb.net/#/gabrielfalcao/lettuce).
 
 ##Setting it up
 
