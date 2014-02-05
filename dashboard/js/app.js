@@ -5,7 +5,8 @@ function loadKibana() {
 }
 
 function fitTabContainer () {
-    $('#tab-container').height($(window).height() - $('#topbar').height() - 30);
+    var $container = $('#tab-container');
+    $container.height($(window).height() - $container.offset().top - 20);
 }
 
 window.onresize = fitTabContainer;
