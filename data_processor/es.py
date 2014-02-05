@@ -1,10 +1,16 @@
 import elasticsearch
+import json
 
 INDEX_NAME = 'demo-demo'
 
+
+with open('config.json') as f:
+    CONFIG = json.load(f)
+
+
 ES_NODE = {
-    'host': 'localhost',
-    'port': 9200,
+    'host': CONFIG['elasticsearch']['host'],
+    'port': CONFIG['elasticsearch']['port'],
 }
 
 ES = elasticsearch.Elasticsearch(hosts=[ES_NODE])
