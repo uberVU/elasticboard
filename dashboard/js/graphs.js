@@ -65,14 +65,14 @@ function makeXYGraph(container, options) {
                     enabled: false
                 },
                 series: [{
-                        name: options.label,
-                        data: data.map(function (e) {
-                            if (typeof options.valueName === 'function') {
-                                return options.valueName(e);
-                            }
-                            return e[options.valueName];
-                        })
-                    }]
+                    name: options.label,
+                    data: data.map(function (e) {
+                        if (typeof options.valueName === 'function') {
+                            return options.valueName(e);
+                        }
+                        return e[options.valueName];
+                    })
+                }]
             });
         })
         .fail(logFailure);
