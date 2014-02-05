@@ -198,6 +198,25 @@ ul.menu li:hover {
     100% {-moz-transform: rotate(360deg);}
 }
 
+.issue-count {
+    font-size: 1.5rem;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    width: 3.2rem;
+    height: 3.2rem;
+    text-align: center;
+    line-height: 3rem;
+    display:inline-block;
+}
+
+.text-small {
+    font-size:.7rem;
+}
+
+.text-centered {
+    text-align: center;
+}
+
 #open-issues-count {
     color: red;
 }
