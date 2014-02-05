@@ -1,4 +1,0 @@
-git
-python-virtualenv
-openjdk-7-jdk
-python-dev
