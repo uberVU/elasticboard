@@ -28,7 +28,7 @@
         <ul class="menu text-center">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
-            <li data-tab="tab-3">Insights</li>
+            <li data-tab="tab-3" data-function="drawInsights">Insights</li>
             <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
             <li data-tab="github">Follow on GitHub</li>
         </ul>
@@ -46,7 +46,6 @@
                 <div class="graph" id="most-active-people"></div>
                 <div class="graph" id="total-events-monthly"></div>
                 <div class="graph" id="most-active-issues"></div>
-                <div class="graph" id="issues-activity"></div>
                 <!--<div class="graph" id="open-issues"></div>-->
                 <!--<div class="graph" id="issues-without-comments"></div>-->
                 <!--<div class="graph">-->
@@ -58,7 +57,7 @@
         </div>
 
         <div class="tab hide" id="tab-3">
-            <p>Work in progress. Check out the <a href="https://github.com/uberVU/elasticboard/wiki/Insights">wiki</a>.</p>
+            <div class="graph" id="issues-activity"></div>
         </div>
 
         <div class="tab hide" id="tab-4">
