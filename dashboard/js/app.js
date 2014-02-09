@@ -16,6 +16,24 @@ function initDashboard () {
     populateOpenPulls();
     populateTimeline();
     $('#user-repo').text(REPO);
+    changeTabs();
+}
+
+function changeTabs() {
+
+    var href = location.href.split('/');
+    if (href.length > 6) {
+        var tab = href.pop();
+        var tabs = $('ul.menu li');
+        tabs.each(function (idx, el) {
+            var text = $(el).text().toLowerCase();
+            if (text == tab) {
+                console.log('trigger click', el);
+                $(el).trigger('click');
+            }
+        })
+    }
+
 }
 
 function loadKibana() {
