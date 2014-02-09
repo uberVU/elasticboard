@@ -245,5 +245,3 @@ function populateTimeline(count, starting_from) {
         });
     }
 }
-
-populateTimeline();
