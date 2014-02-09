@@ -1,4 +1,22 @@
-var hash = location.hash.split('/');
+var hash = location.hash.split('/'),
+    API_HOST = 'http://' + window.location.hostname + ':5000/',
+    API_BASE = API_HOST,
+    REPO;
+
+if (hash.length > 1) {
+    REPO = hash[1] + '/' + hash[2];
+    API_BASE += hash[1] + '/' + hash[2];
+    initDashboard();
+} else {
+    getDefaultRepo();
+}
+
+function initDashboard () {
+    populateOpenIssues();
+    populateOpenPulls();
+    populateTimeline();
+    $('#user-repo').text(REPO);
+}
 
 function loadKibana() {
     $('#kibana-iframe').attr('src', 'kibana-latest/index.html');
@@ -12,16 +30,6 @@ function fitTabContainer () {
 window.onresize = fitTabContainer;
 fitTabContainer();
 
-var API_HOST = 'http://' + window.location.hostname + ':5000/';
-var API_BASE = API_HOST;
-    API_BASE += hash[1] + '/' + hash[2];
-if (hash.length > 1) {
-    var REPO = hash[1] + '/' + hash[2];
-} else {
-    getDefaultRepo();
-}
-
-$('#user-repo').text(REPO);
 $('#repo-select-trigger').on('click', function () {
 
     var $container = $('.repo-select');
@@ -71,12 +79,20 @@ function addRepos (data) {
 
 function getDefaultRepo() {
     getAvailableRepos(function (data) {
-        loadDashboard(location.origin + '/#/' + data.data[0]); // load first repo
+        setLocation(location.origin + '/#/' + data.data[0]); // load first repo
+        hash = data.data[0].split('/');
+        REPO = hash[0] + '/' + hash[1];
+        API_BASE += hash[0] + '/' + hash[1];
+        initDashboard();
     })
 }
 
-function loadDashboard (newlocation) {
+function setLocation (newlocation) {
     location.href = newlocation;
+}
+
+function loadDashboard (newlocation) {
+    setLocation(newlocation);
     location.reload();
 }
 
@@ -97,7 +113,6 @@ function populateOpenIssues() {
         $p.addClass('clickable');
     });
 }
-populateOpenIssues();
 
 function populateOpenPulls() {
     $.get(API_BASE + "/pulls_count").success(function (data) {
@@ -116,4 +131,3 @@ function populateOpenPulls() {
         $p.addClass('clickable');
     });
 }
-populateOpenPulls();

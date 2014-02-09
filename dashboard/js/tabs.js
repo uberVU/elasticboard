@@ -6,13 +6,16 @@ $('ul.menu li').click(function (e) {
      * calls init function (data-function) the first time
      */
 
-    $t = $(e.target);
+    var $t = $(this);
     var tabID = $t.data('tab');
     var $newTab = $('#' + tabID);
     var $tabContainer = $('#tab-container');
+    var tabName = $t.text().toLowerCase();
+
+    addNavigationSegment(tabName);
 
     if (tabID == 'github') {
-        window.location.href = "https://github.com/ubervu/elasticboard/";
+        window.location.href = 'https://github.com/ubervu/elasticboard/';
         return;
     }
 
@@ -38,3 +41,18 @@ $('ul.menu li').click(function (e) {
     $crtTab = $newTab;
 });
 
+/*
+* Add a new segment to the navigation
+* <user>/<repo>/page
+*/
+function addNavigationSegment (segment) {
+
+    var href = location.href.split('/');
+    if (href.length > 6) {
+        // remove last segment from previous tab
+        href.pop();
+    }
+
+    location.href = href.join('/') + '/' + segment;
+
+}
