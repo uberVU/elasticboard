@@ -11,6 +11,10 @@ if (hash.length > 1) {
     getDefaultRepo();
 }
 
+/*
+ * Bundle together different functions
+ * used to load the widgets in the application
+ */
 function initDashboard () {
     populateOpenIssues();
     populateOpenPulls();
@@ -19,6 +23,10 @@ function initDashboard () {
     changeTabs();
 }
 
+/*
+ * According to URL path
+ * navigate to different tabs in the application
+ */
 function changeTabs() {
 
     var href = location.href.split('/');
@@ -28,10 +36,9 @@ function changeTabs() {
         tabs.each(function (idx, el) {
             var text = $(el).text().toLowerCase();
             if (text == tab) {
-                console.log('trigger click', el);
                 $(el).trigger('click');
             }
-        })
+        });
     }
 
 }
@@ -102,7 +109,7 @@ function getDefaultRepo() {
         REPO = hash[0] + '/' + hash[1];
         API_BASE += hash[0] + '/' + hash[1];
         initDashboard();
-    })
+    });
 }
 
 function setLocation (newlocation) {
