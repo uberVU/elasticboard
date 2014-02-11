@@ -40,7 +40,7 @@ def most_active_issues(owner, repo):
 
 @app.route('/<owner>/<repo>/untouched_issues')
 @crossdomain(origin='*')
-def issues_without_comments(owner, repo):
+def untouched_issues(owner, repo):
     index = index_name(owner, repo)
     data = queries.untouched_issues(index)
     return jsonify(data=data)
