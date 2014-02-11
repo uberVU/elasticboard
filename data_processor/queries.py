@@ -112,14 +112,10 @@ def issues_assigned_to(index, login):
     """
     List of open issues assigned to {{ login }}.
     """
-    q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
-    assigned = q.filter(**{'payload.issue.assignee.login': login})
-    assigned = facet_counts_all(assigned, 'payload.issue.number')
-    assigned = [r['term'] for r in assigned]
-
-    # keep open ones
-    issues = open_issues(index)
-    return list(set(assigned).intersection(set(issues)))
+    issues = S().indexes(index).doctypes('IssueData') \
+                .filter(**{'assignee.login': login, 'state': 'open'}) \
+                .values_dict()
+    return list(issues)
 
 def recent_events(index, count=200, starting_from=0):
     """
