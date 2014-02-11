@@ -58,7 +58,22 @@ function drawUntouchedIssues() {
         .fail(logFailure);
 }
 
+function drawInactiveIssues() {
+    $.getJSON(API_BASE + '/inactive_issues')
+        .done(function(json) {
+            var data = json.data;
+            var context = {
+                issues: data,
+                title: "Inactive Issues (2 weeks)"
+            }
+            var $list = $(issuesListTemplate(context));
+            $('#inactive-issues').empty().append($list);
+        })
+        .fail(logFailure);
+}
+
 function drawInsights () {
     drawIssuesActivity();
     drawUntouchedIssues();
+    drawInactiveIssues();
 }
