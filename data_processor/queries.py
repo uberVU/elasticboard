@@ -104,14 +104,9 @@ def issues_without_comments(index):
     """
     Open issues with no comments.
     """
-    # todo - facet count needs to be bigger than 10
-    issues = open_issues(index)
-
-    with_comments = S().indexes(index).doctypes('IssueCommentEvent')
-    with_comments = facet_counts_all(with_comments, 'payload.issue.number')
-    with_comments = [r['term'] for r in with_comments]
-
-    return list(set(issues) - set(with_comments))
+    issues = S().indexes(index).doctypes('IssueData') \
+                .filter(state='open', comments=0).values_dict()
+    return list(issues)
 
 def issues_assigned_to(index, login):
     """
