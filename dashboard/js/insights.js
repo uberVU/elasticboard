@@ -79,7 +79,13 @@ function drawAvgIssueTime() {
         title: "Average Issue Time",
         subtitle: "From the time it's opened until it's closed",
         keyName: 'month',
-        valueName: 'value',
+        valueName: function(e) {
+            var m = moment.duration(e.value, 'seconds');
+            return {
+                name: m.humanize(),
+                y: e.value
+            };
+        },
         yTitle: 'Seconds',
         label: 'seconds'
     });
