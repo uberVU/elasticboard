@@ -5,10 +5,14 @@ from utils import crossdomain
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-app.debug = True
+# app.debug = True
 
 def index_name(user, repo):
     return '-'.join((user, repo))
+
+@app.errorhandler(500)
+def internal_error(error):
+    return "Not found or bad request", 400
 
 
 # api endpoints that call the queries
