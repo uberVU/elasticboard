@@ -72,8 +72,22 @@ function drawInactiveIssues() {
         .fail(logFailure);
 }
 
+function drawAvgIssueTime() {
+    makeXYGraph('#avg-issue-time', {
+        endpoint: '/avg_issue_time',
+        type: 'spline',
+        title: "Average Issue Time",
+        subtitle: "From the time it's opened until it's closed",
+        keyName: 'month',
+        valueName: 'value',
+        yTitle: 'Seconds',
+        label: 'seconds'
+    });
+}
+
 function drawInsights () {
     drawIssuesActivity();
     drawUntouchedIssues();
     drawInactiveIssues();
+    drawAvgIssueTime();
 }
