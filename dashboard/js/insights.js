@@ -51,13 +51,17 @@ function drawIssuesActivity() {
         .fail(logFailure);
 }
 
-var untouchedIssuesTemplate = Handlebars.compile($('#untouched-issues-template').html());
+var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
 
 function drawUntouchedIssues() {
     $.getJSON(API_BASE + '/untouched_issues')
         .done(function(json) {
             var data = json.data;
-            var $list = $(untouchedIssuesTemplate({issues: data}));
+            var context = {
+                issues: data,
+                title: "Untouched Issues"
+            }
+            var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
         .fail(logFailure);
