@@ -156,3 +156,8 @@ function populateOpenPulls() {
         $p.addClass('clickable');
     });
 }
+
+function logFailure(fail) {
+    console.log("Trouble getting data. API server down?");
+    console.log(fail);
+}
