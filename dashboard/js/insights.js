@@ -12,10 +12,7 @@ function drawIssuesActivity() {
                     text: 'Issues Burndown'
                 },
                 xAxis: {
-                    categories: opened.reduceRight(function (arr, el) {
-                        arr.push(el.month);
-                        return arr;
-                    }, [])
+                    categories: opened.map(function(e) { return e.month; })
                 },
                 yAxis: {
                     min: 0,
@@ -29,19 +26,13 @@ function drawIssuesActivity() {
                 series: [
                     {
                         name: 'Opened',
-                        data: opened.reduceRight(function (arr, el) {
-                            arr.push(el.value);
-                            return arr;
-                        }, []),
+                        data: opened.map(function(e) { return e.value; }),
                         lineColor: '#FF4E50',
                         color: '#FF4E50'
                     },
                     {
                         name: 'Closed',
-                        data: closed.reduceRight(function (arr, el) {
-                            arr.push(el.value);
-                            return arr;
-                        }, []),
+                        data: closed.map(function(e) { return e.value; }),
                         lineColor: '#88C425',
                         color: '#88C425'
                     }
