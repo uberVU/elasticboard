@@ -19,8 +19,14 @@ body {
     margin-bottom: 30px;
 }
 
-.graph ul {
+.graph ul, .graph-like ul {
     margin-left: 2em;
+}
+
+.graph-like {
+    background: rgb(31, 31, 31);
+    padding: 5px;
+    margin-bottom: 30px;
 }
 
 .full-width {

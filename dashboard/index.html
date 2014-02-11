@@ -65,6 +65,7 @@
 
         <div class="tab hide" id="tab-3">
             <div class="graph" id="issues-activity"></div>
+            <div class="graph-like" id="untouched-issues"></div>
         </div>
 
         <div class="tab hide" id="tab-4">
@@ -100,6 +101,17 @@
             <img src="{{ avatarURL }}"/>
             <a href="{{ githubURL }}">{{ login }}</a>
         </span>
+</script>
+
+<script id="untouched-issues-template" type="text/x-handlebars-template">
+    <div class="text-center">
+        <p>Untouched Issues</p>
+    </div>
+    <ul>
+        {{#each issues}}
+        <li><a href="{{{ html_url }}}">#{{ number }}</a></li>
+        {{/each}}
+    </ul>
 </script>
 
 <script src="js/jquery.js"></script>

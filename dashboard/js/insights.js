@@ -51,6 +51,19 @@ function drawIssuesActivity() {
         .fail(logFailure);
 }
 
+var untouchedIssuesTemplate = Handlebars.compile($('#untouched-issues-template').html());
+
+function drawUntouchedIssues() {
+    $.getJSON(API_BASE + '/untouched_issues')
+        .done(function(json) {
+            var data = json.data;
+            var $list = $(untouchedIssuesTemplate({issues: data}));
+            $('#untouched-issues').empty().append($list);
+        })
+        .fail(logFailure);
+}
+
 function drawInsights () {
     drawIssuesActivity();
+    drawUntouchedIssues();
 }
