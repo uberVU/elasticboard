@@ -102,7 +102,13 @@ def inactive_issues(owner, repo):
     data = queries.inactive_issues(index)
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/avg_issue_time')
+@crossdomain(origin='*')
+def avg_issue_time(owner, repo):
+    index = index_name(owner, repo)
+    times = queries.past_n_months(index, queries.avg_issue_time, CHART_MONTHS)
+    return jsonify(data=times)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
-
