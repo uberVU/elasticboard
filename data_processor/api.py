@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 # app.debug = True
 
+CHART_MONTHS = 6
+
 def index_name(user, repo):
     return '-'.join((user, repo))
 
@@ -28,7 +30,7 @@ def most_active_people(owner, repo):
 @crossdomain(origin='*')
 def total_events_monthly(owner, repo):
     index = index_name(owner, repo)
-    data = queries.past_n_months(index, queries.total_events, 6)
+    data = queries.past_n_months(index, queries.total_events, CHART_MONTHS)
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/most_active_issues')
@@ -71,8 +73,8 @@ def available_repos():
 @crossdomain(origin='*')
 def issues_activity(owner, repo):
     index = index_name(owner, repo)
-    opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), 6)
-    closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), 6)
+    opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), CHART_MONTHS)
+    closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), CHART_MONTHS)
     data = {'opened': opened, 'closed': closed}
     return jsonify(data=data)
 
