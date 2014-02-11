@@ -1,4 +1,4 @@
-function drawInsights () {
+function drawIssuesActivity() {
     $.getJSON(API_BASE + '/issues_activity')
         .done(function (json) {
             data = json.data;
@@ -26,26 +26,31 @@ function drawInsights () {
                 legend: {
                     enabled: false
                 },
-                series: [{
-                    name: 'Opened',
-                    data: opened.reduceRight(function (arr, el) {
-                        arr.push(el.value);
-                        return arr;
-                    }, []),
-                    lineColor: '#FF4E50',
-                    color: '#FF4E50'
-                }, {
-                    name: 'Closed',
-                    data: closed.reduceRight(function (arr, el) {
-                        arr.push(el.value);
-                        return arr;
-                    }, []),
-                    lineColor: '#88C425',
-                    color: '#88C425'
-                }]
+                series: [
+                    {
+                        name: 'Opened',
+                        data: opened.reduceRight(function (arr, el) {
+                            arr.push(el.value);
+                            return arr;
+                        }, []),
+                        lineColor: '#FF4E50',
+                        color: '#FF4E50'
+                    },
+                    {
+                        name: 'Closed',
+                        data: closed.reduceRight(function (arr, el) {
+                            arr.push(el.value);
+                            return arr;
+                        }, []),
+                        lineColor: '#88C425',
+                        color: '#88C425'
+                    }
+                ]
             });
         })
         .fail(logFailure);
+}
 
-
+function drawInsights () {
+    drawIssuesActivity();
 }
