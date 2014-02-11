@@ -93,6 +93,13 @@ def pulls_count(owner, repo):
     data = {'open': count}
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/inactive_issues')
+@crossdomain(origin='*')
+def inactive_issues(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.inactive_issues(index)
+    return jsonify(data=data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

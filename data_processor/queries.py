@@ -158,3 +158,15 @@ def pulls_count(index):
     # we only have open pull requests
     q = S().indexes(index).doctypes('PullRequestData')
     return q.count()
+
+def inactive_issues(index):
+    """
+    Open issues that haven't seen any activity in the past 2 weeks.
+    """
+    now = datetime.datetime.now()
+    limit = now - datetime.timedelta(weeks=2)
+    issues = S().indexes(index).doctypes('IssueData') \
+                .filter(state='open') \
+                .filter(updated_at__lt=limit) \
+                .values_dict()
+    return list(issues)
