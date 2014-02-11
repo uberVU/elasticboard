@@ -26,8 +26,8 @@ pip install -r data_processor/requirements-pip
 
 ###Get some data
 
-There are two options here - if you want just a quick demo, you can start off
-with some sample data, like this:
+There are **two options** here - if you want just a quick demo, you can start off
+with some *sample* data, like this:
 
     $ python
     >>> from data_processor.es import index_events, index_issues
@@ -39,7 +39,7 @@ with some sample data, like this:
     >>> pulls = parse_json_file('contrib/lettuce-pulls')
     >>> index_other(pulls, index_name='gabrielfalcao-lettuce', doc_type='PullRequestData')
 
-Otherwise, we suggest you use the GitHub [river](https://github.com/uberVU/elasticsearch-river-github)
+**Otherwise**, we suggest you use the GitHub [river](https://github.com/uberVU/elasticsearch-river-github)
 so you can always have up-to-date data. After installing the river plugin, feel free to add
 the repositories that interest you in the `config.json` file.
 
