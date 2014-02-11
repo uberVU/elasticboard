@@ -38,11 +38,11 @@ def most_active_issues(owner, repo):
     data = queries.most_active_issues(index)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/issues_without_comments')
+@app.route('/<owner>/<repo>/untouched_issues')
 @crossdomain(origin='*')
 def issues_without_comments(owner, repo):
     index = index_name(owner, repo)
-    data = queries.issues_without_comments(index)
+    data = queries.untouched_issues(index)
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/<login>/issues_assigned')

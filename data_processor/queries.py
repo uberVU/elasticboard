@@ -100,13 +100,14 @@ def most_active_issues(index, start=None, end=None):
     q = apply_time_filter(q, start, end)
     return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
 
-def issues_without_comments(index):
+def untouched_issues(index):
     """
-    Open issues with no comments.
+    Open issues that haven't seen any action (updated_at == created_at).
     """
     issues = S().indexes(index).doctypes('IssueData') \
-                .filter(state='open', comments=0).values_dict()
-    return list(issues)
+                .filter(state='open').values_dict()
+    untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
+    return untouched
 
 def issues_assigned_to(index, login):
     """
