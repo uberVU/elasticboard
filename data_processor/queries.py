@@ -50,6 +50,7 @@ def past_n_months(index, query, n):
                 'value': query(index=index, start=start, end=end)
         }
         data.append(month_data)
+    data.reverse()
     return data
 
 def facet_counts_all(query, field):
