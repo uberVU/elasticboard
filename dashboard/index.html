@@ -107,9 +107,12 @@
     <div class="text-center">
         <p>Untouched Issues</p>
     </div>
-    <ul>
+    <ul class="grey-text">
         {{#each issues}}
-        <li><a href="{{{ html_url }}}">#{{ number }}</a></li>
+        <li>
+            <a href="{{{ html_url }}}">#{{ number }}</a>
+            <span class="muted">- {{ title }}</span>
+        </li>
         {{/each}}
     </ul>
 </script>
