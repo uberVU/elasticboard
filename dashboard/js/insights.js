@@ -86,11 +86,11 @@ function drawAvgIssueTime() {
             var m = moment.duration(e.value, 'seconds');
             return {
                 name: m.humanize(),
-                y: e.value
+                y: e.value / 3600
             };
         },
-        yTitle: 'Seconds',
-        label: 'seconds'
+        yTitle: 'Hours',
+        label: 'hours'
     });
 }
 
