@@ -11,6 +11,9 @@ function drawIssuesActivity() {
                 title: {
                     text: 'Issues Burndown'
                 },
+                subtitle: {
+                    text: '# of issues opened vs closed, monthly'
+                },
                 xAxis: {
                     categories: opened.map(function(e) { return e.month; })
                 },
