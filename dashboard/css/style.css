@@ -68,6 +68,10 @@ ul.menu li:hover {
     background: rgb(180, 180, 180);
 }
 
+.menu iframe {
+    margin-top: 10px;
+}
+
 #timeline {
     overflow: auto;
     margin-bottom: 30px;
