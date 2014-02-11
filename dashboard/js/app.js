@@ -55,7 +55,8 @@ function fitTabContainer () {
 window.onresize = fitTabContainer;
 fitTabContainer();
 
-$('#repo-select-trigger').on('click', function () {
+$('#repo-select-trigger').on('click', function (e) {
+    e.stopPropagation();
 
     var $container = $('.repo-select');
     var $repoList = $('ul', $container);
@@ -64,6 +65,14 @@ $('#repo-select-trigger').on('click', function () {
 
     if (!$container.hasClass('hidden')) {
         getAvailableRepos(addRepos);
+        $(window).on('click', function () {
+            $('.show--fade-in').removeClass('show--fade-in');
+            setTimeout(function () {
+                $repoList.empty();
+            }, 200);
+            $(window).off('click');
+            $container.toggleClass('hidden');
+        })
     } else {
         $('.show--fade-in').removeClass('show--fade-in');
         setTimeout(function () {
