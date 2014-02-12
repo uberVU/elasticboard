@@ -6,10 +6,15 @@ from elasticutils import S
 from es import ES
 
 
+def make_datetime(utctime):
+    return datetime.datetime.strptime(utctime,'%Y-%m-%dT%H:%M:%SZ')
+
 def fit_time_range(start, end):
     """
     Keeps an empty time range empty. Stretches an incomplete
     time range.
+
+    field can be 'created_at' or 'closed_at'
     """
     if start == None and end == None:
         return (None, None)
@@ -20,10 +25,13 @@ def fit_time_range(start, end):
 
     return (start, end)
 
-def apply_time_filter(query, start, end):
+def apply_time_filter(query, start, end, field='created_at'):
     start, end = fit_time_range(start, end)
     if start and end:
-        return query.filter(created_at__range=(start, end))
+        if field == 'created_at':
+            return query.filter(created_at__range=(start, end))
+        elif field == 'closed_at':
+            return query.filter(closed_at__range=(start, end))
     return query
 
 def past_n_months(index, query, n):
@@ -170,3 +178,24 @@ def inactive_issues(index):
                 .filter(updated_at__lt=limit) \
                 .values_dict()
     return list(issues)
+
+def avg_issue_time(index, start=None, end=None):
+    """
+    Average time from opening until closing for issues in the given timeframe.
+    """
+    q = S().indexes(index).doctypes('IssueData').filter(state='closed')
+    q = apply_time_filter(q, start, end, field='closed_at')
+    issues = q.values_dict()
+
+    sum = 0 # using seconds, int is fine
+    count = 0
+    for i in issues:
+        start = make_datetime(i['created_at'])
+        end = make_datetime(i['closed_at'])
+        delta = end - start
+        sum += delta.total_seconds()
+        count += 1
+
+    if not count:
+        return 0
+    return sum / count

@@ -11,6 +11,9 @@ function drawIssuesActivity() {
                 title: {
                     text: 'Issues Burndown'
                 },
+                subtitle: {
+                    text: '# of issues opened vs closed, monthly'
+                },
                 xAxis: {
                     categories: opened.map(function(e) { return e.month; })
                 },
@@ -72,8 +75,28 @@ function drawInactiveIssues() {
         .fail(logFailure);
 }
 
+function drawAvgIssueTime() {
+    makeXYGraph('#avg-issue-time', {
+        endpoint: '/avg_issue_time',
+        type: 'spline',
+        title: "Average Issue Time",
+        subtitle: "From the time it's opened until it's closed",
+        keyName: 'month',
+        valueName: function(e) {
+            var m = moment.duration(e.value, 'seconds');
+            return {
+                name: m.humanize(),
+                y: e.value / 3600
+            };
+        },
+        yTitle: 'Hours',
+        label: 'hours'
+    });
+}
+
 function drawInsights () {
     drawIssuesActivity();
     drawUntouchedIssues();
     drawInactiveIssues();
+    drawAvgIssueTime();
 }
