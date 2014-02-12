@@ -139,6 +139,9 @@ var TIMELINE_MAPPING = {
         },
         assignee: function(e) {
           return e.payload.issue.assignee || 'nobody';
+        },
+        number: function(e) {
+          return e.payload.issue.number;
         }
     },
     'IssuesEvent': {
@@ -153,6 +156,9 @@ var TIMELINE_MAPPING = {
         },
         title: function(e) {
           return e.payload.issue.title;
+        },
+        number: function(e) {
+          return e.payload.issue.number;
         }
     },
     'MemberEvent': {
@@ -259,6 +265,7 @@ function populateTimeline(count, starting_from) {
                       avatar: formatAuthor(e.actor).avatar,
                       username: formatAuthor(e.actor).username,
                       comment: formatPayload(e.payload).comment,
+                      number: mapping.number ? mapping.number(e) : 0,
                       commentCount: formatPayload(e.payload).count,
                       commits: formatPayload(e.payload).commits,
                       diffTree: formatPayload(e.payload).diffTree,

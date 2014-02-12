@@ -88,20 +88,20 @@
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
-        <div class="small-1 columns">
+        <div class="small-2 columns">
           <img src="{{ avatar }}" class="timeline-item--avatar">
           <p class="timeline-item--username">{{ username }}</p>
         </div>
-        <div class="small-9 columns">
+        <div class="small-8 columns">
             {{#if title}}
             <p class="timeline-item--title">
-              {{ title }}
+             #{{ number }} {{ title }}
               <span class="badge badge--gray">assigned to {{ assignee }}</span>
             </p>
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
-              <a href="{{ link }}">{{ comment }}</a>
+              <a href="{{ link }}"> {{ comment }}</a>
             </p>
             {{else}}
             <p>{{ username }} {{ action }} {{{ object }}}
