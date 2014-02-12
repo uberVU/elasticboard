@@ -87,14 +87,38 @@
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
-        <div class="small-8 columns">
-            <p>{{{ author }}} {{ action }} {{{ object }}}
+        <div class="small-2 columns">
+          <img src="{{ avatar }}" class="timeline-item--avatar">
+          <br>
+          {{ username }}
+        </div>
+        <div class="small-7 columns">
+            {{#if title}}
+            <p class="timeline-item--title">
+              {{ title }}
+              <span class="badge badge--gray">assigned to {{ assignee }}</span>
+            </p>
+            {{/if}}
+            {{#if comment }}
+            <p class="timeline-item--comment">
+              <a href="{{ link }}">{{ comment }}</a>
+            </p>
+            {{else}}
+            <p>{{ username }} {{ action }} {{{ object }}}
                 {{#if link}}
                 - see <a href="{{ link }}">here</a>.
                 {{/if}}
+                {{#if commits}}
+                  <p class="timeline-item--comment">
+                    <a href="#"> {{ commits.[0].[sha] }} </a>
+                    {{ commits.[0].[message] }}
+                  </p>
+                  <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+                {{/if}}
             </p>
+            {{/if}}
         </div>
-        <div class="small-4 columns text-right">
+        <div class="small-3 columns text-right">
             <p class="timestamp muted">{{ timestamp }}</p>
         </div>
     </div>
