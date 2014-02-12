@@ -2,6 +2,16 @@ PER_PAGE = 50;
 
 var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
 
+Handlebars.registerHelper('eachCommit', function(context, options) {
+  var ret = "";
+
+  for(var i=0, j=context.length; i<j; i++) {
+    ret = ret + options.fn(context[i]);
+  }
+
+  return ret;
+});
+
 function formatAuthor(author) {
     var login = author.login;
     var avatarURL = author.avatar_url;
@@ -29,8 +39,8 @@ function formatPayload (payload) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
     data.commits = payload.commits.map(function(commit) {
       return {
-        message: commit.message,
         commitUrl: commit.url,
+        message: commit.message,
         sha: commit.sha.substr(0,10)
       };
     });

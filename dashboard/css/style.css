@@ -96,17 +96,24 @@ ul.menu li:hover {
 }
 
 .timeline-item p {
-    line-height: 40px;
-    margin-bottom: 0;
+  line-height: 1.2rem;
+  font-size: 1rem;
 }
 
 .timeline-item--title {
   font-size: 1.1rem;
+  line-height: 1.3rem;
 }
 
 .timeline-item--avatar {
   border-radius: 50%;
   width: 65px;
+  margin:0 auto;
+  display: block;
+}
+
+.timeline-item--username {
+  text-align: center;
 }
 
 .timeline-item--comment {
