@@ -240,10 +240,19 @@ ul.menu li:hover {
 }
 
 #issues-involvement-graph-container {
-    height: 90%;
+    height: 88%;
 }
 
 .link {
     stroke: #999;
     stroke-opacity: .6;
+}
+
+.graph-title {
+    margin-bottom: 0;
+}
+
+.graph-subtitle {
+    font-size: 0.9rem;
+    color: rgb(221, 221, 221);
 }
