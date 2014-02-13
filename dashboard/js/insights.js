@@ -6,7 +6,7 @@ function drawIssuesActivity() {
             var closed = data.closed;
             $('#issues-activity').highcharts({
                 chart: {
-                    type: 'areaspline'
+                    type: 'spline'
                 },
                 title: {
                     text: 'Issues Burndown'
