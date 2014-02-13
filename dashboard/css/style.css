@@ -238,3 +238,12 @@ ul.menu li:hover {
 .clickable {
     cursor: pointer;
 }
+
+#issues-involvement-graph-container {
+    height: 90%;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: .6;
+}
