@@ -142,6 +142,9 @@ var TIMELINE_MAPPING = {
         },
         number: function(e) {
           return e.payload.issue.number;
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.issue.created_at, true);
         }
     },
     'IssuesEvent': {
@@ -159,6 +162,9 @@ var TIMELINE_MAPPING = {
         },
         number: function(e) {
           return e.payload.issue.number;
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.issue.created_at, true);
         }
     },
     'MemberEvent': {
@@ -261,11 +267,13 @@ function populateTimeline(count, starting_from) {
                   if (!mapping) {
                       return;
                   }
+                  console.log(e);
                   context = {
                       avatar: formatAuthor(e.actor).avatar,
                       username: formatAuthor(e.actor).username,
                       comment: formatPayload(e.payload).comment,
                       number: mapping.number ? mapping.number(e) : 0,
+                      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
                       commentCount: formatPayload(e.payload).count,
                       commits: formatPayload(e.payload).commits,
                       diffTree: formatPayload(e.payload).diffTree,
@@ -276,9 +284,6 @@ function populateTimeline(count, starting_from) {
                       timestamp: moment(e.created_at).fromNow(),
                       title: mapping.title ? mapping.title(e) : ''
                   };
-                  if (context.action == 'opened') {
-                    console.log(e);
-                  }
                   if (mapping.link) {
                       context.link = mapping.link(e);
                   }

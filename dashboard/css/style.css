@@ -82,7 +82,7 @@ ul.menu li:hover {
 
 .timeline-item {
     padding: 10px;
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid rgba(113, 113, 113, 0.36);
     margin: 1.25rem 0 1.1875rem;
 }
 
@@ -101,9 +101,15 @@ ul.menu li:hover {
 }
 
 .timeline-item--title {
-  font-size: 1.1rem;
-  line-height: 1.3rem;
+  margin-bottom: 0;
 }
+
+.timeline-item--read-more {
+  margin: -.5rem 0 0 0;
+}
+  .timeline-item--read-more a {
+    font-size: .8rem;
+  }
 
 .timeline-item--avatar {
   border-radius: 50%;
@@ -132,7 +138,7 @@ ul.menu li:hover {
     display: inline-block;
     margin: 0 0 1.2rem 0;
 }
-    
+
     .cog:hover {
         -webkit-transform: rotate(180deg);
         -webkit-transition-duration: .5s;

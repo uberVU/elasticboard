@@ -96,18 +96,21 @@
             {{#if title}}
             <p class="timeline-item--title">
              #{{ number }} {{ title }}
+            </p>
+            <p>
               <span class="badge badge--gray">assigned to {{ assignee }}</span>
+              <span class="badge badge--gray">opened {{ issue_age }} ago</span>
             </p>
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
-              <a href="{{ link }}"> {{ comment }}</a>
+              {{ comment }}
+            </p>
+            <p class="timeline-item--read-more">
+              <a href="{{ link }}">Read more</a>
             </p>
             {{else}}
             <p>{{ username }} {{ action }} {{{ object }}}
-                {{#if link}}
-                - see <a href="{{ link }}">here</a>.
-                {{/if}}
                 {{#if commits}}
                   {{#eachCommit commits }}
                     <p class="timeline-item--comment">
@@ -116,7 +119,9 @@
                         </a>
                     </p>
                   {{/eachCommit}}
-                  <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+                  <p class="timeline-item--read-more">
+                    <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+                  </p>
                 {{/if}}
             </p>
             {{/if}}
