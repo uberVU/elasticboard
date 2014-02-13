@@ -211,6 +211,7 @@ function drawIssuesInvolvement() {
                 });
 
 
+                // http://mbostock.github.io/d3/talk/20110921/bounding.html
                 var rl = radius + 5;
                 gnodes.attr("cx", function(d) { return d.x = Math.max(rl, Math.min(width - rl, d.x)); })
                     .attr("cy", function(d) { return d.y = Math.max(rl, Math.min(height - rl, d.y)); });
