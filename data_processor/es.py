@@ -1,7 +1,7 @@
 import elasticsearch
 import json
 
-INDEX_NAME = 'demo-demo'
+INDEX_NAME = 'demo&demo'
 
 
 with open('config.json') as f:

@@ -33,11 +33,11 @@ with some *sample* data, like this:
     >>> from data_processor.es import index_events, index_issues
     >>> from data_processor.github import parse_json_file
     >>> events = parse_json_file('contrib/lettuce-events')
-    >>> index_events(events, index_name='gabrielfalcao-lettuce')
+    >>> index_events(events, index_name='gabrielfalcao&lettuce')
     >>> issues = parse_json_file('contrib/lettuce-issues')
-    >>> index_other(issues, index_name='gabrielfalcao-lettuce', doc_type='IssueData')
+    >>> index_other(issues, index_name='gabrielfalcao&lettuce', doc_type='IssueData')
     >>> pulls = parse_json_file('contrib/lettuce-pulls')
-    >>> index_other(pulls, index_name='gabrielfalcao-lettuce', doc_type='PullRequestData')
+    >>> index_other(pulls, index_name='gabrielfalcao&lettuce', doc_type='PullRequestData')
 
 **Otherwise**, we suggest you use the GitHub [river](https://github.com/uberVU/elasticsearch-river-github)
 so you can always have up-to-date data. After installing the river plugin, feel free to add
