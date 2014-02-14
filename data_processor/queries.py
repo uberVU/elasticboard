@@ -199,3 +199,29 @@ def avg_issue_time(index, start=None, end=None):
     if not count:
         return 0
     return sum / count
+
+def issues_involvement(index, start=None, end=None):
+    """
+    Dict mapping from issue number to {issue: issue_obj,
+                                       users: [list of users_obj]}
+    for events that happened during the <start, end> time period.
+    """
+    q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
+    q = apply_time_filter(q, start, end)
+
+    issues = {}
+    for event in q.values_dict():
+        issue = event['payload']['issue']
+        number = issue['number']
+        user = event['actor']
+
+        if number not in issues:
+            issues[number] = {
+                'issue': issue,
+                'users': [user]
+            }
+            continue
+
+        issues[number]['users'].append(user)
+
+    return issues

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/normalize.css"/>
     <link rel="stylesheet" href="css/foundation.css"/>
     <link rel="stylesheet" href="css/style.css"/>
+    <meta charset="UTF-8">
 </head>
 <body>
 
@@ -39,7 +40,7 @@
             <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
             <li data-tab="github">
                 <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
-                        allowtransparency="true" frameborder="0" scrolling="0" width="72" height="20"></iframe>
+                        allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
             </li>
         </ul>
     </div>
@@ -71,6 +72,13 @@
             <div class="graph-like" id="inactive-issues"></div>
             <div class="graph" id="issues-activity"></div>
             <div class="graph" id="avg-issue-time"></div>
+            <div class="graph graph-like">
+                <div class="text-center">
+                    <p class="graph-title">Issues Involvement Graph</p>
+                    <p class="graph-subtitle">Over the current month</p>
+                </div>
+                <div id="issues-involvement-graph-container"></div>
+            </div>
         </div>
 
         <div class="tab hide" id="tab-4">
@@ -158,6 +166,7 @@
 <script src="js/highcharts-gray-theme.js"></script>
 <script src="js/handlebars-v1.1.2.js"></script>
 <script src="js/moment.min.js"></script>
+<script src="js/d3.js"></script>
 <script src="js/timeline.js"></script>
 <script src="js/graphs.js"></script>
 <script src="js/insights.js"></script>

@@ -1,4 +1,5 @@
 from functools import partial
+import datetime
 import queries
 
 from utils import crossdomain
@@ -108,6 +109,15 @@ def avg_issue_time(owner, repo):
     index = index_name(owner, repo)
     times = queries.past_n_months(index, queries.avg_issue_time, CHART_MONTHS)
     return jsonify(data=times)
+
+@app.route('/<owner>/<repo>/issues_involvement')
+@crossdomain(origin='*')
+def issues_involvement(owner, repo):
+    index = index_name(owner, repo)
+    now = datetime.datetime.now()
+    month_start = now - datetime.timedelta(days=now.day)
+    data = queries.issues_involvement(index, start=month_start, end=now)
+    return jsonify(data=data)
 
 
 if __name__ == '__main__':

@@ -1,8 +1,8 @@
-elasticsearch==0.4.3
-elasticutils==0.8.1
+elasticsearch==1.0.0
+elasticutils==0.8.2
+eventlet==0.14.0
+gevent==1.0
+greenlet==0.4.2
 requests==2.0.1
 Flask==0.10.1
 gunicorn==18.0
-greenlet
-eventlet
-gevent
