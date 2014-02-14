@@ -240,9 +240,8 @@ ul.menu li:hover {
 
 .issue-count {
     font-size: 1.5rem;
-    border: 3px solid #fff;
-    border-radius: 50%;
-    width: 3.2rem;
+    border: 1px solid #fff;
+    width: 4.2rem;
     height: 3.2rem;
     text-align: center;
     line-height: 3rem;
