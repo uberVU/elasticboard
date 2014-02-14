@@ -147,7 +147,7 @@ def available_repos():
     for name in indices:
         aliases_dict = aliases[name]
         # add aliases to the list
-        indices.extend(aliases_dict.keys())
+        indices.extend(aliases_dict['aliases'].keys())
 
     # filter out those that don't look as repos
     indices = [i for i in indices if len(i.split('&')) == 2]
