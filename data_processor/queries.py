@@ -139,7 +139,16 @@ def recent_events(index, count=200, starting_from=0):
 def available_repos():
     EXCLUDED = ['kibana-int']
     # get all indices
-    indices = ES.indices.get_aliases().keys()
+    aliases = ES.indices.get_aliases()
+    indices = aliases.keys()
+
+    # backward compatibility - add aliases as well in there
+    # (for old '-' indexes)
+    for name in indices:
+        aliases_dict = aliases[name]
+        # add aliases to the list
+        indices.extend(aliases_dict.keys())
+
     # filter out those that don't look as repos
     indices = [i for i in indices if len(i.split('&')) == 2]
     # there are some that still sneak by
