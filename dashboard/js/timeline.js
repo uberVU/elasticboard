@@ -138,7 +138,11 @@ var TIMELINE_MAPPING = {
             return e.payload.comment.html_url;
         },
         assignee: function(e) {
-          return e.payload.issue.assignee || 'nobody';
+            var assignee = e.payload.issue.assignee;
+            if (assignee) {
+                return assignee.login;
+            }
+            return 'nobody';
         },
         number: function(e) {
           return e.payload.issue.number;
