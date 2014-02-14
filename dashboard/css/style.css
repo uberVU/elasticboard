@@ -39,8 +39,8 @@ body {
 }
 
 .tab {
-    overflow-y: auto;
-    height: 100%;
+    /*overflow-y: auto;*/
+    /*height: 100%;*/
 }
 
 .tab iframe {
@@ -49,15 +49,17 @@ body {
 }
 
 ul.menu {
-    background: rgb(31, 31, 31);
+  margin-bottom: 0;
 }
 
 ul.menu li {
-    cursor: pointer;
-    height: 40px;
-    line-height: 40px;
-    list-style-type: none;
-    border-bottom: 1px solid #777;
+  cursor: pointer;
+  list-style-type: none;
+  display: inline-block;
+  height: 5rem;
+  line-height: 5rem;
+  vertical-align: bottom;
+  font-size: 1.1rem;
 }
 
 ul.menu li:last-child {

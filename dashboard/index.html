@@ -10,10 +10,22 @@
 <body>
 
 <div class="row full-width" id="topbar">
-    <div class="large-4 small-12 columns">
+    <div class="large-2 small-12 columns">
         <h1>Elasticboard</h1>
     </div>
-    <div class="large-8 small-12 columns text-right">
+    <div class="small-12 large-8 columns" id="side-menu">
+        <ul class="menu text-center">
+            <li data-tab="tab-1">Timeline</li>
+            <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
+            <li data-tab="tab-3" data-function="drawInsights">Insights</li>
+            <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
+            <li data-tab="github">
+                <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
+                        allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
+            </li>
+        </ul>
+    </div>
+    <div class="large-2 small-12 columns text-right">
         <span id="repo-select-trigger">
             <h1 class="inline" id="user-repo"></h1>
             <img class="cog" src="/imgs/cog.svg">
@@ -32,20 +44,8 @@
 </div>
 
 <div class="container row full-width">
-    <div class="small-0 large-2 columns" id="side-menu">
-        <ul class="menu text-center">
-            <li data-tab="tab-1">Timeline</li>
-            <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
-            <li data-tab="tab-3" data-function="drawInsights">Insights</li>
-            <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
-            <li data-tab="github">
-                <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
-                        allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
-            </li>
-        </ul>
-    </div>
 
-    <div class="small-12 large-10 columns" id="tab-container">
+    <div class="small-12 large-12 columns" id="tab-container">
         <div class="tab" id="tab-1">
             <div id="timeline" class="large-centered">
                 <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
