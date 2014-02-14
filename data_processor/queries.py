@@ -144,10 +144,12 @@ def available_repos():
 
     # backward compatibility - add aliases as well in there
     # (for old '-' indexes)
+    extra_indices = []
     for name in indices:
         aliases_dict = aliases[name]
         # add aliases to the list
-        indices.extend(aliases_dict['aliases'].keys())
+        extra_indices.extend(aliases_dict['aliases'].keys())
+    indices.extend(extra_indices)
 
     # filter out those that don't look as repos
     indices = [i for i in indices if len(i.split('&')) == 2]
