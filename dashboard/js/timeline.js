@@ -31,9 +31,13 @@ function formatPayload (payload) {
     commits: '',
     diffTree: ''
   };
-  if (payload.comment) {
+  if (payload.comment && payload.issue) {
     data.comment = payload.comment.body;
-    data.count = payload.issue.comments;
+    // FIXME: @piatra
+    if (payload.issue) {
+      data.count = payload.issue.comments;
+    } else {
+      data.count = 0;
   }
   if (payload.commits) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
