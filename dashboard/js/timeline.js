@@ -275,7 +275,6 @@ function populateTimeline(count, starting_from) {
                   if (!mapping) {
                       return;
                   }
-                  console.log(e);
                   context = {
                       avatar: formatAuthor(e.actor).avatar,
                       username: formatAuthor(e.actor).username,
