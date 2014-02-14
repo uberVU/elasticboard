@@ -11,7 +11,7 @@ app = Flask(__name__)
 CHART_MONTHS = 6
 
 def index_name(user, repo):
-    return '-'.join((user, repo))
+    return '&'.join((user, repo))
 
 @app.errorhandler(500)
 def internal_error(error):

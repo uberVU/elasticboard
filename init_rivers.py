@@ -6,7 +6,7 @@ for repository in CONFIG['repositories']:
         'type': 'github',
         'github': repository
     }
-    index_name = '%s-%s' % (repository['owner'], repository['repository'])
+    index_name = '%s&%s' % (repository['owner'], repository['repository'])
     url = '/_river/%s/_meta' % index_name
     ES.transport.perform_request(url=url, method='PUT', body=body)
     count += 1

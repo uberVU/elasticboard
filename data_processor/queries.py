@@ -141,12 +141,12 @@ def available_repos():
     # get all indices
     indices = ES.indices.get_aliases().keys()
     # filter out those that don't look as repos
-    indices = [i for i in indices if len(i.split('-')) == 2]
+    indices = [i for i in indices if len(i.split('&')) == 2]
     # there are some that still sneak by
     indices = [i for i in indices if i not in EXCLUDED]
 
     # format them as github repos (slashes)
-    formatted = [i.replace('-', '/') for i in indices]
+    formatted = [i.replace('&', '/') for i in indices]
     return formatted
 
 def issue_events_count(index, action, start=None, end=None):
