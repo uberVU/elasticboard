@@ -1,16 +1,51 @@
 PER_PAGE = 50;
 
 var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
+
+Handlebars.registerHelper('eachCommit', function(context, options) {
+  var ret = "";
+
+  for(var i=0, j=context.length; i<j; i++) {
+    ret = ret + options.fn(context[i]);
+  }
+
+  return ret;
+});
+
 function formatAuthor(author) {
     var login = author.login;
     var avatarURL = author.avatar_url;
     var githubURL = 'http://github.com/' + login;
 
-    return authorTemplate({
-        login: login,
-        avatarURL: avatarURL,
+    return {
+        username: login,
+        avatar: avatarURL,
         githubURL: githubURL
+    };
+}
+
+function formatPayload (payload) {
+  var data = {
+    comment: '',
+    count: '',
+    commits: '',
+    diffTree: ''
+  };
+  if (payload.comment) {
+    data.comment = payload.comment.body;
+    data.count = payload.issue.comments;
+  }
+  if (payload.commits) {
+    data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
+    data.commits = payload.commits.map(function(commit) {
+      return {
+        commitUrl: commit.url,
+        message: commit.message,
+        sha: commit.sha.substr(0,10)
+      };
     });
+  }
+  return data;
 }
 
 function formatLink(href, text, title) {
@@ -90,6 +125,9 @@ var TIMELINE_MAPPING = {
         }
     },
     'IssueCommentEvent': {
+        title: function(e) {
+          return e.payload.issue.title;
+        },
         action: function(e) {
             return "commented on";
         },
@@ -98,6 +136,15 @@ var TIMELINE_MAPPING = {
         },
         link: function(e) {
             return e.payload.comment.html_url;
+        },
+        assignee: function(e) {
+          return e.payload.issue.assignee || 'nobody';
+        },
+        number: function(e) {
+          return e.payload.issue.number;
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.issue.created_at, true);
         }
     },
     'IssuesEvent': {
@@ -106,6 +153,18 @@ var TIMELINE_MAPPING = {
         },
         object: function(e) {
             return formatIssue(e.payload.issue);
+        },
+        assignee: function(e) {
+          return e.payload.issue.assignee || 'nobody';
+        },
+        title: function(e) {
+          return e.payload.issue.title;
+        },
+        number: function(e) {
+          return e.payload.issue.number;
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.issue.created_at, true);
         }
     },
     'MemberEvent': {
@@ -208,11 +267,22 @@ function populateTimeline(count, starting_from) {
                   if (!mapping) {
                       return;
                   }
+                  console.log(e);
                   context = {
-                      author: formatAuthor(e.actor),
+                      avatar: formatAuthor(e.actor).avatar,
+                      username: formatAuthor(e.actor).username,
+                      comment: formatPayload(e.payload).comment,
+                      number: mapping.number ? mapping.number(e) : 0,
+                      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
+                      commentCount: formatPayload(e.payload).count,
+                      commits: formatPayload(e.payload).commits,
+                      diffTree: formatPayload(e.payload).diffTree,
+                      url: e.repo.name,
+                      assignee: mapping.assignee ? mapping.assignee(e) : '',
                       action: mapping.action(e),
                       object: mapping.object(e),
-                      timestamp: moment(e.created_at).fromNow()
+                      timestamp: moment(e.created_at).fromNow(),
+                      title: mapping.title ? mapping.title(e) : ''
                   };
                   if (mapping.link) {
                       context.link = mapping.link(e);
@@ -229,7 +299,7 @@ function populateTimeline(count, starting_from) {
                       action: mapping.action(),
                       object: mapping.object(),
                       timestamp: ""
-                  }
+                  };
                   var $item = $(template(context));
                   $loading.remove();
                   $timeline.append($item);

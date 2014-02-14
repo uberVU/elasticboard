@@ -96,14 +96,45 @@
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
+        <div class="small-2 columns">
+          <img src="{{ avatar }}" class="timeline-item--avatar">
+          <p class="timeline-item--username">{{ username }}</p>
+        </div>
         <div class="small-8 columns">
-            <p>{{{ author }}} {{ action }} {{{ object }}}
-                {{#if link}}
-                - see <a href="{{ link }}">here</a>.
+            {{#if title}}
+            <p class="timeline-item--title">
+             #{{ number }} {{ title }}
+            </p>
+            <p>
+              <span class="badge badge--gray">assigned to {{ assignee }}</span>
+              <span class="badge badge--gray">opened {{ issue_age }} ago</span>
+            </p>
+            {{/if}}
+            {{#if comment }}
+            <p class="timeline-item--comment">
+              {{ comment }}
+            </p>
+            <p class="timeline-item--read-more">
+              <a href="{{ link }}">Read more</a>
+            </p>
+            {{else}}
+            <p>{{ username }} {{ action }} {{{ object }}}
+                {{#if commits}}
+                  {{#eachCommit commits }}
+                    <p class="timeline-item--comment">
+                        <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
+                          {{{ message }}}
+                        </a>
+                    </p>
+                  {{/eachCommit}}
+                  <p class="timeline-item--read-more">
+                    <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+                  </p>
                 {{/if}}
             </p>
+            {{/if}}
         </div>
-        <div class="small-4 columns text-right">
+        <div class="small-2 columns text-right">
             <p class="timestamp muted">{{ timestamp }}</p>
         </div>
     </div>
