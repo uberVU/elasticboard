@@ -38,6 +38,7 @@ function formatPayload (payload) {
       data.count = payload.issue.comments;
     } else {
       data.count = 0;
+    }
   }
   if (payload.commits) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
