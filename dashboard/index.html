@@ -140,6 +140,20 @@
     </div>
 </script>
 
+<script id="timeline-item-basic" type="text/x-handlebars-template">
+  <div class="timeline-item row">
+    <div class="small-2 columns text-centered">
+      <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
+    </div>
+    <div class="small-8 columns">
+      <p>{{ username }} {{ action }} {{{ object }}}</p>
+    </div>
+    <div class="small-2 columns text-right">
+        <p class="timestamp muted">{{ timestamp }}</p>
+    </div>
+  </div>
+</script>
+
 <script id="timeline-author-template" type="text/x-handlebars-template">
         <span class="timeline-author">
             <img src="{{ avatarURL }}"/>

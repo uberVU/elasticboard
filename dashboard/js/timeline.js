@@ -257,6 +257,7 @@ var TIMELINE_MAPPING = {
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
     var template = Handlebars.compile($('#timeline-item-template').html());
+    var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
     var $loading = $('#timeline-loading');
 
     // if we don't have a specified index, don't do anythin
@@ -274,32 +275,57 @@ function populateTimeline(count, starting_from) {
     $.get(API_BASE + '/recent_events',
           {count: count, starting_from: starting_from})
           .success(function(data) {
+            console.log('success');
               var fragment = document.createDocumentFragment();
               data.data.forEach(function(e) {
                   mapping = TIMELINE_MAPPING[e.type];
                   if (!mapping) {
-                      return;
+                      console.log('no mapping');
+                      context = {
+                        avatar: e.user.avatar_url,
+                        username: e.user.login,
+                        comment: e.body,
+                        number: e.number,
+                        issue_age: moment().from(e.created_at, true),
+                        commentCount: e.comments,
+                        commits: [],
+                        diffTree: '',
+                        url: '',
+                        assignee: e.assignee,
+                        action: 'opened an issue',
+                        object: '',
+                        timestamp: moment().from(e.created_at, true),
+                        title: e.title
+                      };
+                  } else {
+                    context = {
+                        avatar: formatAuthor(e.actor).avatar,
+                        username: formatAuthor(e.actor).username,
+                        comment: formatPayload(e.payload).comment,
+                        number: mapping.number ? mapping.number(e) : 0,
+                        issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
+                        commentCount: formatPayload(e.payload).count,
+                        commits: formatPayload(e.payload).commits,
+                        diffTree: formatPayload(e.payload).diffTree,
+                        url: e.repo.name,
+                        assignee: mapping.assignee ? mapping.assignee(e) : '',
+                        action: mapping.action(e),
+                        object: mapping.object(e),
+                        timestamp: moment(e.created_at).fromNow(),
+                        title: mapping.title ? mapping.title(e) : ''
+                    };
                   }
-                  context = {
-                      avatar: formatAuthor(e.actor).avatar,
-                      username: formatAuthor(e.actor).username,
-                      comment: formatPayload(e.payload).comment,
-                      number: mapping.number ? mapping.number(e) : 0,
-                      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
-                      commentCount: formatPayload(e.payload).count,
-                      commits: formatPayload(e.payload).commits,
-                      diffTree: formatPayload(e.payload).diffTree,
-                      url: e.repo.name,
-                      assignee: mapping.assignee ? mapping.assignee(e) : '',
-                      action: mapping.action(e),
-                      object: mapping.object(e),
-                      timestamp: moment(e.created_at).fromNow(),
-                      title: mapping.title ? mapping.title(e) : ''
-                  };
-                  if (mapping.link) {
+                  if (mapping && mapping.link) {
                       context.link = mapping.link(e);
                   }
-                  var $item = $(template(context));
+                  var $item;
+                  if (context.action == 'starred' || context.action == 'forked to') {
+                    console.log(context.action);
+                    context.img = context.action == 'starred' ? 'starred' : 'forked';
+                    $item = $(templateBasic(context));
+                  } else {
+                    $item = $(template(context));
+                  }
                   fragment.appendChild($item[0]);
               });
               $(fragment).insertBefore($loading);
@@ -317,11 +343,12 @@ function populateTimeline(count, starting_from) {
                   $timeline.append($item);
                   $('#tab-1').off('scroll');
               }
-          });
+          }).fail(logFailure);
 
     if (!starting_from) {
         $('#tab-1').on('scroll', function () {
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 5) {
+                console.log('loadgin');
                 populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
             }
         });
