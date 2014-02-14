@@ -159,7 +159,11 @@ var TIMELINE_MAPPING = {
             return formatIssue(e.payload.issue);
         },
         assignee: function(e) {
-          return e.payload.issue.assignee || 'nobody';
+            var assignee = e.payload.issue.assignee;
+            if (assignee) {
+                return assignee.login;
+            }
+            return 'nobody';
         },
         title: function(e) {
           return e.payload.issue.title;
