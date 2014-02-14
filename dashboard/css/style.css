@@ -239,13 +239,14 @@ ul.menu li:hover {
 }
 
 .issue-count {
-    font-size: 1.5rem;
-    border: 1px solid #fff;
-    width: 4.2rem;
-    height: 3.2rem;
-    text-align: center;
-    line-height: 3rem;
-    display:inline-block;
+  font-size: 1.5rem;
+  border: 4px solid #FFF;
+  width: 4.2rem;
+  height: 4.2rem;
+  text-align: center !important;
+  line-height: 4rem;
+  display: inline-block;
+  border-radius: 50%;
 }
 
 .text-small {
