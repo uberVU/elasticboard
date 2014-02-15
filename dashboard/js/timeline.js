@@ -31,7 +31,7 @@ function formatPayload (payload) {
     commits: '',
     diffTree: ''
   };
-  if (payload.comment && payload.issue) {
+  if (payload.comment) {
     data.comment = payload.comment.body;
     // FIXME: @piatra
     if (payload.issue) {
@@ -346,7 +346,6 @@ function formatContext (e) {
     // changes refer to additions & deletions in a pull request
     context.changes = mapping.changes(e);
   }
-  console.log(e, context.timestamp);
   return context;
 }
 
@@ -377,6 +376,10 @@ function populateTimeline(count, starting_from) {
                   var context = formatContext(e);
                   if (mapping && mapping.link) {
                       context.link = mapping.link(e);
+                  }
+                  if (e.type == 'CommitCommentEvent') {
+                    console.log(e);
+                    console.log(context.link);
                   }
                   var $item;
                   if (context.action == 'starred' || context.action == 'forked to') {

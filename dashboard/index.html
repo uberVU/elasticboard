@@ -115,7 +115,7 @@
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
-              {{ comment }}
+              {{ username }} commented: {{ comment }}
             </p>
             {{else}}
             <p>{{ username }} {{ action }} {{{ object }}}
@@ -143,6 +143,8 @@
             <p>
               <span class="badge badge--gray">opened {{ issue_age }} ago</span>
             </p>
+            {{/if}}
+            {{#if link}}
             <p class="timeline-item--read-more">
               <a href="{{ link }}">Read more</a>
             </p>
