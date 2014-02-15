@@ -147,7 +147,7 @@ var TIMELINE_MAPPING = {
             if (assignee) {
                 return assignee.login;
             }
-            return 'nobody';
+            return 'no one';
         },
         number: function(e) {
           return e.payload.issue.number;
@@ -220,7 +220,25 @@ var TIMELINE_MAPPING = {
         object: function(e) {
             var pullReq = e.payload.pull_request;
             return "pull request " + formatIssue(pullReq);
-        }
+        },
+        title: function(e) {
+          return e.payload.pull_request.title;
+        },
+        number: function(e) {
+          return e.payload.pull_request.number;
+        },
+        issueURL: function(e) {
+          return e.payload.pull_request.comments_url;
+        },
+        changes: function(e) {
+          return {
+            additions: e.payload.pull_request.additions,
+            deletions: e.payload.pull_request.deletions
+          };
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.pull_request.created_at, true);
+        },
     },
     'PullRequestReviewCommentEvent': {
         action: function(e) {
@@ -292,7 +310,7 @@ function formatContext (e) {
       commits: [],
       diffTree: '',
       url: '',
-      assignee: e.assignee,
+      assignee: e.assignee || 'no one',
       action: 'UNHANDLED EVENT',
       object: '',
       timestamp: moment().from(e.created_at, true),
@@ -309,7 +327,7 @@ function formatContext (e) {
       commits: formatPayload(e.payload).commits,
       diffTree: formatPayload(e.payload).diffTree,
       url: e.repo.name,
-      assignee: mapping.assignee ? mapping.assignee(e) : '',
+      assignee: mapping.assignee ? mapping.assignee(e) : 'no one',
       action: mapping.action(e),
       object: mapping.object(e),
       timestamp: moment(e.created_at).fromNow(),
@@ -324,7 +342,11 @@ function formatContext (e) {
       context.issueURL = e.html_url;
     }
   }
-
+  if (mapping && mapping.changes) {
+    // changes refer to additions & deletions in a pull request
+    context.changes = mapping.changes(e);
+  }
+  console.log(e, context.timestamp);
   return context;
 }
 

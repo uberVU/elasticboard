@@ -121,12 +121,21 @@ ul.menu li:hover {
 .timeline-item--avatar {
   border-radius: 50%;
   width: 65px;
-  margin:0 auto;
+  margin:1rem auto 0 auto;
   display: block;
+}
+
+.timeline-item--avatar:hover + .timeline-item--username {
+  opacity: 1;
 }
 
 .timeline-item--username {
   text-align: center;
+  margin: .3rem 0;
+  opacity: 0;
+  -webkit-transition-duration: .2s;
+  -moz-transition-duration: .2s;
+  transition-duration: .2s;
 }
 
 .timeline-item--comment {
