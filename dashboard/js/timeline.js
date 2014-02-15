@@ -382,12 +382,11 @@ function populateTimeline(count, starting_from) {
               }
           }).fail(logFailure);
 
-    if (!starting_from) {
-        $('#tab-1').on('scroll', function () {
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 5) {
-                console.log('loadgin');
+          if (!starting_from) {
+            $(document).on('scroll', function () {
+              if($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
                 populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
-            }
-        });
-    }
+              }
+            });
+          }
 }
