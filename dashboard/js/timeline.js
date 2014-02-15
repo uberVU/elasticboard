@@ -244,6 +244,15 @@ var TIMELINE_MAPPING = {
             return "the repository";
         }
     },
+    'TeamAddEvent': {
+      action: function(e) {
+        return 'Team add event';
+      },
+      object: function(e) {
+        console.log(e);
+        return 'for ' + e.payload.team.name;
+      }
+    },
     'EndOfTimeline': {
         action: function (e) {
             return "No more events available";
@@ -253,6 +262,48 @@ var TIMELINE_MAPPING = {
         }
     }
 };
+
+function formatContext (e) {
+  var mapping = TIMELINE_MAPPING[e.type];
+
+  if (!mapping) {
+    context = {
+      avatar: e.user.avatar_url,
+      username: e.user.login,
+      comment: e.body,
+      number: e.number,
+      issue_age: moment().from(e.created_at, true),
+      commentCount: e.comments,
+      commits: [],
+      diffTree: '',
+      url: '',
+      assignee: e.assignee,
+      action: 'opened an issue',
+      object: '',
+      timestamp: moment().from(e.created_at, true),
+      title: e.title
+    };
+  } else {
+    context = {
+      avatar: formatAuthor(e.actor).avatar,
+      username: formatAuthor(e.actor).username,
+      comment: formatPayload(e.payload).comment,
+      number: mapping.number ? mapping.number(e) : 0,
+      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
+      commentCount: formatPayload(e.payload).count,
+      commits: formatPayload(e.payload).commits,
+      diffTree: formatPayload(e.payload).diffTree,
+      url: e.repo.name,
+      assignee: mapping.assignee ? mapping.assignee(e) : '',
+      action: mapping.action(e),
+      object: mapping.object(e),
+      timestamp: moment(e.created_at).fromNow(),
+      title: mapping.title ? mapping.title(e) : ''
+    };
+  }
+
+  return context;
+}
 
 function populateTimeline(count, starting_from) {
     var $timeline = $('#timeline');
@@ -279,48 +330,12 @@ function populateTimeline(count, starting_from) {
               var fragment = document.createDocumentFragment();
               data.data.forEach(function(e) {
                   mapping = TIMELINE_MAPPING[e.type];
-                  if (!mapping) {
-                      console.log('no mapping');
-                      context = {
-                        avatar: e.user.avatar_url,
-                        username: e.user.login,
-                        comment: e.body,
-                        number: e.number,
-                        issue_age: moment().from(e.created_at, true),
-                        commentCount: e.comments,
-                        commits: [],
-                        diffTree: '',
-                        url: '',
-                        assignee: e.assignee,
-                        action: 'opened an issue',
-                        object: '',
-                        timestamp: moment().from(e.created_at, true),
-                        title: e.title
-                      };
-                  } else {
-                    context = {
-                        avatar: formatAuthor(e.actor).avatar,
-                        username: formatAuthor(e.actor).username,
-                        comment: formatPayload(e.payload).comment,
-                        number: mapping.number ? mapping.number(e) : 0,
-                        issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
-                        commentCount: formatPayload(e.payload).count,
-                        commits: formatPayload(e.payload).commits,
-                        diffTree: formatPayload(e.payload).diffTree,
-                        url: e.repo.name,
-                        assignee: mapping.assignee ? mapping.assignee(e) : '',
-                        action: mapping.action(e),
-                        object: mapping.object(e),
-                        timestamp: moment(e.created_at).fromNow(),
-                        title: mapping.title ? mapping.title(e) : ''
-                    };
-                  }
+                  var context = formatContext(e);
                   if (mapping && mapping.link) {
                       context.link = mapping.link(e);
                   }
                   var $item;
                   if (context.action == 'starred' || context.action == 'forked to') {
-                    console.log(context.action);
                     context.img = context.action == 'starred' ? 'starred' : 'forked';
                     $item = $(templateBasic(context));
                   } else {
