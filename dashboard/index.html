@@ -103,7 +103,8 @@
         <div class="small-8 columns">
             {{#if title}}
             <p class="timeline-item--title">
-             #{{ number }} {{ title }}
+             <a href="{{ issueURL }}">#{{ number }}</a>
+             {{ title }}
             </p>
             <p>
               <span class="badge badge--gray">assigned to {{ assignee }}</span>

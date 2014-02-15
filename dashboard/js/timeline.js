@@ -154,6 +154,14 @@ var TIMELINE_MAPPING = {
         },
         issue_age: function(e) {
           return moment().from(e.payload.issue.created_at, true);
+        },
+        issueURL: function(e) {
+          if (e.payload && e.payload.comment) {
+            var url = e.payload.comment.html_url.split('#')[0];
+            return url;
+          } else {
+            return '';
+          }
         }
     },
     'IssuesEvent': {
@@ -178,6 +186,14 @@ var TIMELINE_MAPPING = {
         },
         issue_age: function(e) {
           return moment().from(e.payload.issue.created_at, true);
+        },
+        issueURL: function(e) {
+          if (e.payload && e.payload.comment) {
+            var url = e.payload.comment.html_url.split('#')[0];
+            return url;
+          } else {
+            return '';
+          }
         }
     },
     'MemberEvent': {
@@ -249,7 +265,6 @@ var TIMELINE_MAPPING = {
         return 'Team add event';
       },
       object: function(e) {
-        console.log(e);
         return 'for ' + e.payload.team.name;
       }
     },
@@ -278,7 +293,7 @@ function formatContext (e) {
       diffTree: '',
       url: '',
       assignee: e.assignee,
-      action: 'opened an issue',
+      action: 'UNHANDLED EVENT',
       object: '',
       timestamp: moment().from(e.created_at, true),
       title: e.title
@@ -300,6 +315,14 @@ function formatContext (e) {
       timestamp: moment(e.created_at).fromNow(),
       title: mapping.title ? mapping.title(e) : ''
     };
+  }
+
+  if (context.number && context.title) {
+    if (mapping) {
+      context.issueURL = mapping.issueURL(e);
+    } else {
+      context.issueURL = e.html_url;
+    }
   }
 
   return context;
@@ -326,7 +349,6 @@ function populateTimeline(count, starting_from) {
     $.get(API_BASE + '/recent_events',
           {count: count, starting_from: starting_from})
           .success(function(data) {
-            console.log('success');
               var fragment = document.createDocumentFragment();
               data.data.forEach(function(e) {
                   mapping = TIMELINE_MAPPING[e.type];
