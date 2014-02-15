@@ -102,21 +102,14 @@
         </div>
         <div class="small-8 columns">
             {{#if title}}
-            <p class="timeline-item--title">
+            <p class="timeline-item--title muted">
              <a href="{{ issueURL }}">#{{ number }}</a>
              {{ title }}
-            </p>
-            <p>
-              <span class="badge badge--gray">assigned to {{ assignee }}</span>
-              <span class="badge badge--gray">opened {{ issue_age }} ago</span>
             </p>
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
               {{ comment }}
-            </p>
-            <p class="timeline-item--read-more">
-              <a href="{{ link }}">Read more</a>
             </p>
             {{else}}
             <p>{{ username }} {{ action }} {{{ object }}}
@@ -135,8 +128,19 @@
             </p>
             {{/if}}
         </div>
-        <div class="small-2 columns text-right">
+        <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
+            {{#if title}}
+            <p>
+              <span class="badge badge--gray">assigned to {{ assignee }}</span>
+            </p>
+            <p>
+              <span class="badge badge--gray">opened {{ issue_age }} ago</span>
+            </p>
+            <p class="timeline-item--read-more">
+              <a href="{{ link }}">Read more</a>
+            </p>
+            {{/if}}
         </div>
     </div>
 </script>

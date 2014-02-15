@@ -98,8 +98,13 @@ ul.menu li:hover {
 }
 
 .timeline-item p {
-  line-height: 1.2rem;
+  line-height: 1.5rem;
   font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.timeline-aside p {
+  margin: .3rem 0;
 }
 
 .timeline-item--title {
