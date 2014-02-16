@@ -106,6 +106,9 @@
              <a href="{{ issueURL }}">#{{ number }}</a>
              {{ title }}
             </p>
+            {{#each labels}}
+                <span class="badge badge--issue" style="background:#{{ color }}">{{ name }}</span>
+            {{/each}}
             {{#with changes}}
               <p>
                 <span class="timeline-item--additions"><span>+</span> {{{ additions }}}</span>
@@ -136,11 +139,6 @@
         </div>
         <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
-            {{#each labels}}
-              <p>
-                <span class="badge" style="background:#{{ color }}">{{ name }}</span>
-              </p>
-            {{/each}}
             {{#if title}}
             <p>
               <span class="badge badge--gray">assigned to {{ assignee }}</span>

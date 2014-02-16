@@ -319,6 +319,10 @@ ul.menu li:hover {
     background: #999;
   }
 
+  .badge--issue {
+    display: inline-block;
+  }
+
 #issues-involvement-graph-container {
     height: 88%;
 }
