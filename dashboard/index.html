@@ -13,7 +13,7 @@
     <div class="large-2 small-12 columns">
         <h1>Elasticboard</h1>
     </div>
-    <div class="small-12 large-8 columns" id="side-menu">
+    <div class="small-12 large-6 columns" id="side-menu">
         <ul class="menu text-center">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
@@ -25,7 +25,7 @@
             </li>
         </ul>
     </div>
-    <div class="large-2 small-12 columns text-right">
+    <div class="large-4 small-12 columns text-right">
         <span id="repo-select-trigger">
             <h1 class="inline" id="user-repo"></h1>
             <img class="cog" src="/imgs/cog.svg">
@@ -143,6 +143,11 @@
                 {{/if}}
             </p>
             {{/if}}
+            {{#if link}}
+            <p class="timeline-item--read-more">
+              <a href="{{ link }}">Read more</a>
+            </p>
+            {{/if}}
         </div>
         <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
@@ -152,11 +157,6 @@
             </p>
             <p>
               <span class="badge badge--gray">opened {{ issue_age }} ago</span>
-            </p>
-            {{/if}}
-            {{#if link}}
-            <p class="timeline-item--read-more">
-              <a href="{{ link }}">Read more</a>
             </p>
             {{/if}}
         </div>
