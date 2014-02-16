@@ -18,9 +18,11 @@ function formatAuthor(author) {
     var githubURL = 'http://github.com/' + login;
 
     return {
-        username: login,
+        username: {
+          username: login,
+          url: githubURL
+        },
         avatar: avatarURL,
-        githubURL: githubURL
     };
 }
 
@@ -311,7 +313,10 @@ function formatContext (e) {
     }
     context = {
       avatar: e.user.avatar_url,
-      username: e.user.login,
+      username: {
+        username: e.user.login,
+        url: e.user.html_url
+      },
       comment: e.body,
       number: e.number,
       issue_age: moment().from(e.created_at, true),

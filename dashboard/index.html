@@ -118,10 +118,17 @@
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
-              {{ username }} commented: {{ comment }}
+            {{#with username}}
+              <a href="{{ url }}">{{ username }}</a>
+            {{/with}}
+              commented: {{ comment }}
             </p>
             {{else}}
-            <p>{{ username }} {{ action }} {{{ object }}}
+            <p>
+              {{#with username }}
+                <a href="{{ url }}">{{ username }}</a>
+              {{/with}}
+                {{ action }} {{{ object }}}
                 {{#if commits}}
                   {{#eachCommit commits }}
                     <p class="timeline-item--comment">
@@ -162,7 +169,10 @@
       <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
     </div>
     <div class="small-8 columns">
-      <p>{{ username }} {{ action }} {{{ object }}}</p>
+      <p>
+      {{#with username}}
+        <a href="{{ url }}">{{ username }}</a>
+      {{/with}} {{ action }} {{{ object }}}</p>
     </div>
     <div class="small-2 columns text-right">
         <p class="timestamp muted">{{ timestamp }}</p>
