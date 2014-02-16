@@ -182,7 +182,7 @@ var TIMELINE_MAPPING = {
             if (assignee) {
                 return assignee.login;
             }
-            return 'nobody';
+            return 'no one';
         },
         title: function(e) {
           return e.payload.issue.title;
@@ -327,7 +327,7 @@ function formatContext (e) {
       assignee: e.assignee || 'no one',
       action: 'commented: ',
       object: '',
-      timestamp: moment().from(e.created_at, true),
+      timestamp: moment(e.created_at).fromNow(),
       title: e.title
     };
   } else {
