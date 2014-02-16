@@ -108,8 +108,8 @@
             </p>
             {{#with changes}}
               <p>
-                <span class="timeline-item--additions">Additions: {{{ additions }}}</span>
-                <span class="timeline-item--deletions">Deletions: {{{ deletions }}}</span>
+                <span class="timeline-item--additions"><span>+</span> {{{ additions }}}</span>
+                <span class="timeline-item--deletions"><span>-</span> {{{ deletions }}}</span>
               </p>
             {{/with}}
             {{/if}}
@@ -136,6 +136,11 @@
         </div>
         <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
+            {{#each labels}}
+              <p>
+                <span class="badge" style="background:#{{ color }}">{{ name }}</span>
+              </p>
+            {{/each}}
             {{#if title}}
             <p>
               <span class="badge badge--gray">assigned to {{ assignee }}</span>

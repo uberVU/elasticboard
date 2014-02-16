@@ -29,7 +29,8 @@ function formatPayload (payload) {
     comment: '',
     count: '',
     commits: '',
-    diffTree: ''
+    diffTree: '',
+    labels: []
   };
   if (payload.comment) {
     data.comment = payload.comment.body;
@@ -39,6 +40,9 @@ function formatPayload (payload) {
     } else {
       data.count = 0;
     }
+  }
+  if (payload.issue) {
+    data.labels = payload.issue.labels;
   }
   if (payload.commits) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
@@ -300,6 +304,11 @@ function formatContext (e) {
   var mapping = TIMELINE_MAPPING[e.type];
 
   if (!mapping) {
+    if (!e.body) {
+      // FIXME: need better handling for this
+      // can't figure out what kind of event this is
+      return;
+    }
     context = {
       avatar: e.user.avatar_url,
       username: e.user.login,
@@ -311,7 +320,7 @@ function formatContext (e) {
       diffTree: '',
       url: '',
       assignee: e.assignee || 'no one',
-      action: 'UNHANDLED EVENT',
+      action: 'commented: ',
       object: '',
       timestamp: moment().from(e.created_at, true),
       title: e.title
@@ -323,6 +332,7 @@ function formatContext (e) {
       comment: formatPayload(e.payload).comment,
       number: mapping.number ? mapping.number(e) : 0,
       issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
+      labels: formatPayload(e.payload).labels,
       commentCount: formatPayload(e.payload).count,
       commits: formatPayload(e.payload).commits,
       diffTree: formatPayload(e.payload).diffTree,
@@ -374,16 +384,14 @@ function populateTimeline(count, starting_from) {
               data.data.forEach(function(e) {
                   mapping = TIMELINE_MAPPING[e.type];
                   var context = formatContext(e);
+                  if (!context) return;
                   if (mapping && mapping.link) {
                       context.link = mapping.link(e);
                   }
-                  if (e.type == 'CommitCommentEvent') {
-                    console.log(e);
-                    console.log(context.link);
-                  }
                   var $item;
-                  if (context.action == 'starred' || context.action == 'forked to') {
+                  if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
                     context.img = context.action == 'starred' ? 'starred' : 'forked';
+                    if (e.type == 'CommitCommentEvent') context.img = 'comment';
                     $item = $(templateBasic(context));
                   } else {
                     $item = $(template(context));

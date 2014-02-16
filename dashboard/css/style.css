@@ -111,6 +111,23 @@ ul.menu li:hover {
   margin-bottom: 0;
 }
 
+.timeline-item--additions span,
+.timeline-item--deletions span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.timeline-item--deletions span {
+  color: red;
+}
+
+.timeline-item--additions span {
+  color: green;
+}
+  
+  
+}
+
 .timeline-item--read-more {
   margin: -.5rem 0 0 0;
 }
