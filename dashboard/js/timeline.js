@@ -360,66 +360,78 @@ function formatContext (e) {
 }
 
 function populateTimeline(count, starting_from) {
-    var $timeline = $('#timeline');
-    var template = Handlebars.compile($('#timeline-item-template').html());
-    var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
-    var $loading = $('#timeline-loading');
+  var $timeline = $('#timeline');
+  var template = Handlebars.compile($('#timeline-item-template').html());
+  var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
+  var $loading = $('#timeline-loading');
 
-    // if we don't have a specified index, don't do anythin
-    if (API_BASE.indexOf('undefined/undefined') >= 0) {
-        return;
-    }
+  // if we don't have a specified index, don't do anythin
+  if (API_BASE.indexOf('undefined/undefined') >= 0) {
+    return;
+  }
 
-    if (!count) {
-        count = PER_PAGE;
-    }
+  if (!count) {
+    count = PER_PAGE;
+  }
+  if (!starting_from) {
+    starting_from = 0;
+  }
+
+  $.get(API_BASE + '/recent_events', {count: count, starting_from: starting_from})
+    .success(function(data) {
+      var fragment = document.createDocumentFragment();
+      data.data.forEach(function(e) {
+        mapping = TIMELINE_MAPPING[e.type];
+        var context = formatContext(e);
+
+        if (!context) return;
+
+        if (mapping && mapping.link) {
+          context.link = mapping.link(e);
+        }
+
+        var $item;
+
+        if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
+          context.img = context.action == 'starred' ? 'starred' : 'forked';
+
+          if (e.type == 'CommitCommentEvent') context.img = 'comment';
+
+          $item = $(templateBasic(context));
+
+        } else {
+
+          $item = $(template(context));
+
+        }
+
+        fragment.appendChild($item[0]);
+      });
+
+      $(fragment).insertBefore($loading);
+
+      if (!data.data.length) {
+        mapping = TIMELINE_MAPPING['EndOfTimeline'];
+        context = {
+          author: "Sorry!",
+          action: mapping.action(),
+          object: mapping.object(),
+          timestamp: ""
+        };
+
+        var $item = $(template(context));
+        $loading.remove();
+        $timeline.append($item);
+        $('#tab-1').off('scroll');
+      }
+
+    }).fail(logFailure);
+
     if (!starting_from) {
-        starting_from = 0;
+      $(document).on('scroll', function () {
+        if($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+          populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
+        }
+      });
     }
-
-    $.get(API_BASE + '/recent_events',
-          {count: count, starting_from: starting_from})
-          .success(function(data) {
-              var fragment = document.createDocumentFragment();
-              data.data.forEach(function(e) {
-                  mapping = TIMELINE_MAPPING[e.type];
-                  var context = formatContext(e);
-                  if (!context) return;
-                  if (mapping && mapping.link) {
-                      context.link = mapping.link(e);
-                  }
-                  var $item;
-                  if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
-                    context.img = context.action == 'starred' ? 'starred' : 'forked';
-                    if (e.type == 'CommitCommentEvent') context.img = 'comment';
-                    $item = $(templateBasic(context));
-                  } else {
-                    $item = $(template(context));
-                  }
-                  fragment.appendChild($item[0]);
-              });
-              $(fragment).insertBefore($loading);
-
-              if (!data.data.length) {
-                  mapping = TIMELINE_MAPPING['EndOfTimeline'];
-                  context = {
-                      author: "Sorry!",
-                      action: mapping.action(),
-                      object: mapping.object(),
-                      timestamp: ""
-                  };
-                  var $item = $(template(context));
-                  $loading.remove();
-                  $timeline.append($item);
-                  $('#tab-1').off('scroll');
-              }
-          }).fail(logFailure);
-
-          if (!starting_from) {
-            $(document).on('scroll', function () {
-              if($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
-                populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
-              }
-            });
-          }
 }
