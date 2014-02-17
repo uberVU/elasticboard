@@ -167,6 +167,7 @@ function drawIssuesInvolvement() {
                 .enter()
                 .append('g')
                 .classed('gnode', true)
+                .call(force.drag);
 
             var nodes = gnodes.append('circle')
                 .attr('class', 'node')
@@ -181,8 +182,7 @@ function drawIssuesInvolvement() {
                         return '#FF4E50';
                     }
                     return '#88C425';
-                })
-                .call(force.drag);
+                });
 
             var labels = gnodes.append('text')
                 .attr('dx', function (d) {
