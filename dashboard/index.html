@@ -10,10 +10,8 @@
 <body>
 
 <div class="row full-width" id="topbar">
-    <div class="large-2 small-12 columns">
+    <div class="large-7 small-12 columns">
         <h1>Elasticboard</h1>
-    </div>
-    <div class="small-12 large-6 columns" id="side-menu">
         <ul class="menu text-center">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
@@ -25,10 +23,11 @@
             </li>
         </ul>
     </div>
-    <div class="large-4 small-12 columns text-right">
+    <div class="large-5 small-12 columns text-right">
         <span id="repo-select-trigger">
-            <h1 class="inline" id="user-repo"></h1>
-            <img class="cog" src="/imgs/cog.svg">
+            <h1 class="inline" id="user-repo">
+              <img class="cog" src="/imgs/cog.svg">
+            </h1>
             <div class="repo-select hidden">
                 <ul></ul>
             </div>
@@ -98,11 +97,7 @@
     <div class="timeline-item row">
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
-          {{#with username}}
-            <p class="timeline-item--username">
-              <a href="{{ url }}">{{ username }}</a>
-            </p>
-          {{/with}
+          <p class="timeline-item--username">{{ username.[username] }}</p>
         </div>
         <div class="small-8 columns">
             {{#if title}}

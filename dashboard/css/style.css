@@ -11,6 +11,11 @@ body {
 
 #topbar h1, h2 {
     color: white;
+    display:inline-block;
+}
+
+#topbar h1 {
+  font-size: 2rem;
 }
 
 .graph {
@@ -43,26 +48,39 @@ body {
     height: 100%;
 }
 
-ul.menu {
+.menu {
   margin-bottom: 0;
+  display: inline-block;
 }
 
-ul.menu li {
+.menu li {
   cursor: pointer;
   list-style-type: none;
   display: inline-block;
-  height: 5rem;
-  line-height: 5rem;
+  height: 2rem;
+  line-height: 2rem;
+  padding:0 .1rem;
   vertical-align: bottom;
   font-size: 1.1rem;
+  -webkit-transition-duration: .2s;
+  border-bottom:1px solid rgba(180, 180, 180, 0);
 }
 
-ul.menu li:last-child {
+  li[data-tab='github'] {
+    margin:0 0 .2rem 0;
+    border: none;
+  }
+  
+  .menu li[data-tab='github']:hover {
+    border:none;
+  }
+
+.menu li:last-child {
     border-bottom: none;
 }
 
-ul.menu li:hover {
-    background: rgb(180, 180, 180);
+.menu li:hover {
+    border-bottom:1px solid rgb(180, 180, 180);
 }
 
 .menu iframe {
@@ -164,7 +182,6 @@ ul.menu li:hover {
 
 .cog {
     display: inline-block;
-    margin: 0 0 1.2rem 0;
 }
 
     .cog:hover {
@@ -335,4 +352,15 @@ ul.menu li:hover {
 .graph-subtitle {
     font-size: 0.9rem;
     color: rgb(221, 221, 221);
+}
+
+@media (max-width: 1024px) {
+  #topbar h1 {
+    display: block;
+    text-align:center;
+  }
+  
+  .menu {
+    display: block;
+  }
 }
