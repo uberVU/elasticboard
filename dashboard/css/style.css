@@ -312,6 +312,7 @@ ul.menu li:hover {
 
   .badge--gray {
     background: #999;
+    color: #444;
   }
 
   .badge--issue {
