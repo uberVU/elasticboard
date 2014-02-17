@@ -98,7 +98,11 @@
     <div class="timeline-item row">
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
-          <p class="timeline-item--username">{{ username }}</p>
+          {{#with username}}
+            <p class="timeline-item--username">
+              <a href="{{ url }}">{{ username }}</a>
+            </p>
+          {{/with}
         </div>
         <div class="small-8 columns">
             {{#if title}}
