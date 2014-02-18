@@ -61,25 +61,6 @@ def past_n_months(index, query, n):
     data.reverse()
     return data
 
-def facet_counts_all(query, field):
-    """
-    Returns the facet counts for the equivalent .facet(field) query
-    but grabs all the results (size = big).
-    """
-    # https://github.com/mozilla/fjord/blob/master/fjord/analytics/views.py#L527
-    ALL = 2**31 - 1 # es/java maxint
-    facet = {
-        'terms': {
-            'field': field,
-            'size': ALL
-        }
-    }
-    q = query._build_query()
-    if 'filter' in q:
-        facet['facet_filter'] = q['filter']
-
-    return query.facet_raw(f=facet).facet_counts()['f']
-
 def most_active_people(index, start=None, end=None):
     """
     Finds the most active users - as actors in all the events.
