@@ -32,6 +32,8 @@ body {
     background: rgb(31, 31, 31);
     padding: 5px;
     margin-bottom: 30px;
+    max-height: 38rem;
+    overflow-y: auto;
 }
 
 .full-width {

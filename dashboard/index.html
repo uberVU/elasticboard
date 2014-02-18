@@ -66,7 +66,7 @@
             <div class="graph graph-like">
                 <div class="text-center">
                     <p class="graph-title">Issues Involvement Graph</p>
-                    <p class="graph-subtitle">Over the current month</p>
+                    <p class="graph-subtitle">for the top 5 issues over the current month</p>
                 </div>
                 <div id="issues-involvement-graph-container"></div>
             </div>
@@ -181,7 +181,8 @@
 
 <script id="issues-list-template" type="text/x-handlebars-template">
     <div class="text-center">
-        <p>{{ title }}</p>
+        <p class="graph-title">{{ title }}</p>
+        <p class="graph-subtitle">{{ subtitle }}</p>
     </div>
     <ul class="grey-text">
         {{#each issues}}

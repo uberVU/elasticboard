@@ -6,6 +6,10 @@ from elasticutils import S
 from es import ES
 
 
+# for queries where it makes sense
+LIMIT = 20
+
+
 def all(query):
     count = query.count()
     return query[:count]
@@ -96,10 +100,13 @@ def most_active_issues(index, start=None, end=None):
 def untouched_issues(index):
     """
     Open issues that haven't seen any action (updated_at == created_at).
+    max LIMIT results
     """
     issues = S().indexes(index).doctypes('IssueData') \
                 .filter(state='open').values_dict()
+    issues = all(issues)
     untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
+    untouched = untouched[:LIMIT]
     return untouched
 
 def issues_assigned_to(index, login):
@@ -109,6 +116,7 @@ def issues_assigned_to(index, login):
     issues = S().indexes(index).doctypes('IssueData') \
                 .filter(**{'assignee.login': login, 'state': 'open'}) \
                 .values_dict()
+    issues = issues[:LIMIT]
     return list(issues)
 
 def recent_events(index, count=200, starting_from=0):
@@ -166,6 +174,7 @@ def pulls_count(index):
 def inactive_issues(index):
     """
     Open issues that haven't seen any activity in the past 2 weeks.
+    max LIMIT results
     """
     now = datetime.datetime.now()
     limit = now - datetime.timedelta(weeks=2)
@@ -173,6 +182,7 @@ def inactive_issues(index):
                 .filter(state='open') \
                 .filter(updated_at__lt=limit) \
                 .values_dict()
+    issues = issues[:LIMIT]
     return list(issues)
 
 def avg_issue_time(index, start=None, end=None):
@@ -182,6 +192,7 @@ def avg_issue_time(index, start=None, end=None):
     q = S().indexes(index).doctypes('IssueData').filter(state='closed')
     q = apply_time_filter(q, start, end, field='closed_at')
     issues = q.values_dict()
+    issues = all(issues)
 
     sum = 0 # using seconds, int is fine
     count = 0
@@ -201,23 +212,37 @@ def issues_involvement(index, start=None, end=None):
     Dict mapping from issue number to {issue: issue_obj,
                                        users: [list of users_obj]}
     for events that happened during the <start, end> time period.
+    ! only for the 10 most popular during this time period
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q = apply_time_filter(q, start, end)
+    q = all(q)
+
+    active_issues = most_active_issues(index, start, end)
+    # only top 5 issues
+    active_issues = [i['term'] for i in active_issues][:5]
 
     issues = {}
+    added_users = {} # scratch dict to keep track of duplicate users
     for event in q.values_dict():
         issue = event['payload']['issue']
         number = issue['number']
         user = event['actor']
+
+        if number not in active_issues:
+            continue
 
         if number not in issues:
             issues[number] = {
                 'issue': issue,
                 'users': [user]
             }
+            added_users[number] = set()
+            added_users[number].add(user['login'])
             continue
 
-        issues[number]['users'].append(user)
+        if user['login'] not in added_users[number]:
+            issues[number]['users'].append(user)
+            added_users[number].add(user['login'])
 
     return issues

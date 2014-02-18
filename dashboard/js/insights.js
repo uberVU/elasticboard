@@ -53,7 +53,8 @@ function drawUntouchedIssues() {
             var data = json.data;
             var context = {
                 issues: data,
-                title: "Untouched Issues"
+                title: "Untouched Issues",
+                subtitle: "(max. 20 results)"
             }
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
@@ -67,7 +68,8 @@ function drawInactiveIssues() {
             var data = json.data;
             var context = {
                 issues: data,
-                title: "Inactive Issues (2 weeks)"
+                title: "Inactive Issues (2 weeks)",
+                subtitle: "(max. 20 results)"
             }
             var $list = $(issuesListTemplate(context));
             $('#inactive-issues').empty().append($list);
