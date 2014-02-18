@@ -348,7 +348,7 @@ body {
 
 .inline-comment {
   width: 1.2rem;
-  opacity: 0.7;
+  margin-bottom: .3rem;
 }
 
 .graph-title {
