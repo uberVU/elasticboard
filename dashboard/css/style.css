@@ -314,6 +314,10 @@ body {
     cursor: pointer;
 }
 
+.badge {
+    width: 5rem;
+}
+
 .badge,
 .badge--timestamp,
 .badge--issue {
