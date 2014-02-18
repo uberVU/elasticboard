@@ -6,6 +6,10 @@ from elasticutils import S
 from es import ES
 
 
+def all(query):
+    count = query.count()
+    return query[:count]
+
 def make_datetime(utctime):
     return datetime.datetime.strptime(utctime,'%Y-%m-%dT%H:%M:%SZ')
 
