@@ -314,26 +314,27 @@ body {
     cursor: pointer;
 }
 
-.badge {
-  display: inline;
+.badge,
+.badge--timestamp,
+.badge--issue {
+  background: #999;
+  display: inline-block;
   padding: 0.2em 0.6em 0.3em;
   font-size: 75%;
   font-weight: 700;
   line-height: 1;
-  color: #FFF;
+  color: #444;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
+  width: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-  .badge--gray {
-    background: #999;
-    color: #444;
-  }
-
-  .badge--issue {
-    display: inline-block;
+  .badge--timestamp {
+    width: 9rem;
   }
 
 #issues-involvement-graph-container {
