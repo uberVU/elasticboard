@@ -369,9 +369,18 @@ body {
 }
 
 @media (max-width: 1024px) {
+  
   #topbar h1 {
     display: block;
     text-align:center;
+  }
+  
+  #repo-select-trigger {
+    display: inline-block !important;
+  }
+  
+  #topbar .text-right {
+    text-align: center !important;
   }
   
   .menu {
