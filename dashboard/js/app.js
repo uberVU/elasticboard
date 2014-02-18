@@ -19,7 +19,9 @@ function initDashboard () {
     populateOpenIssues();
     populateOpenPulls();
     populateTimeline();
-    $('#user-repo').text(REPO);
+    $('#user-repo').html(function(index, html) {
+      return REPO + html;
+    });
     changeTabs();
 }
 

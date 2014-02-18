@@ -18,9 +18,11 @@ function formatAuthor(author) {
     var githubURL = 'http://github.com/' + login;
 
     return {
-        username: login,
+        username: {
+          username: login,
+          url: githubURL
+        },
         avatar: avatarURL,
-        githubURL: githubURL
     };
 }
 
@@ -29,9 +31,10 @@ function formatPayload (payload) {
     comment: '',
     count: '',
     commits: '',
-    diffTree: ''
+    diffTree: '',
+    labels: []
   };
-  if (payload.comment && payload.issue) {
+  if (payload.comment) {
     data.comment = payload.comment.body;
     // FIXME: @piatra
     if (payload.issue) {
@@ -39,6 +42,9 @@ function formatPayload (payload) {
     } else {
       data.count = 0;
     }
+  }
+  if (payload.issue) {
+    data.labels = payload.issue.labels;
   }
   if (payload.commits) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
@@ -147,13 +153,21 @@ var TIMELINE_MAPPING = {
             if (assignee) {
                 return assignee.login;
             }
-            return 'nobody';
+            return 'no one';
         },
         number: function(e) {
           return e.payload.issue.number;
         },
         issue_age: function(e) {
           return moment().from(e.payload.issue.created_at, true);
+        },
+        issueURL: function(e) {
+          if (e.payload && e.payload.comment) {
+            var url = e.payload.comment.html_url.split('#')[0];
+            return url;
+          } else {
+            return '';
+          }
         }
     },
     'IssuesEvent': {
@@ -168,7 +182,7 @@ var TIMELINE_MAPPING = {
             if (assignee) {
                 return assignee.login;
             }
-            return 'nobody';
+            return 'no one';
         },
         title: function(e) {
           return e.payload.issue.title;
@@ -178,6 +192,14 @@ var TIMELINE_MAPPING = {
         },
         issue_age: function(e) {
           return moment().from(e.payload.issue.created_at, true);
+        },
+        issueURL: function(e) {
+          if (e.payload && e.payload.comment) {
+            var url = e.payload.comment.html_url.split('#')[0];
+            return url;
+          } else {
+            return '';
+          }
         }
     },
     'MemberEvent': {
@@ -204,7 +226,25 @@ var TIMELINE_MAPPING = {
         object: function(e) {
             var pullReq = e.payload.pull_request;
             return "pull request " + formatIssue(pullReq);
-        }
+        },
+        title: function(e) {
+          return e.payload.pull_request.title;
+        },
+        number: function(e) {
+          return e.payload.pull_request.number;
+        },
+        issueURL: function(e) {
+          return e.payload.pull_request.comments_url;
+        },
+        changes: function(e) {
+          return {
+            additions: e.payload.pull_request.additions,
+            deletions: e.payload.pull_request.deletions
+          };
+        },
+        issue_age: function(e) {
+          return moment().from(e.payload.pull_request.created_at, true);
+        },
     },
     'PullRequestReviewCommentEvent': {
         action: function(e) {
@@ -244,6 +284,14 @@ var TIMELINE_MAPPING = {
             return "the repository";
         }
     },
+    'TeamAddEvent': {
+      action: function(e) {
+        return 'Team add event';
+      },
+      object: function(e) {
+        return 'for ' + e.payload.team.name;
+      }
+    },
     'EndOfTimeline': {
         action: function (e) {
             return "No more events available";
@@ -254,76 +302,141 @@ var TIMELINE_MAPPING = {
     }
 };
 
+function formatContext (e) {
+  var mapping = TIMELINE_MAPPING[e.type];
+
+  if (!mapping) {
+    if (!e.body) {
+      // FIXME: need better handling for this
+      // can't figure out what kind of event this is
+      return;
+    }
+    context = {
+      avatar: e.user.avatar_url,
+      username: {
+        username: e.user.login,
+        url: e.user.html_url
+      },
+      comment: e.body,
+      number: e.number,
+      issue_age: moment().from(e.created_at, true),
+      commentCount: e.comments,
+      commits: [],
+      diffTree: '',
+      url: '',
+      assignee: e.assignee || 'no one',
+      action: 'commented: ',
+      object: '',
+      timestamp: moment(e.created_at).fromNow(),
+      title: e.title
+    };
+  } else {
+    context = {
+      avatar: formatAuthor(e.actor).avatar,
+      username: formatAuthor(e.actor).username,
+      comment: formatPayload(e.payload).comment,
+      number: mapping.number ? mapping.number(e) : 0,
+      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
+      labels: formatPayload(e.payload).labels,
+      commentCount: formatPayload(e.payload).count,
+      commits: formatPayload(e.payload).commits,
+      diffTree: formatPayload(e.payload).diffTree,
+      url: e.repo.name,
+      assignee: mapping.assignee ? mapping.assignee(e) : 'no one',
+      action: mapping.action(e),
+      object: mapping.object(e),
+      timestamp: moment(e.created_at).fromNow(),
+      title: mapping.title ? mapping.title(e) : ''
+    };
+  }
+
+  if (context.number && context.title) {
+    if (mapping) {
+      context.issueURL = mapping.issueURL(e);
+    } else {
+      context.issueURL = e.html_url;
+    }
+  }
+  if (mapping && mapping.changes) {
+    // changes refer to additions & deletions in a pull request
+    context.changes = mapping.changes(e);
+  }
+  return context;
+}
+
 function populateTimeline(count, starting_from) {
-    var $timeline = $('#timeline');
-    var template = Handlebars.compile($('#timeline-item-template').html());
-    var $loading = $('#timeline-loading');
+  var $timeline = $('#timeline');
+  var template = Handlebars.compile($('#timeline-item-template').html());
+  var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
+  var $loading = $('#timeline-loading');
 
-    // if we don't have a specified index, don't do anythin
-    if (API_BASE.indexOf('undefined/undefined') >= 0) {
-        return;
-    }
+  // if we don't have a specified index, don't do anythin
+  if (API_BASE.indexOf('undefined/undefined') >= 0) {
+    return;
+  }
 
-    if (!count) {
-        count = PER_PAGE;
-    }
+  if (!count) {
+    count = PER_PAGE;
+  }
+  if (!starting_from) {
+    starting_from = 0;
+  }
+
+  $.get(API_BASE + '/recent_events', {count: count, starting_from: starting_from})
+    .success(function(data) {
+      var fragment = document.createDocumentFragment();
+      data.data.forEach(function(e) {
+        mapping = TIMELINE_MAPPING[e.type];
+        var context = formatContext(e);
+
+        if (!context) return;
+
+        if (mapping && mapping.link) {
+          context.link = mapping.link(e);
+        }
+
+        var $item;
+
+        if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
+          context.img = context.action == 'starred' ? 'starred' : 'forked';
+
+          if (e.type == 'CommitCommentEvent') context.img = 'comment';
+
+          $item = $(templateBasic(context));
+
+        } else {
+
+          $item = $(template(context));
+
+        }
+
+        fragment.appendChild($item[0]);
+      });
+
+      $(fragment).insertBefore($loading);
+
+      if (!data.data.length) {
+        mapping = TIMELINE_MAPPING['EndOfTimeline'];
+        context = {
+          author: "Sorry!",
+          action: mapping.action(),
+          object: mapping.object(),
+          timestamp: ""
+        };
+
+        var $item = $(template(context));
+        $loading.remove();
+        $timeline.append($item);
+        $('#tab-1').off('scroll');
+      }
+
+    }).fail(logFailure);
+
     if (!starting_from) {
-        starting_from = 0;
-    }
-
-    $.get(API_BASE + '/recent_events',
-          {count: count, starting_from: starting_from})
-          .success(function(data) {
-              var fragment = document.createDocumentFragment();
-              data.data.forEach(function(e) {
-                  mapping = TIMELINE_MAPPING[e.type];
-                  if (!mapping) {
-                      return;
-                  }
-                  context = {
-                      avatar: formatAuthor(e.actor).avatar,
-                      username: formatAuthor(e.actor).username,
-                      comment: formatPayload(e.payload).comment,
-                      number: mapping.number ? mapping.number(e) : 0,
-                      issue_age: mapping.issue_age ? mapping.issue_age(e) : 0,
-                      commentCount: formatPayload(e.payload).count,
-                      commits: formatPayload(e.payload).commits,
-                      diffTree: formatPayload(e.payload).diffTree,
-                      url: e.repo.name,
-                      assignee: mapping.assignee ? mapping.assignee(e) : '',
-                      action: mapping.action(e),
-                      object: mapping.object(e),
-                      timestamp: moment(e.created_at).fromNow(),
-                      title: mapping.title ? mapping.title(e) : ''
-                  };
-                  if (mapping.link) {
-                      context.link = mapping.link(e);
-                  }
-                  var $item = $(template(context));
-                  fragment.appendChild($item[0]);
-              });
-              $(fragment).insertBefore($loading);
-
-              if (!data.data.length) {
-                  mapping = TIMELINE_MAPPING['EndOfTimeline'];
-                  context = {
-                      author: "Sorry!",
-                      action: mapping.action(),
-                      object: mapping.object(),
-                      timestamp: ""
-                  };
-                  var $item = $(template(context));
-                  $loading.remove();
-                  $timeline.append($item);
-                  $('#tab-1').off('scroll');
-              }
-          });
-
-    if (!starting_from) {
-        $('#tab-1').on('scroll', function () {
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
-            }
-        });
+      $(document).on('scroll', function () {
+        if($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+          populateTimeline(PER_PAGE, $timeline.children('.timeline-item').length);
+        }
+      });
     }
 }

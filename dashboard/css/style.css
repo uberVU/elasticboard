@@ -11,6 +11,11 @@ body {
 
 #topbar h1, h2 {
     color: white;
+    display:inline-block;
+}
+
+#topbar h1 {
+  font-size: 2rem;
 }
 
 .graph {
@@ -38,34 +43,44 @@ body {
     opacity: 0.5;
 }
 
-.tab {
-    overflow-y: auto;
-    height: 100%;
-}
-
 .tab iframe {
     width: 100%;
     height: 100%;
 }
 
-ul.menu {
-    background: rgb(31, 31, 31);
+.menu {
+  margin-bottom: 0;
+  display: inline-block;
 }
 
-ul.menu li {
-    cursor: pointer;
-    height: 40px;
-    line-height: 40px;
-    list-style-type: none;
-    border-bottom: 1px solid #777;
+.menu li {
+  cursor: pointer;
+  list-style-type: none;
+  display: inline-block;
+  height: 2rem;
+  line-height: 2rem;
+  padding:0 .1rem;
+  vertical-align: bottom;
+  font-size: 1.1rem;
+  -webkit-transition-duration: .2s;
+  border-bottom:1px solid rgba(180, 180, 180, 0);
 }
 
-ul.menu li:last-child {
+  li[data-tab='github'] {
+    margin:0 0 .2rem 0;
+    border: none;
+  }
+  
+  .menu li[data-tab='github']:hover {
+    border:none;
+  }
+
+.menu li:last-child {
     border-bottom: none;
 }
 
-ul.menu li:hover {
-    background: rgb(180, 180, 180);
+.menu li:hover {
+    border-bottom:1px solid rgb(180, 180, 180);
 }
 
 .menu iframe {
@@ -96,12 +111,34 @@ ul.menu li:hover {
 }
 
 .timeline-item p {
-  line-height: 1.2rem;
+  line-height: 1.5rem;
   font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.timeline-aside p {
+  margin: .3rem 0;
 }
 
 .timeline-item--title {
   margin-bottom: 0;
+}
+
+.timeline-item--additions span,
+.timeline-item--deletions span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.timeline-item--deletions span {
+  color: red;
+}
+
+.timeline-item--additions span {
+  color: green;
+}
+  
+  
 }
 
 .timeline-item--read-more {
@@ -114,12 +151,21 @@ ul.menu li:hover {
 .timeline-item--avatar {
   border-radius: 50%;
   width: 65px;
-  margin:0 auto;
+  margin:1rem auto 0 auto;
   display: block;
+}
+
+.timeline-item--avatar:hover + .timeline-item--username {
+  opacity: 1;
 }
 
 .timeline-item--username {
   text-align: center;
+  margin: .3rem 0;
+  opacity: 0;
+  -webkit-transition-duration: .2s;
+  -moz-transition-duration: .2s;
+  transition-duration: .2s;
 }
 
 .timeline-item--comment {
@@ -136,7 +182,6 @@ ul.menu li:hover {
 
 .cog {
     display: inline-block;
-    margin: 0 0 1.2rem 0;
 }
 
     .cog:hover {
@@ -239,13 +284,14 @@ ul.menu li:hover {
 }
 
 .issue-count {
-    font-size: 1.5rem;
-    border: 1px solid #fff;
-    width: 4.2rem;
-    height: 3.2rem;
-    text-align: center;
-    line-height: 3rem;
-    display:inline-block;
+  font-size: 1.5rem;
+  border: 4px solid #FFF;
+  width: 4.2rem;
+  height: 4.2rem;
+  text-align: center !important;
+  line-height: 3.9rem;
+  display: inline-block;
+  border-radius: 50%;
 }
 
 .text-small {
@@ -268,21 +314,27 @@ ul.menu li:hover {
     cursor: pointer;
 }
 
-.badge {
-  display: inline;
+.badge,
+.badge--timestamp,
+.badge--issue {
+  background: #999;
+  display: inline-block;
   padding: 0.2em 0.6em 0.3em;
   font-size: 75%;
   font-weight: 700;
   line-height: 1;
-  color: #FFF;
+  color: #444;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
+  width: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-  .badge--gray {
-    background: #999;
+  .badge--timestamp {
+    width: 9rem;
   }
 
 #issues-involvement-graph-container {
@@ -294,6 +346,11 @@ ul.menu li:hover {
     stroke-opacity: .6;
 }
 
+.inline-comment {
+  width: 1.2rem;
+  margin-bottom: .3rem;
+}
+
 .graph-title {
     margin-bottom: 0;
 }
@@ -301,4 +358,15 @@ ul.menu li:hover {
 .graph-subtitle {
     font-size: 0.9rem;
     color: rgb(221, 221, 221);
+}
+
+@media (max-width: 1024px) {
+  #topbar h1 {
+    display: block;
+    text-align:center;
+  }
+  
+  .menu {
+    display: block;
+  }
 }
