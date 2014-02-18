@@ -1,13 +1,17 @@
 from functools import partial, wraps
 import datetime
 import queries
+import time
 
 from utils import crossdomain
 from flask import Flask, jsonify, request
 from werkzeug.contrib.cache import MemcachedCache
 
+
 cache = MemcachedCache(['127.0.0.1:11211'])
 CACHE_TIMEOUT = 5 * 60
+
+
 app = Flask(__name__)
 # app.debug = True
 
@@ -149,6 +153,33 @@ def issues_involvement(owner, repo):
     data = queries.issues_involvement(index, start=month_start, end=now)
     return jsonify(data=data)
 
+@app.route('/add_temporary_river', methods=['POST'])
+@crossdomain(origin='*')
+def add_temporary_river():
+    if 'owner' not in request.form or 'repository' not in request.form:
+        return 403
+
+    owner = request.form['owner']
+    repository = request.form['repository']
+    body = {
+        'type': 'github',
+        'github': {
+            'owner': owner,
+            'repository': repository,
+            'interval': 7200
+        },
+        'temporary': True,
+        'created_at': time.time()
+    }
+
+    if 'demo_authentication' in queries.CONFIG:
+        body['github']['authentication'] = queries.CONFIG['demo_authentication']
+
+    index_name = '%s&%s' % (owner, repository)
+    url = '/_river/%s/_meta' % index_name
+    queries.ES.transport.perform_request(url=url, method='PUT', body=body)
+
+    return 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

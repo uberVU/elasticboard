@@ -3,7 +3,7 @@ import datetime
 
 from elasticutils import S
 
-from es import ES
+from es import ES, CONFIG
 
 
 # for queries where it makes sense
