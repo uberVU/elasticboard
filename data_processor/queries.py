@@ -63,7 +63,7 @@ def past_n_months(index, query, n):
 
 def most_active_people(index, start=None, end=None):
     """
-    Finds the most active users - as actors in all the events.
+    Finds the 10 most active users - as actors in all the events.
 
     Returns a list of dicts like:
     {'count': N, 'term': NAME}
@@ -83,7 +83,7 @@ def total_events(index, start=None, end=None):
 
 def most_active_issues(index, start=None, end=None):
     """
-    Finds the most active issues - by total number of events.
+    Finds the 10 most active issues - by total number of events.
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q = apply_time_filter(q, start, end)
