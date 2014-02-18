@@ -332,10 +332,13 @@ body {
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
-  width: 5rem;
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+  .badge--issue {
+      width: auto;
+  }
 
   .badge--timestamp {
     width: 9rem;
