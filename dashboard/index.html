@@ -9,11 +9,202 @@
 </head>
 <body>
 
-<div class="row text-center">
-    Welcome to Elasticboard
+<div class="row full-width" id="topbar">
+    <div class="large-7 small-12 columns">
+        <h1>Elasticboard</h1>
+        <ul class="menu text-center">
+            <li data-tab="tab-1">Timeline</li>
+            <li data-tab="tab-3" data-function="drawInsights">Insights</li>
+            <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
+            <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
+            <li data-tab="github">
+                <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
+                        allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
+            </li>
+        </ul>
+    </div>
+    <div class="large-5 small-12 columns text-right">
+        <div id="repo-select-trigger">
+            <h1 class="inline" id="user-repo">
+                <img class="cog" src="/imgs/cog.svg">
+            </h1>
+            <div class="repo-select hidden">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div class="row full-width text-right">
+    <div class="small-0 large-12 columns">
+        <p id="open-issues" class="text-small inline text-centered"><span id="open-issues-count" class="issue-count">-</span> <br> open issues</p>
+        <p id="open-pulls" class="text-small inline text-centered"><span id="open-pulls-count" class="issue-count">-</span> <br> open pull requests</p>
+    </div>
+</div>
+
+<div class="container row full-width">
+
+    <div class="small-12 large-12 columns" id="tab-container">
+        <div class="tab" id="tab-1">
+            <div id="timeline" class="large-centered">
+                <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+            </div>
+        </div>
+
+        <div class="tab hide" id="tab-2">
+            <div class="graph" id="most-active-people"></div>
+            <div class="graph" id="total-events-monthly"></div>
+            <div class="graph" id="most-active-issues"></div>
+            <div class="row whitespace"></div>
+        </div>
+
+        <div class="tab hide" id="tab-3">
+            <div class="graph-like" id="untouched-issues"></div>
+            <div class="graph-like" id="inactive-issues"></div>
+            <div class="graph" id="issues-activity"></div>
+            <div class="graph" id="avg-issue-time"></div>
+            <div class="graph graph-like">
+                <div class="text-center">
+                    <p class="graph-title">Issues Involvement Graph</p>
+                    <p class="graph-subtitle">for the top 5 issues over the current month</p>
+                </div>
+                <div id="issues-involvement-graph-container"></div>
+            </div>
+            <div class="row whitespace"></div>
+        </div>
+
+        <div class="tab hide" id="tab-4">
+            <iframe id="kibana-iframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</div>
+
+
+<script id="user-issues" type="text/x-handlebars-template">
+    <p>All issues assigned to {{user}}</p>
+    <ul>{{list}}</ul>
+</script>
+
+<script id="timeline-item-template" type="text/x-handlebars-template">
+    <div class="timeline-item row">
+        <div class="small-2 columns position-relative">
+            <img src="{{ avatar }}" class="timeline-item--avatar">
+            <p class="timeline-item--username">{{ username.[username] }}</p>
+        </div>
+        <div class="small-8 columns">
+            {{#if title}}
+            <p class="timeline-item--title muted">
+                <a href="{{ issueURL }}">#{{ number }}</a>
+                {{ title }}
+            </p>
+            {{#each labels}}
+            <span class="badge badge--issue" style="background:#{{ color }}" title="{{ name }}">{{ name }}</span>
+            {{/each}}
+            {{#with changes}}
+            <p>
+                <span class="timeline-item--additions"><span>+</span> {{{ additions }}}</span>
+                <span class="timeline-item--deletions"><span>-</span> {{{ deletions }}}</span>
+            </p>
+            {{/with}}
+            {{/if}}
+            {{#if comment }}
+            <p class="timeline-item--comment">
+                {{#with username}}
+                <a href="{{ url }}">{{ username }}</a>
+                {{/with}}
+                <img src="/imgs/inline_comment.svg" class="inline-comment"> {{ comment }}
+            </p>
+            {{else}}
+            <p>
+                {{#with username }}
+                <a href="{{ url }}">{{ username }}</a>
+                {{/with}}
+                {{ action }} {{{ object }}}
+                {{#if commits}}
+                {{#eachCommit commits }}
+            <p class="timeline-item--comment">
+                <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
+                {{{ message }}}
+                </a>
+            </p>
+            {{/eachCommit}}
+            <p class="timeline-item--read-more">
+                <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+            </p>
+            {{/if}}
+            </p>
+            {{/if}}
+            {{#if link}}
+            <p class="timeline-item--read-more">
+                <a href="{{ link }}">Read more</a>
+            </p>
+            {{/if}}
+        </div>
+        <div class="small-2 columns text-right timeline-aside">
+            <p class="timestamp muted">{{ timestamp }}</p>
+            {{#if title}}
+            <p>
+                <span class="badge--timestamp">assigned to {{ assignee }}</span>
+            </p>
+            <p>
+                <span class="badge--timestamp">opened {{ issue_age }} ago</span>
+            </p>
+            {{/if}}
+        </div>
+    </div>
+</script>
+
+<script id="timeline-item-basic" type="text/x-handlebars-template">
+    <div class="timeline-item row">
+        <div class="small-2 columns text-centered">
+            <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
+        </div>
+        <div class="small-8 columns">
+            <p>
+                {{#with username}}
+                <a href="{{ url }}">{{ username }}</a>
+                {{/with}} {{ action }} {{{ object }}}</p>
+        </div>
+        <div class="small-2 columns text-right">
+            <p class="timestamp muted">{{ timestamp }}</p>
+        </div>
+    </div>
+</script>
+
+<script id="timeline-author-template" type="text/x-handlebars-template">
+        <span class="timeline-author">
+            <img src="{{ avatarURL }}"/>
+            <a href="{{ githubURL }}">{{ login }}</a>
+        </span>
+</script>
+
+<script id="issues-list-template" type="text/x-handlebars-template">
+    <div class="text-center">
+        <p class="graph-title">{{ title }}</p>
+        <p class="graph-subtitle">{{ subtitle }}</p>
+    </div>
+    <ul class="grey-text">
+        {{#each issues}}
+        <li>
+            <a href="{{{ html_url }}}">#{{ number }}</a>
+            <span class="muted">- {{ title }}</span>
+        </li>
+        {{/each}}
+    </ul>
+</script>
+
 <script src="/js/jquery.js"></script>
+<script src="/js/highcharts.js"></script>
+<script src="/js/highcharts-gray-theme.js"></script>
+<script src="/js/handlebars-v1.1.2.js"></script>
+<script src="/js/moment.min.js"></script>
+<script src="/js/d3.js"></script>
+<script src="/js/timeline.js"></script>
+<script src="/js/graphs.js"></script>
+<script src="/js/insights.js"></script>
+<script src="/js/tabs.js"></script>
+<script src="/js/app.js"></script>
 
 </body>
 </html>
