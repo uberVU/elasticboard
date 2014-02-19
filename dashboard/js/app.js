@@ -193,7 +193,11 @@ function displayFailMessage(fail) {
     $('#counts-container').remove();
     $('#tab-container').empty();
 
-    var msg = "<p class=\"text-center\">No data for this repository yet. Maybe try again later?</p>";
+    var msg = "<p class=\"text-center\">No data for this repository yet. Retrying in 2 minutes.</p>";
     $tabContainer = $('#tab-container');
     $tabContainer.append(msg);
+
+    setTimeout(function() {
+        location.reload();
+    }, 1000 * 60 * 2);
 }
