@@ -9,6 +9,8 @@ RUN pip install -r /root/requirements-pip
 
 EXPOSE 80
 
+# TODO install river
+
 # copy nginx configs
 ADD docker_configs/dashboard /etc/nginx/sites-available/dashboard
 ADD docker_configs/elasticsearch /etc/nginx/sites-available/elasticsearch
