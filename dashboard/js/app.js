@@ -98,7 +98,7 @@ function addRepos (data) {
     data.data.forEach(function (repo) {
         var repoLink = document.createElement('a');
         var repoLI = document.createElement('li');
-        repoLink.href = location.origin + '/#/' + repo;
+        repoLink.href = location.origin + location.pathname + '#/' + repo;
         repoLink.textContent = repo;
         repoLink.target = '_blank';
         repoLI.appendChild(repoLink);
@@ -115,7 +115,7 @@ function addRepos (data) {
 
 function getDefaultRepo() {
     getAvailableRepos(function (data) {
-        setLocation(location.origin + '/#/' + data.data[0]); // load first repo
+        setLocation(location.origin + location.pathname + '#/' + data.data[0]); // load first repo
         hash = data.data[0].split('/');
         REPO = hash[0] + '/' + hash[1];
         API_BASE += hash[0] + '/' + hash[1];
