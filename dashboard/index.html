@@ -95,8 +95,10 @@
         <div class="small-8 columns">
             {{#if title}}
             <p class="timeline-item--title muted">
-             <a href="{{ issueURL }}">#{{ number }}</a>
-             {{ title }}
+            {{#if number}}
+              <a href="{{ issueURL }}">#{{ number }}</a>
+            {{/if}}
+             {{{ title }}}
             </p>
             {{#each labels}}
                 <span class="badge badge--issue" style="background:#{{ color }}" title="{{ name }}">{{ name }}</span>
