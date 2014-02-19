@@ -430,7 +430,7 @@ function populateTimeline(count, starting_from) {
         $('#tab-1').off('scroll');
       }
 
-    }).fail(logFailure);
+    }).fail(displayFailMessage);
 
     if (!starting_from) {
       $(document).on('scroll', function () {

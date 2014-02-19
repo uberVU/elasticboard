@@ -42,7 +42,7 @@ function drawIssuesActivity() {
                 ]
             });
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
@@ -59,7 +59,7 @@ function drawUntouchedIssues() {
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 function drawInactiveIssues() {
@@ -74,7 +74,7 @@ function drawInactiveIssues() {
             var $list = $(issuesListTemplate(context));
             $('#inactive-issues').empty().append($list);
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 function drawAvgIssueTime() {
@@ -219,7 +219,7 @@ function drawIssuesInvolvement() {
                     .attr("cy", function(d) { return d.y = Math.max(rl, Math.min(height - rl, d.y)); });
             });
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 function drawInsights () {
