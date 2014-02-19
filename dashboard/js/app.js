@@ -30,10 +30,9 @@ function initDashboard () {
  * navigate to different tabs in the application
  */
 function changeTabs() {
-
-    var href = location.href.split('/');
-    if (href.length > 6) {
-        var tab = href.pop();
+    var parts = location.hash.split('/');
+    if (parts.length > 3) {
+        var tab = parts.pop();
         var tabs = $('ul.menu li');
         tabs.each(function (idx, el) {
             var text = $(el).text().toLowerCase();
@@ -42,7 +41,6 @@ function changeTabs() {
             }
         });
     }
-
 }
 
 function loadKibana() {
