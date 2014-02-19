@@ -83,7 +83,20 @@ $('#repo-select-trigger').on('click', function (e) {
 
 function getAvailableRepos (cb) {
     $.get(API_HOST + 'available_repos')
-        .success(cb)
+        .success(function (data) {
+            if (data.data.length == 0) {
+                $('#counts-container').remove();
+                $('#tab-container').empty();
+
+                var msg = "<p class=\"text-center\">No data available. Please follow the " +
+                    "<a href=\"https://github.com/uberVU/elasticboard/blob/master/README.md\">README</a>.</p>";
+                $tabContainer = $('#tab-container');
+                $tabContainer.append(msg);
+
+                return;
+            }
+            cb(data);
+        })
     .fail(function (data) {
         console.log('An error has occured');
     });
