@@ -25,7 +25,7 @@ function makeList(container, options) {
             });
             $container.append($list);
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 function makeXYGraph(container, options) {
@@ -70,7 +70,7 @@ function makeXYGraph(container, options) {
                 }]
             });
         })
-        .fail(logFailure);
+        .fail(displayFailMessage);
 }
 
 /*

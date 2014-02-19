@@ -170,3 +170,17 @@ function logFailure(fail) {
     console.log("Trouble getting data. API server down?");
     console.log(fail);
 }
+
+function displayFailMessage(fail) {
+    if (fail.status != 404) {
+        logFailure(fail);
+        return;
+    }
+
+    $('#counts-container').remove();
+    $('#tab-container').empty();
+
+    var msg = "<p class=\"text-center\">No data for this repository yet. Maybe try again later?</p>";
+    $tabContainer = $('#tab-container');
+    $tabContainer.append(msg);
+}
