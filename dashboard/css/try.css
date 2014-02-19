@@ -1,0 +1,13 @@
+form input[type="text"] {
+    width: auto;
+    display: inline-block;
+}
+
+.text-white {
+    color: white;
+}
+
+#add {
+    background: rgb(31, 31, 31);
+    padding: 20px;
+}

@@ -5,12 +5,28 @@
     <link rel="stylesheet" href="/css/normalize.css"/>
     <link rel="stylesheet" href="/css/foundation.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/try.css"/>
     <meta charset="UTF-8">
 </head>
 <body>
 
 <div class="row text-center">
-    Welcome to Elasticboard
+    <div class="row">
+        <h1 class="text-white">Elasticboard</h1>
+    </div>
+    <div class="small-12 large-5 columns large-centered" id="add">
+        <p>Try it with any public repository ..</p>
+        <form>
+            <input type="text" placeholder="owner"/>
+            <span>/</span>
+            <input type="text" placeholder="repository"/>
+            <br><br>
+            <input type="submit" value="Add" class="button"/>
+        </form>
+    </div>
+    <div class="row">
+        <p>.. or <a href="/">check out</a> the existing ones!</p>
+    </div>
 </div>
 
 <script src="/js/jquery.js"></script>
