@@ -105,8 +105,7 @@ please submit it on the [issue tracker](https://github.com/uberVU/elasticboard/i
 
 ##Architecture
 
-The **dashboard** takes care of the visualization aspect. You can even
-use the embedded Kibana instance to manually explore the data.
+The **dashboard** takes care of the visualization aspect.
 
 The **data_processor** is where all querying happens. It accesses data stored in
 elasticsearch using [elasticutils](http://elasticutils.readthedocs.org/en/latest/)
