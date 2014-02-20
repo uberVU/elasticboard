@@ -179,7 +179,7 @@
         <p class="graph-title">{{ title }}</p>
         <p class="graph-subtitle">{{ subtitle }}</p>
     </div>
-    <ul class="grey-text">
+    <ul>
         {{#each issues}}
         <li>
             <a href="{{{ html_url }}}">#{{ number }}</a>
@@ -189,12 +189,35 @@
     </ul>
 </script>
 
+<script id="tooltip-user-template" type="text/x-handlebars-template">
+    <div class="tooltip-template">
+        <img src="{{ imgURL }}"/>
+        <span><a href="http://github.com/{{ login }}">{{ login }}</a></span>
+    </div>
+</script>
+
+<script id="tooltip-issue-template" type="text/x-handlebars-template">
+    <div class="tooltip-template">
+        <span>
+            <a href="{{ url }}">#{{ number }}</a>
+            -
+            {{ title }}
+        </span>
+        <div class="text-right graph-subtitle muted">
+            <span>{{ comments }} comments</span>
+            <br>
+            <span>Opened {{ ago }} ago</span>
+        </div>
+    </div>
+</script>
+
 <script src="/js/jquery.js"></script>
 <script src="/js/highcharts.js"></script>
 <script src="/js/highcharts-gray-theme.js"></script>
 <script src="/js/handlebars-v1.1.2.js"></script>
 <script src="/js/moment.min.js"></script>
 <script src="/js/d3.js"></script>
+<script src="/js/d3.tip.js"></script>
 <script src="/js/timeline.js"></script>
 <script src="/js/graphs.js"></script>
 <script src="/js/insights.js"></script>
