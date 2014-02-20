@@ -1,10 +1,11 @@
 import calendar
 import datetime
 
-from elasticutils import S
+from es import ES, ES_NODE
+from elasticutils import S as _S
 
-from es import ES
-
+def S():
+    return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
 
 # for queries where it makes sense
 LIMIT = 20
