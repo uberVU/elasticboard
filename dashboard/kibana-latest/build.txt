@@ -2,8 +2,8 @@
 app/app.js
 ----------------
 vendor/jquery/jquery-1.8.0.js
-vendor/underscore.js
-app/components/underscore.extended.js
+vendor/lodash.js
+app/components/lodash.extended.js
 app/components/settings.js
 vendor/angular/angular.js
 app/../vendor/elasticjs/elastic.js
@@ -24,6 +24,7 @@ vendor/chromath.js
 app/components/kbn.js
 vendor/modernizr-2.6.1.js
 vendor/filesaver.js
+vendor/blob.js
 app/services/dashboard.js
 app/services/fields.js
 app/services/filterSrv.js
