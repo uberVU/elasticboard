@@ -110,7 +110,7 @@ def issues_activity(owner, repo):
 def issues_count(owner, repo):
     index = index_name(owner, repo)
     open = queries.issues_count(index, 'open')
-    closed =  queries.issues_count(index, 'closed')
+    closed = queries.issues_count(index, 'closed')
     data = {'open': open, 'closed': closed}
     return jsonify(data=data)
 
