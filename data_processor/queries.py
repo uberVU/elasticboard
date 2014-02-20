@@ -247,3 +247,8 @@ def issues_involvement(index, start=None, end=None):
             added_users[number].add(user['login'])
 
     return issues
+
+def milestones(index):
+    q = S().indexes(index).doctypes('MilestoneData').values_dict()
+    q = all(q)
+    return list(q)

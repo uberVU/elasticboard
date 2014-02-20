@@ -149,6 +149,14 @@ def issues_involvement(owner, repo):
     data = queries.issues_involvement(index, start=month_start, end=now)
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/milestones')
+@crossdomain(origin='*')
+@cached()
+def milestone(owner, repo):
+    index = index_name(owner, repo)
+    milestones = queries.milestones(index)
+    return jsonify(data=milestones)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
