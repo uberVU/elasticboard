@@ -115,6 +115,11 @@ body {
     border-bottom: 3px solid #505b61;
     z-index: -2;
 }
+
+.no-border {
+    border: none !important;
+}
+
 .card img {
     width: 270px;
     height: 270px;
@@ -195,3 +200,16 @@ body {
     max-width: 100%;
 }
 
+
+.footer {
+    padding: 0;
+    font-size: 1rem;
+}
+.footer-content {
+    border-top: 1px solid #505b61;
+}
+
+a {
+    color: #27ae60;
+    text-decoration: none;
+}
