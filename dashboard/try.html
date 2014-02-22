@@ -2,26 +2,26 @@
 <html>
 <head>
     <title>Elasticboard</title>
-    <!--<link rel="stylesheet" href="/css/normalize.css"/>-->
-    <!--<link rel="stylesheet" href="/css/foundation.css"/>-->
+    <link rel="stylesheet" href="/css/normalize.css"/>
+    <link rel="stylesheet" href="/css/foundation-grid.css"/>
     <link rel="stylesheet" href="/css/try.css"/>
     <meta charset="UTF-8">
 </head>
 <body>
 
-<div class="menu">
-    <div class="container">
-        <div class="brand">
+<div class="menu row">
+    <div class="container row">
+        <div class="brand small-4 columns">
             Elasticboard
         </div>
-        <div class="pull-right">
+        <div class="text-right small-8 columns">
             <small class="github-tagline">100% open source</small>
             <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&amp;repo=elasticboard&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
         </div>
     </div>
 </div>
 
-<div class="hero text-centered">
+<div class="hero text-centered row">
     <h1>Meaningful tracking</h1>
     <h4>The easiest way to track the evolution of your GitHub project</h4>
     <div class="macbook">
@@ -33,34 +33,52 @@
     <br>
 </div>
 
-<div class="cards">
-    <div class="card card--white">
-        <div class="container">
+<div class="cards row full-width">
+
+    <div class="card card--white row">
+        <div class="large-offset-2 large-4 columns small-12">
             <h2>Timeline</h2>
             <p>To quickly bring you up to speed</p>
-            <figure class="pull-right timeline-picture"></figure>
         </div>
+        <div class="large-4 columns small-12 text-right">
+            <img class="timeline-picture" src="/imgs/timeline.png"></img>
+        </div>
+        <div class="large-1 columns hide-for-small"></div>
     </div>
 
-    <div class="card text-right">
-        <div class="container">
+    <div class="card text-right row">
+        <!--Doing a trick with hide for this one so we keep nice aspects on both small and large-->
+        <div class="large-5 columns small-12 hide-for-large">
             <h2>Insights</h2>
             <p>So you'll never miss an issue again</p>
-            <figure class="pull-left insight-picture"></figure>
         </div>
+        <div class="text-left large-offset-1 large-4 columns small-12 hide-for-large">
+            <img class="insight-picture" src="/imgs/insights.png"></img>
+        </div>
+        <div class="large-offset-1 large-4 columns small-12 hide-for-medium-down">
+            <img class="insight-picture" src="/imgs/insights.png"></img>
+        </div>
+        <div class="large-5 columns small-12 hide-for-medium-down">
+            <h2>Insights</h2>
+            <p>So you'll never miss an issue again</p>
+        </div>
+        <div class="large-2 columns hide-for-small"></div>
     </div>
 
-    <div class="card card--white">
-        <div class="container">
+    <div class="card card--white row">
+        <div class="large-offset-2 large-4 columns small-12">
             <h2>Graphs</h2>
             <p>To view aggregated statistics</p>
-            <figure class="pull-right graph-picture"></figure>
         </div>
+        <div class="large-4 columns small-12 text-right">
+            <img class="graph-picture" src="/imgs/graphs.png"></img>
+        </div>
+        <div class="large-1 columns hide-for-small"></div>
     </div>
 
-    <div class="card text-right">
-        <div class="container text-centered">
-            <br><br>
+    <div class="card row text-centered">
+        <div class="small-12 columns">
+            <br>
             <h2>Easy deployment</h2>
             <p>Get up and running in no time</p>
             <h4><a href="#" class="button">Visit our GitHub project</a></h4>

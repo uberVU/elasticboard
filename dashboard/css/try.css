@@ -17,6 +17,11 @@ body {
 .text-right {
     text-align: right;
 }
+
+.text-left {
+    text-align: left;
+}
+
 .button {
     background: #27ae60;
     padding: 1rem;
@@ -48,11 +53,6 @@ body {
     font-weight: 700;
     display: inline-block;
 }
-.container {
-    width: 60%;
-    margin: 0 auto;
-    position: relative;
-}
 .pull-right {
     float: right;
 }
@@ -69,9 +69,7 @@ body {
     border-radius: 3px;
     font-size: 1.5rem;
 }
-.cards {
-    box-sizing: border-box;
-}
+
 .card--white {
     background: #fff;
     color: #333;
@@ -85,43 +83,19 @@ body {
     color: #f4f4f4;
 }
 .card {
-    height: 270px;
     padding: 2rem;
-    position: relative;
     border-bottom: 3px solid #505b61;
     z-index: -2;
 }
-.card figure {
+.card img {
     width: 270px;
     height: 270px;
     border-radius: 50%;
-    position: absolute;
-    right: 0;
-    top: -40px;
     border: 5px solid #dcdcdc;
     box-shadow: 0 0 1px #aaa;
-    z-index: -1;
+    z-index: 1;
 }
-figure.timeline-picture {
-    background: url("../imgs/timeline.png");
-    background-size: 100%;
-    background-position: center center;
-}
-figure.graph-picture {
-    background: url("../imgs/graphs.png");
-    background-size: 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-figure.insight-picture {
-    background: url("../imgs/insights.png");
-    background-size: 100%;
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-figure.pull-left {
-    left: 0;
-}
+
 @-moz-keyframes fade-in {
     0% {
         opacity: 0;
@@ -238,5 +212,10 @@ figure.pull-left {
     100% {
         opacity: 1;
     }
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
 }
 
