@@ -2,34 +2,79 @@
 <html>
 <head>
     <title>Elasticboard</title>
-    <link rel="stylesheet" href="/css/normalize.css"/>
-    <link rel="stylesheet" href="/css/foundation.css"/>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <!--<link rel="stylesheet" href="/css/normalize.css"/>-->
+    <!--<link rel="stylesheet" href="/css/foundation.css"/>-->
     <link rel="stylesheet" href="/css/try.css"/>
     <meta charset="UTF-8">
 </head>
 <body>
 
-<div class="row text-center">
-    <div class="row">
-        <h1 class="text-white">Elasticboard</h1>
-    </div>
-    <div class="small-12 large-5 columns large-centered" id="add">
-        <p>Try it with any public repository ..</p>
-        <form>
-            <input type="text" placeholder="owner"/>
-            <span>/</span>
-            <input type="text" placeholder="repository"/>
-            <br><br>
-            <input type="submit" value="Add" class="button"/>
-        </form>
-    </div>
-    <div class="row">
-        <p>.. or <a href="/">check out</a> the existing ones!</p>
+<div class="menu">
+    <div class="container">
+        <div class="brand">
+            Elasticboard
+        </div>
+        <div class="pull-right">
+            <small class="github-tagline">100% open source</small>
+            <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&amp;repo=elasticboard&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
+        </div>
     </div>
 </div>
 
-<script src="/js/jquery.js"></script>
+<div class="hero text-centered">
+    <h1>Meaningful tracking</h1>
+    <h4>The easiest way to track the evolution of your GitHub project</h4>
+    <div class="img-switch">
+        <div class="overlay">
+            <br />
+            <br />
+            <br />
+            <h3>Try it now</h3>
+            <input class="input--demo" type="text" placeholder="GitHub username" />
+        </div>
+        <img width="850px" src="http://imgur.com/QSOpjlF.png">
+        <img width="850px" src="http://imgur.com/JBzggMu.jpg">
+        <img width="850px" src="http://imgur.com/V93qacp.jpg">
+    </div>
+    <br>
+    <br>
+</div>
+
+<div class="cards">
+    <div class="card card--white">
+        <div class="container">
+            <h2>Timeline</h2>
+            <p>To quickly bring you up to speed</p>
+            <figure class="pull-right timeline-picture"></figure>
+        </div>
+    </div>
+
+    <div class="card text-right">
+        <div class="container">
+            <h2>Insights</h2>
+            <p>So you'll never miss an issue again</p>
+            <figure class="pull-left insight-picture"></figure>
+        </div>
+    </div>
+
+    <div class="card card--white">
+        <div class="container">
+            <h2>Graphs</h2>
+            <p>To view aggregated statistics</p>
+            <figure class="pull-right graph-picture"></figure>
+        </div>
+    </div>
+
+    <div class="card text-right">
+        <div class="container text-centered">
+            <br><br>
+            <h2>Easy deployment</h2>
+            <p>Get up and running in no time</p>
+            <h4><a href="#" class="button">Visit our GitHub project</a></h4>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>
