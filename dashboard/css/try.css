@@ -31,6 +31,7 @@ body {
     padding: 2rem;
 }
 .hero {
+    padding-top: 0;
     padding-bottom: 0;
 }
 .hero h4 {
@@ -58,22 +59,14 @@ body {
 .pull-left {
     float: left;
 }
-.img-switch {
-    width: 850px;
-    height: 450px;
+.macbook {
+    /*width: 850px;*/
+    /*height: 450px;*/
     margin: 0 auto;
-    overflow: hidden;
-    position: relative;
+    /*overflow: hidden;*/
+    /*position: relative;*/
 }
-.overlay {
-    background: rgba(255,255,255,0.7);
-    position: absolute;
-    left: 50%;
-    top: 25px;
-    width: 590px;
-    height: 370px;
-    margin-left: -295px;
-}
+
 .input--demo {
     padding: 0.5rem;
     border: 3px solid #6d7c85;
