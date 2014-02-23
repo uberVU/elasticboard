@@ -37,6 +37,7 @@ function processUserRepos(owner) {
 }
 
 $inputOwner.on('keyup change', function(e) {
+    $inputRepository.off('focus', triggerAutocomplete);
     $inputRepository.on('focus', triggerAutocomplete);
 });
 
