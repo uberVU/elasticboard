@@ -44,6 +44,9 @@ body {
 .hero {
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.hero .container {
     -webkit-animation-name: fade-in;
     -moz-animation-name: fade-in;
     animation-name: fade-in;
@@ -51,6 +54,7 @@ body {
     -moz-animation-duration: 0.7s;
     animation-duration: 0.7s;
 }
+
 .hero h4 {
     font-weight: 400;
 }
