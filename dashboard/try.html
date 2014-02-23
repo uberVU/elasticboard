@@ -28,18 +28,29 @@
         <div class="macbook">
             <img width="850px" src="/imgs/macbook.png">
         </div>
-        <div class="form">
+        <div class="form row">
             <h3>Try with a repository</h3>
-            <span>
-                <input class="input--demo" type="text" placeholder="owner" />
-                /
-                <input class="input--demo" type="text" placeholder="repository" />
-            </span>
+
+            <div class="small-12 columns hide-for-medium-up">
+                <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="small-12 columns hide-for-medium-up">
+                <input class="input--demo input--repository" type="text" placeholder="repository" />
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-right hide-for-small">
+                <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-left hide-for-small">
+                <input class="input--demo input--repository" type="text" placeholder="repository" />
+            </div>
+
+            <br>
             <h4>or <a href="/">check out</a> the existing ones.</h4>
         </div>
     </div>
-    <br>
-    <br>
 </div>
 
 <!--TODO: We should add a small border-bottom to the .feature for when we get one col / row (mobile)-->
@@ -48,18 +59,18 @@
     <div class="large-4 small-12 columns feature">
         <h2>Timeline</h2>
         <p class="subtitle">To quickly bring you up to speed</p>
-        <img class="timeline-picture" src="/imgs/timeline.png"></img>
+        <img class="timeline-picture" src="/imgs/timeline.png">
     </div>
     <div class="large-4 small-12 columns feature">
         <h2>Insights</h2>
         <p class="subtitle">So you'll never miss an issue again</p>
-        <img class="insight-picture" src="/imgs/insights.png"></img>
+        <img class="insight-picture" src="/imgs/insights.png">
     </div>
 
     <div class="large-4 small-12 columns feature">
         <h2>Graphs</h2>
         <p class="subtitle">To view aggregated statistics</p>
-        <img class="graph-picture" src="/imgs/graphs.png"></img>
+        <img class="graph-picture" src="/imgs/graphs.png">
     </div>
 </div>
 
@@ -76,6 +87,9 @@
     </div>
 </div>
 
+<script src="/js/jquery.js"></script>
+<script src="/js/typeahead.bundle.js"></script>
+<script src="/js/try.js"></script>
 
 </body>
 </html>

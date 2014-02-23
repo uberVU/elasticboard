@@ -100,7 +100,7 @@ body {
     border: 3px solid #6d7c85;
     border-radius: 3px;
     font-size: 1.5rem;
-    width: 15rem;
+    max-width: 15rem;
 }
 
 /*http://css-tricks.com/snippets/css/glowing-blue-input-highlights/*/
@@ -224,4 +224,24 @@ body {
 a {
     color: #27ae60;
     text-decoration: none;
+}
+
+/* Typeahead */
+
+.tt-dropdown-menu {
+    background-color: #fff;
+    color: #3f484d;
+    width: 15rem;
+    max-height: 15rem;
+    padding: 5px;
+}
+
+.tt-suggestion {
+    z-index: 2;
+    border-bottom: #3f484d solid 1px;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #0097cf;
 }
