@@ -1,5 +1,6 @@
 from functools import partial, wraps
 import datetime
+import requests
 import queries
 import time
 
@@ -161,6 +162,13 @@ def add_temporary_river():
 
     owner = request.form['owner']
     repository = request.form['repository']
+
+    # make sure this repo exists
+    gh_url = 'https://api.github.com/repos/%s/%s' % (owner, repository)
+    r = requests.get(gh_url)
+    if not r.ok:
+        return 403
+
     body = {
         'type': 'github',
         'github': {
