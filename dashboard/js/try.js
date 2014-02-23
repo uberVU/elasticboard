@@ -43,6 +43,7 @@ $inputOwner.on('keyup change', function(e) {
 
 function triggerAutocomplete(e) {
     $inputRepository.off('focus', triggerAutocomplete);
+    owner = $inputOwner.val().trim();
     processUserRepos(owner);
 }
 
