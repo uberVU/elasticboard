@@ -1,11 +1,11 @@
 body {
-    background: #3f484d;
     font-size: 18px;
     font-family: 'Lato', sans-serif;
     line-height: 1.5rem;
     color: #f4f4f4;
     margin: 0;
     padding: 0;
+    background-image: url('../imgs/pattern.png');
 }
 .menu iframe {
     display: inline-block;
@@ -118,29 +118,19 @@ body {
     border: 1px solid #27ae60;
 }
 
-.card--white {
-    background: #fff;
-    color: #333;
-}
-.card--white p {
-    background: #fff;
-    display: inline-block;
-}
-.card--dark {
-    background: transparent;
-    color: #f4f4f4;
-}
-.card {
-    padding: 2rem;
-    border-bottom: 3px solid #505b61;
-    z-index: -2;
-}
-
 .no-border {
     border: none !important;
 }
 
-.card img {
+.features {
+    color: #3f484d;
+}
+
+.feature {
+    z-index: 1;
+}
+
+.feature img {
     width: 270px;
     height: 270px;
     border-radius: 50%;
@@ -222,11 +212,9 @@ body {
 
 
 .footer {
+    background-color: #3f484d;
     padding: 0;
     font-size: 1rem;
-}
-.footer-content {
-    border-top: 1px solid #505b61;
 }
 
 a {
