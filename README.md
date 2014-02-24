@@ -33,8 +33,8 @@ data in there, if you want to access private repos or to make more requests:
 
 ```json
 {
-    "owner": "scala",
-    "repository": "scala",
+    "owner": "facebook",
+    "repository": "react",
     "interval": 3600,
     "authentication": {
         "username": "SOMEUSER",
