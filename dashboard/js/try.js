@@ -1,80 +1,87 @@
-var data = null;
-var timeoutOwner = null;
-var timeoutRepository = null;
-var owner = '';
-var $inputOwner = $('.input--owner');
-var $inputRepository = $('.input--repository');
+var $repo = $('.input--repository');
+var data;
 
-function processUserRepos(owner) {
-    var URL = 'https://api.github.com/users/' + owner + '/repos?per_page=1000';
+$repo.on('keyup', function() {
 
-    $.getJSON(URL)
-      .success(function(d) {
-        data = d;
+  var repoName = $(this).val();
 
-        var repos = new Bloodhound({
-            datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 4,
-            local: data
-        });
+  if (window._timeout) {
+    clearTimeout(window._timeout);
+  }
+  window._timeout = setTimeout(function() {
+    selectedRepo(repoName);
+  }, 300);
 
-        repos.initialize();
-
-        $inputRepository.typeahead('destroy');
-        $inputRepository.typeahead(null, {
-            name: 'repository',
-            displayKey: 'name',
-            source: repos.ttAdapter()
-        });
-
-        $inputRepository.focus();
-    })
-    .fail(function(d) {
-        console.log(d);
-        // TODO handle fail, probably bad username?
-    });
-}
-
-$inputOwner.on('keyup change', function(e) {
-    $inputRepository.off('focus', triggerAutocomplete);
-    $inputRepository.on('focus', triggerAutocomplete);
 });
 
-function triggerAutocomplete(e) {
-    $inputRepository.off('focus', triggerAutocomplete);
-    owner = $inputOwner.val().trim();
-    processUserRepos(owner);
-}
+$('.input--owner').on('focusout', function() {
+  var owner = $(this).val();
+  var url = 'https://api.github.com/users/' + owner + '/repos?per_page=1000';
 
-$inputRepository.on('keyup change', function(e) {
-    $input = $(this);
+  if (!owner) {
+    alert('You did not write a username');
+    $(this).focus();
+    return;
+  }
 
-    if (timeoutRepository) {
-        window.clearTimeout(timeoutRepository);
-    }
-    timeoutRepository = window.setTimeout(function() {
-        var name = $input.val().trim();
+  $.get(url)
+  .success(autocompleteRepos)
+  .fail(handleFail)
 
-        if (!data || !name) {
-            return;
-        }
-
-        var ok = data.some(function(r) {
-            return r.name.toLowerCase() === name.toLowerCase();
-        });
-
-        if (ok) {
-          showDashboardLink();
-        }
-
-    }, 200);
 });
 
-function showDashboardLink() {
+function selectedRepo(repoName) {
+  
+  if (!data) return; // data has not loaded just yet
 
-    var link = $('<a/>').attr('href', '#').text('Go to the dashboard');
+  if (data.some(equal(repoName))) {
+    // show dashboard link
+    var container = $('.form');
+    var link = $('<a/>').attr('href', '#').text('Go to your dashboard');
     var h2 = $('<h2/>').append(link);
-    $('.form').html('').append(h2);
+    container.html('').append(h2);
+  }
 
+}
+
+function equal(val) {
+  return function (obj) {
+    return obj.name == val;
+  };
+}
+
+function autocompleteRepos(d) {
+
+  if (d.message) {
+    alert("User not found :(");
+    $('.input--owner').val('').focus();
+    return;
+  }
+
+  if (!d.length) {
+    alert('No repos found :(');
+    return;
+  }
+
+  data = d;
+
+  var numbers = new Bloodhound({
+    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: data
+  });
+
+  numbers.initialize();
+
+  $repo.typeahead(null, {
+    displayKey: 'name',
+    source: numbers.ttAdapter()
+  });
+
+  $repo.focus();
+}
+
+function handleFail(data) {
+  console.log(data);
+  alert('Something bad happend :( Check out the existing repos in the dashboard');
 }
