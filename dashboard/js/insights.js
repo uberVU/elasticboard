@@ -211,13 +211,10 @@ function drawIssuesInvolvement() {
                         return '#FF4E50';
                     }
                     return '#88C425';
-                })
-                .on('mousedown', function(e) {
-                    d3.event.stopPropagation();
-                    tip.show(e);
                 });
 
             var labels = gnodes.append('text')
+                .attr('class', 'textnode')
                 .attr('dx', function (d) {
                     if (d.type == 'issue') {
                         return radius + 3;
@@ -231,6 +228,10 @@ function drawIssuesInvolvement() {
                         return '#' + d.data.number;
                     }
                     return d.data.login;
+                })
+                .on('mousedown', function(e) {
+                    d3.event.stopPropagation();
+                    tip.show(e);
                 });
 
             force.on("tick", function() {
