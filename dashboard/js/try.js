@@ -81,7 +81,9 @@ function showRedirectModal() {
     body: 'We are fetching the data from ' + user_data.repository + ' just for you!. We will redirect you when it is ready.'
   });
   $('#modal').removeClass('modal-window--error').addClass('modal-window--success');
-  location.href = location.origin;
+  setTimeout(function(){
+    location.href = location.origin;
+  }, 3000);
 }
 
 function equal(val) {
