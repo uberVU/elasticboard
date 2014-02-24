@@ -20,7 +20,7 @@ function drawIssuesActivity() {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Events'
+                        text: '# Issues'
                     }
                 },
                 legend: {
