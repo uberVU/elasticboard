@@ -77,10 +77,12 @@ body {
 
     .form.hide-link h2 {
         opacity: 0;
+        pointer-events: none;
     }
 
     .form.show-link h2 {
         opacity: 1;
+        pointer-events: auto;
     }
 
     .form.show-link div {
