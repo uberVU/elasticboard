@@ -10,7 +10,7 @@ var user_data = {
 };
 
 $('#temporary-dashboard').on('click', function() {
-  $.post(location.origin + ':5000/add_temporary_river', user_data)
+  $.post('http://' + location.hostname + ':5000/add_temporary_river', user_data)
     .success(showRedirectModal)
     .fail(function(data) {
       console.log(data);
