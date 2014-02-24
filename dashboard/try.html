@@ -29,12 +29,27 @@
             <img width="850px" src="/imgs/macbook.png">
         </div>
         <h3>Try with a repository</h3>
-        <div class="form row">
+        <div class="form row hide-link">
 
-          <div>
+           <div class="small-12 columns hide-for-medium-up">
                 <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="small-12 columns hide-for-medium-up">
                 <input class="input--demo input--repository" type="text" placeholder="repository" />
-          </div>
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-right hide-for-small">
+                <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-left hide-for-small">
+                <input class="input--demo input--repository" type="text" placeholder="repository" />
+            </div>
+
+            <h2>
+                <a href="#" id="temporary-dashboard">Go to your dashboard</a>
+            </h2>
 
         </div>
         <h4>or <a href="/">check out</a> the existing ones.</h4>
@@ -73,6 +88,16 @@
             <a href="http://paper-leaf.com/blog/2010/01/free-macbook-stock-photo-for-web-design/">paper-leaf</a>
         </p>
     </div>
+</div>
+
+<div id="modal" class="modal-window--error modal-window--hidden">
+    <button id="close-modal" class="modal-window--close">&times;</button>
+    <h2 class="modal-title">
+        Some title
+    </h2>
+    <p>
+        Some content
+    </p>
 </div>
 
 <script src="/js/jquery.js"></script>
