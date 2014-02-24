@@ -78,7 +78,8 @@ function selectedRepo(repoName) {
 function showRedirectModal() {
   showModal({
     title: 'Please wait while we set things up',
-    body: 'We are fetching the data from ' + user_data.repository + ' just for you! We will redirect you when it is ready.'
+    body: 'We are fetching the data from ' + user_data.owner + '/' + user_data.repository +
+          ' just for you! Redirecting you right away.'
   });
   $('#modal').removeClass('modal-window--error').addClass('modal-window--success');
   setTimeout(function(){
