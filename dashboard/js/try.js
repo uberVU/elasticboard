@@ -1,3 +1,7 @@
+/* globals $, Bloodhound */
+
+'use strict';
+
 var $repo = $('.input--repository');
 var data;
 
@@ -19,27 +23,30 @@ $('.input--owner').on('focusout', function() {
   var url = 'https://api.github.com/users/' + owner + '/repos?per_page=1000';
 
   if (!owner) {
-    alert('You did not write a username');
+    showModal({
+      title: 'No username',
+      body: 'You did not write a username'
+    });
+
     $(this).focus();
     return;
   }
 
   $.get(url)
   .success(autocompleteRepos)
-  .fail(handleFail)
+  .fail(handleFail);
 
 });
 
 function selectedRepo(repoName) {
-  
+
   if (!data) return; // data has not loaded just yet
 
   if (data.some(equal(repoName))) {
     // show dashboard link
+    $repo.typeahead('destroy');
     var container = $('.form');
-    var link = $('<a/>').attr('href', '#').text('Go to your dashboard');
-    var h2 = $('<h2/>').append(link);
-    container.html('').append(h2);
+    container.removeClass('hide-link').addClass('show-link');
   }
 
 }
@@ -52,14 +59,15 @@ function equal(val) {
 
 function autocompleteRepos(d) {
 
-  if (d.message) {
-    alert("User not found :(");
-    $('.input--owner').val('').focus();
-    return;
-  }
-
   if (!d.length) {
-    alert('No repos found :(');
+      showModal({
+        title: 'No repositories found',
+        body: 'Check out the existing repos in the dashboard'
+      });
+      $(window).on('click', function() {
+        $(window).off('click');
+        toggleModal();
+      });
     return;
   }
 
@@ -81,7 +89,29 @@ function autocompleteRepos(d) {
   $repo.focus();
 }
 
-function handleFail(data) {
-  console.log(data);
-  alert('Something bad happend :( Check out the existing repos in the dashboard');
+function handleFail() {
+  showModal({
+    title: 'Could not get your repos',
+    body: 'Did you type in the correct GitHub username?'
+  });
+  $(window).on('click', function() {
+    $(window).off('click');
+    toggleModal();
+  });
 }
+
+function showModal(msg) {
+  var $modal = $('#modal');
+  $('h2', $modal).text(msg.title);
+  $('p', $modal).text(msg.body);
+  toggleModal();
+}
+
+function toggleModal() {
+  var $modal = $('#modal');
+  $modal.toggleClass('modal-window--hidden');
+}
+
+$('#close-modal').on('click', function() {
+  toggleModal();
+});

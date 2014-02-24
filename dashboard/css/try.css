@@ -66,7 +66,26 @@ body {
     -webkit-animation-duration: 2.5s;
     -moz-animation-duration: 2.5s;
     animation-duration: 2.5s;
+    overflow: hidden;
 }
+
+    .form h2, .form div {
+        -moz-transition-duration: 1s;
+        -webkit-transition-duration: 1s;
+        transition-duration: 1s;
+    }
+
+    .form.hide-link h2 {
+        opacity: 0;
+    }
+
+    .form.show-link h2 {
+        opacity: 1;
+    }
+
+    .form.show-link div {
+        margin-top:-60px;
+    }
 
 .menu {
     text-align: left;
@@ -142,6 +161,44 @@ body {
     box-shadow: 0 0 1px #aaa;
     z-index: 1;
 }
+
+.modal-window,
+.modal-window--error {
+    width: 540px;
+    height: 200px;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    margin-left: -260px;
+    background: #fff;
+    color: #333;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    border: 5px solid rgba(12,12,12,.6);
+    -webkit-transition-duration: .5s;
+    -moz-transition-duration: .5s;
+    transition-duration: .5s;
+}
+
+    .modal-window--close {
+        background: none;
+        border: none;
+        float: right;
+    }
+
+    .modal-window--hidden {
+        top: -50%;
+    }
+
+    .modal-window--error {
+        border: 5px solid rgba(200, 7, 7, 0.6);
+    }
+
+    .modal-window,
+    .modal-window--error h2 {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #ddd;
+    }
 
 @-moz-keyframes fade-in {
     0% {
