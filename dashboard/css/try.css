@@ -177,7 +177,8 @@ body {
 }
 
 .modal-window,
-.modal-window--error {
+.modal-window--error,
+.modal-window--success {
     width: 540px;
     height: 200px;
     position: absolute;
@@ -206,6 +207,10 @@ body {
 
     .modal-window--error {
         border: 5px solid rgba(200, 7, 7, 0.6);
+    }
+
+    .modal-window--success {
+        border: 5px solid rgba(7, 200, 23, 0.6);
     }
 
     .modal-window,

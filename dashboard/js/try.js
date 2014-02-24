@@ -16,7 +16,7 @@ $('#temporary-dashboard').on('click', function() {
       console.log(data);
         showModal({
           title: 'Could not set things up :(',
-          body: 'Please try again or check out <a href="#">the existing repos</a> in the dashboard'
+          body: 'Please try again or <a href="/">check out the existing repos</a> in the dashboard'
         });
         $(window).on('click', function() {
           $(window).off('click');
@@ -78,8 +78,10 @@ function selectedRepo(repoName) {
 function showRedirectModal() {
   showModal({
     title: 'Please wait while we set things up',
-    body: 'We are fetching the data from ' + user_data.repositories + ' just for you!. We will redirect you when it is ready.'
+    body: 'We are fetching the data from ' + user_data.repository + ' just for you!. We will redirect you when it is ready.'
   });
+  $('#modal').removeClass('modal-window--error').addClass('modal-window--success');
+  location.href = location.origin;
 }
 
 function equal(val) {
