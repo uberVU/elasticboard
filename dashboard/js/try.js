@@ -4,6 +4,26 @@
 
 var $repo = $('.input--repository');
 var data;
+var user_data = {
+  owner: '',
+  repository: ''
+};
+
+$('#temporary-dashboard').on('click', function() {
+  $.post(location.origin + ':5000/add_temporary_river', user_data)
+    .success(showRedirectModal)
+    .fail(function(data) {
+      console.log(data);
+        showModal({
+          title: 'Could not set things up :(',
+          body: 'Please try again or check out <a href="#">the existing repos</a> in the dashboard'
+        });
+        $(window).on('click', function() {
+          $(window).off('click');
+          toggleModal();
+        });
+    });
+});
 
 $repo.on('keyup', function() {
 
@@ -32,6 +52,8 @@ $('.input--owner').on('focusout', function() {
     return;
   }
 
+  user_data.owner = owner;
+
   $.get(url)
   .success(autocompleteRepos)
   .fail(handleFail);
@@ -44,11 +66,20 @@ function selectedRepo(repoName) {
 
   if (data.some(equal(repoName))) {
     // show dashboard link
+    user_data.repository = repoName;
     $repo.typeahead('destroy');
-    var container = $('.form');
-    container.removeClass('hide-link').addClass('show-link');
+    var $container = $('.form');
+    $('input', $container).attr('disabled', true);
+    $container.removeClass('hide-link').addClass('show-link');
   }
 
+}
+
+function showRedirectModal() {
+  showModal({
+    title: 'Please wait while we set things up',
+    body: 'We are fetching the data from ' + user_data.repositories + ' just for you!. We will redirect you when it is ready.'
+  });
 }
 
 function equal(val) {
@@ -62,7 +93,7 @@ function autocompleteRepos(d) {
   if (!d.length) {
       showModal({
         title: 'No repositories found',
-        body: 'Check out the existing repos in the dashboard'
+        body: 'Try with a different owner or check out <a href="#">the existing repos</a> in the dashboard'
       });
       $(window).on('click', function() {
         $(window).off('click');
@@ -89,7 +120,8 @@ function autocompleteRepos(d) {
   $repo.focus();
 }
 
-function handleFail() {
+function handleFail(data) {
+  console.log(data);
   showModal({
     title: 'Could not get your repos',
     body: 'Did you type in the correct GitHub username?'
@@ -103,7 +135,7 @@ function handleFail() {
 function showModal(msg) {
   var $modal = $('#modal');
   $('h2', $modal).text(msg.title);
-  $('p', $modal).text(msg.body);
+  $('p', $modal).html(msg.body);
   toggleModal();
 }
 
