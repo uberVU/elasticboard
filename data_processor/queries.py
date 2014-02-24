@@ -1,10 +1,11 @@
 import calendar
 import datetime
 
-from elasticutils import S
+from es import ES, ES_NODE
+from elasticutils import S as _S
 
-from es import ES, CONFIG
-
+def S():
+    return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
 
 # for queries where it makes sense
 LIMIT = 20
@@ -155,9 +156,15 @@ def available_repos():
 
 def issue_events_count(index, action, start=None, end=None):
     # action can be 'opened' or 'closed'
-    q = S().indexes(index).doctypes('IssuesEvent')
-    q = apply_time_filter(q, start, end)
-    q = q.filter(**{'payload.action': action})
+    q = S().indexes(index).doctypes('IssueData')
+    if action == 'opened':
+        field = 'created_at'
+        state = 'open'
+    else:
+        field = 'closed_at'
+        state = 'closed'
+    q = apply_time_filter(q, start, end, field)
+    q = q.filter(state=state)
     return q.count()
 
 def issues_count(index, state):
@@ -246,3 +253,8 @@ def issues_involvement(index, start=None, end=None):
             added_users[number].add(user['login'])
 
     return issues
+
+def milestones(index):
+    q = S().indexes(index).doctypes('MilestoneData').values_dict()
+    q = all(q)
+    return list(q)

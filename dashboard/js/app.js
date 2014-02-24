@@ -43,10 +43,6 @@ function changeTabs() {
     }
 }
 
-function loadKibana() {
-    $('#kibana-iframe').attr('src', 'kibana-latest/index.html');
-}
-
 function fitTabContainer () {
     var $container = $('#tab-container');
     $container.height($(window).height() - $container.offset().top - 20);

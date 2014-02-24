@@ -20,7 +20,7 @@ function drawIssuesActivity() {
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Events'
+                        text: '# Issues'
                     }
                 },
                 legend: {
@@ -105,14 +105,14 @@ function makeD3Graph(issues_data) {
         issue.users.forEach(function(user) {
             var node = {
                 type: 'user',
-                login: user.login
+                data: user
             }
             nodes.push(node);
             user_nodes.push(node);
         });
         var issue_node = {
             type: 'issue',
-            number: issue.issue.number
+            data: issue.issue
         }
         nodes.push(issue_node);
 
@@ -131,6 +131,8 @@ function makeD3Graph(issues_data) {
     }
 }
 
+var tooltipUserTemplate = Handlebars.compile($('#tooltip-user-template').html());
+var tooltipIssueTemplate = Handlebars.compile($('#tooltip-issue-template').html());
 function drawIssuesInvolvement() {
     $.getJSON(API_BASE + '/issues_involvement')
         .done(function(json) {
@@ -150,9 +152,34 @@ function drawIssuesInvolvement() {
                 .gravity(0.05)
                 .size([width, height]);
 
+            var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+                var context;
+                var template;
+                if (d.type == 'issue') {
+                    context = {
+                        number: d.data.number,
+                        title: d.data.title,
+                        url: d.data.html_url,
+                        comments: d.data.comments,
+                        ago: moment().from(d.data.created_at, true)
+                    };
+                    template = tooltipIssueTemplate;
+                } else {
+                    context = {
+                        login: d.data.login,
+                        imgURL: d.data.avatar_url
+                    };
+                    template = tooltipUserTemplate;
+                }
+                return template(context);
+            });
+
             var svg = d3.select('#issues-involvement-graph-container').append('svg')
                 .attr('width', width)
-                .attr('height', height);
+                .attr('height', height)
+                .on('mousedown', tip.hide);
+
+            svg.call(tip);
 
             force.nodes(nodes)
                 .links(links)
@@ -187,6 +214,7 @@ function drawIssuesInvolvement() {
                 });
 
             var labels = gnodes.append('text')
+                .attr('class', 'textnode')
                 .attr('dx', function (d) {
                     if (d.type == 'issue') {
                         return radius + 3;
@@ -197,9 +225,13 @@ function drawIssuesInvolvement() {
                 .style('fill', 'white')
                 .text(function(d) {
                     if (d.type == 'issue') {
-                        return '#' + d.number;
+                        return '#' + d.data.number;
                     }
-                    return d.login;
+                    return d.data.login;
+                })
+                .on('mousedown', function(e) {
+                    d3.event.stopPropagation();
+                    tip.show(e);
                 });
 
             force.on("tick", function() {
