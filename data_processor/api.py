@@ -168,8 +168,8 @@ def add_temporary_river():
     if 'owner' not in request.form or 'repository' not in request.form:
         return "Incomplete data", 403
 
-    owner = request.form['owner']
-    repository = request.form['repository']
+    owner = request.form['owner'].lower()
+    repository = request.form['repository'].lower()
 
     # make sure this repo exists
     gh_url = 'https://api.github.com/repos/%s/%s' % (owner, repository)
