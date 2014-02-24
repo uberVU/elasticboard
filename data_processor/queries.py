@@ -156,9 +156,15 @@ def available_repos():
 
 def issue_events_count(index, action, start=None, end=None):
     # action can be 'opened' or 'closed'
-    q = S().indexes(index).doctypes('IssuesEvent')
-    q = apply_time_filter(q, start, end)
-    q = q.filter(**{'payload.action': action})
+    q = S().indexes(index).doctypes('IssueData')
+    if action == 'opened':
+        field = 'created_at'
+        state = 'open'
+    else:
+        field = 'closed_at'
+        state = 'closed'
+    q = apply_time_filter(q, start, end, field)
+    q = q.filter(state=state)
     return q.count()
 
 def issues_count(index, state):
