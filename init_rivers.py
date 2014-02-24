@@ -2,6 +2,8 @@ from data_processor.es import *
 
 count = 0
 for repository in CONFIG['repositories']:
+    repository['owner'] = repository['owner'].lower()
+    repository['repository'] = repository['repository'].lower()
     body = {
         'type': 'github',
         'github': repository
