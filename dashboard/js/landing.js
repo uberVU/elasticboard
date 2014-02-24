@@ -82,7 +82,7 @@ function showRedirectModal() {
   });
   $('#modal').removeClass('modal-window--error').addClass('modal-window--success');
   setTimeout(function(){
-    location.href = location.origin;
+    location.href = location.origin + '/#/' + user_data.owner + '/' + user_data.repository;
   }, 3000);
 }
 
