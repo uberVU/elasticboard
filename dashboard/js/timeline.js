@@ -50,7 +50,7 @@ function formatPayload (payload) {
     data.diffTree = payload.before.substr(0,10) + '...' + payload.head.substr(0,10);
     data.commits = payload.commits.map(function(commit) {
       return {
-        commitUrl: commit.url,
+        commitUrl: commit.url.replace('https://api.', 'https://').replace('/commits/', '/commit/').replace('/repos/', '/'),
         message: commit.message,
         sha: commit.sha.substr(0,10)
       };
