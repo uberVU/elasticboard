@@ -192,8 +192,16 @@ def add_temporary_river():
         body['github']['authentication'] = queries.CONFIG['demo_authentication']
 
     index_name = '%s&%s' % (owner, repository)
-    url = '/_river/%s/_meta' % index_name
-    queries.ES.transport.perform_request(url=url, method='PUT', body=body)
+
+    # don't re-add if it's already there as non-temporary
+    rivers = queries.S().indexes('_river') \
+        .filter(type='github') \
+        .values_dict()
+    rivers = ['%s&%s' % (r['github']['owner'], r['github']['repository'])
+              for r in rivers if 'temporary' not in r]
+    if index_name not in rivers:
+        url = '/_river/%s/_meta' % index_name
+        queries.ES.transport.perform_request(url=url, method='PUT', body=body)
 
     return "OK", 200
 
