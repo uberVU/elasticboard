@@ -30,10 +30,9 @@ function initDashboard () {
  * navigate to different tabs in the application
  */
 function changeTabs() {
-
-    var href = location.href.split('/');
-    if (href.length > 6) {
-        var tab = href.pop();
+    var parts = location.hash.split('/');
+    if (parts.length > 3) {
+        var tab = parts.pop();
         var tabs = $('ul.menu li');
         tabs.each(function (idx, el) {
             var text = $(el).text().toLowerCase();
@@ -42,11 +41,6 @@ function changeTabs() {
             }
         });
     }
-
-}
-
-function loadKibana() {
-    $('#kibana-iframe').attr('src', 'kibana-latest/index.html');
 }
 
 function fitTabContainer () {
@@ -85,7 +79,20 @@ $('#repo-select-trigger').on('click', function (e) {
 
 function getAvailableRepos (cb) {
     $.get(API_HOST + 'available_repos')
-        .success(cb)
+        .success(function (data) {
+            if (data.data.length == 0) {
+                $('#counts-container').remove();
+                $('#tab-container').empty();
+
+                var msg = "<p class=\"text-center\">No data available. Please follow the " +
+                    "<a href=\"https://github.com/uberVU/elasticboard/blob/master/README.md\">README</a>.</p>";
+                $tabContainer = $('#tab-container');
+                $tabContainer.append(msg);
+
+                return;
+            }
+            cb(data);
+        })
     .fail(function (data) {
         console.log('An error has occured');
     });
@@ -98,7 +105,7 @@ function addRepos (data) {
     data.data.forEach(function (repo) {
         var repoLink = document.createElement('a');
         var repoLI = document.createElement('li');
-        repoLink.href = location.origin + '/#/' + repo;
+        repoLink.href = location.origin + location.pathname + '#/' + repo;
         repoLink.textContent = repo;
         repoLink.target = '_blank';
         repoLI.appendChild(repoLink);
@@ -115,7 +122,7 @@ function addRepos (data) {
 
 function getDefaultRepo() {
     getAvailableRepos(function (data) {
-        setLocation(location.origin + '/#/' + data.data[0]); // load first repo
+        setLocation(location.origin + location.pathname + '#/' + data.data[0]); // load first repo
         hash = data.data[0].split('/');
         REPO = hash[0] + '/' + hash[1];
         API_BASE += hash[0] + '/' + hash[1];
@@ -171,4 +178,22 @@ function populateOpenPulls() {
 function logFailure(fail) {
     console.log("Trouble getting data. API server down?");
     console.log(fail);
+}
+
+function displayFailMessage(fail) {
+    if (fail.status != 404) {
+        logFailure(fail);
+        return;
+    }
+
+    $('#counts-container').remove();
+    $('#tab-container').empty();
+
+    var msg = "<p class=\"text-center\">No data for this repository yet. Retrying in 2 minutes.</p>";
+    $tabContainer = $('#tab-container');
+    $tabContainer.append(msg);
+
+    setTimeout(function() {
+        location.reload();
+    }, 1000 * 60 * 2);
 }

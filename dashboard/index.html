@@ -2,21 +2,20 @@
 <html>
 <head>
     <title>Elasticboard</title>
-    <link rel="stylesheet" href="css/normalize.css"/>
-    <link rel="stylesheet" href="css/foundation.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="/css/normalize.css"/>
+    <link rel="stylesheet" href="/css/foundation.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
     <meta charset="UTF-8">
 </head>
 <body>
 
 <div class="row full-width" id="topbar">
     <div class="large-7 small-12 columns">
-        <h1>Elasticboard</h1>
+        <a href="/"><h1>Elasticboard</h1></a>
         <ul class="menu text-center">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-3" data-function="drawInsights">Insights</li>
             <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
-            <li data-tab="tab-4" data-function="loadKibana">Kibana</li>
             <li data-tab="github">
                 <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
                         allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
@@ -35,7 +34,7 @@
     </div>
 </div>
 
-<div class="row full-width text-right">
+<div class="row full-width text-right" id="counts-container">
     <div class="small-0 large-12 columns">
         <p id="open-issues" class="text-small inline text-centered"><span id="open-issues-count" class="issue-count">-</span> <br> open issues</p>
         <p id="open-pulls" class="text-small inline text-centered"><span id="open-pulls-count" class="issue-count">-</span> <br> open pull requests</p>
@@ -59,10 +58,10 @@
         </div>
 
         <div class="tab hide" id="tab-3">
-            <div class="graph-like" id="untouched-issues"></div>
-            <div class="graph-like" id="inactive-issues"></div>
             <div class="graph" id="issues-activity"></div>
             <div class="graph" id="avg-issue-time"></div>
+            <div class="graph-like" id="untouched-issues"></div>
+            <div class="graph-like" id="inactive-issues"></div>
             <div class="graph graph-like">
                 <div class="text-center">
                     <p class="graph-title">Issues Involvement Graph</p>
@@ -71,10 +70,6 @@
                 <div id="issues-involvement-graph-container"></div>
             </div>
             <div class="row whitespace"></div>
-        </div>
-
-        <div class="tab hide" id="tab-4">
-            <iframe id="kibana-iframe" src="" frameborder="0"></iframe>
         </div>
     </div>
 
@@ -186,7 +181,7 @@
         <p class="graph-title">{{ title }}</p>
         <p class="graph-subtitle">{{ subtitle }}</p>
     </div>
-    <ul class="grey-text">
+    <ul>
         {{#each issues}}
         <li>
             <a href="{{{ html_url }}}">#{{ number }}</a>
@@ -196,17 +191,40 @@
     </ul>
 </script>
 
-<script src="js/jquery.js"></script>
-<script src="js/highcharts.js"></script>
-<script src="js/highcharts-gray-theme.js"></script>
-<script src="js/handlebars-v1.1.2.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/d3.js"></script>
-<script src="js/timeline.js"></script>
-<script src="js/graphs.js"></script>
-<script src="js/insights.js"></script>
-<script src="js/tabs.js"></script>
-<script src="js/app.js"></script>
+<script id="tooltip-user-template" type="text/x-handlebars-template">
+    <div class="tooltip-template">
+        <img src="{{ imgURL }}"/>
+        <span><a href="http://github.com/{{ login }}">{{ login }}</a></span>
+    </div>
+</script>
+
+<script id="tooltip-issue-template" type="text/x-handlebars-template">
+    <div class="tooltip-template">
+        <span>
+            <a href="{{ url }}">#{{ number }}</a>
+            -
+            {{ title }}
+        </span>
+        <div class="text-right graph-subtitle muted">
+            <span>{{ comments }} comments</span>
+            <br>
+            <span>Opened {{ ago }} ago</span>
+        </div>
+    </div>
+</script>
+
+<script src="/js/jquery.js"></script>
+<script src="/js/highcharts.js"></script>
+<script src="/js/highcharts-gray-theme.js"></script>
+<script src="/js/handlebars-v1.1.2.js"></script>
+<script src="/js/moment.min.js"></script>
+<script src="/js/d3.js"></script>
+<script src="/js/d3.tip.js"></script>
+<script src="/js/timeline.js"></script>
+<script src="/js/graphs.js"></script>
+<script src="/js/insights.js"></script>
+<script src="/js/tabs.js"></script>
+<script src="/js/app.js"></script>
 
 </body>
 </html>

@@ -3,7 +3,7 @@ import sys
 
 # python remove_repo.py ubervu/elasticboard
 
-uri = sys.argv[1]
+uri = sys.argv[1].lower()
 owner, repository = uri.split('/')
 index_name = '%s&%s' % (owner, repository)
 ES.indices.delete(index_name)
