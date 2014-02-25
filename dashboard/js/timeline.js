@@ -305,7 +305,7 @@ var TIMELINE_MAPPING = {
             return "No more events available";
         },
         object: function (e) {
-            return;
+            return "<p class='text-centered'>No more events available</p>";
         }
     }
 };
@@ -428,7 +428,7 @@ function populateTimeline(count, starting_from) {
         $(document).off('scroll');
         context = {
           author: "Sorry!",
-          action: mapping.action(),
+          action: '',
           object: mapping.object(),
           timestamp: ""
         };
