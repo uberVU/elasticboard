@@ -90,8 +90,10 @@
         <div class="small-8 columns">
             {{#if title}}
             <p class="timeline-item--title muted">
-             <a href="{{ issueURL }}">#{{ number }}</a>
-             {{ title }}
+            {{#if number}}
+              <a href="{{ issueURL }}">#{{ number }}</a>
+            {{/if}}
+             {{{ title }}}
             </p>
             {{#each labels}}
                 <span class="badge badge--issue" style="background:#{{ color }}" title="{{ name }}">{{ name }}</span>
@@ -218,8 +220,8 @@
 <script src="/js/moment.min.js"></script>
 <script src="/js/d3.js"></script>
 <script src="/js/d3.tip.js"></script>
-<script src="/js/timeline.js"></script>
 <script src="/js/graphs.js"></script>
+<script src="/js/timeline.js"></script>
 <script src="/js/insights.js"></script>
 <script src="/js/tabs.js"></script>
 <script src="/js/app.js"></script>
