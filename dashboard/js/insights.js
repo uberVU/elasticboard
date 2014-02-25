@@ -88,11 +88,11 @@ function drawAvgIssueTime() {
             var m = moment.duration(e.value, 'seconds');
             return {
                 name: m.humanize(),
-                y: Math.ceil(e.value / 3600)
+                y: Math.ceil(e.value / (3600 * 24))
             };
         },
-        yTitle: 'Hours',
-        label: 'hours'
+        yTitle: 'Days',
+        label: 'days'
     });
 }
 
