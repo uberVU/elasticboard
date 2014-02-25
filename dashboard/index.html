@@ -88,10 +88,12 @@
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
+        {{#if avatar }}
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
           <p class="timeline-item--username">{{ username.[username] }}</p>
         </div>
+        {{/if}}
         <div class="small-8 columns">
             {{#if title}}
             <p class="timeline-item--title muted">
