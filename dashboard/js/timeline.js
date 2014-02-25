@@ -265,8 +265,8 @@ var TIMELINE_MAPPING = {
           var id = url.match(/\/[0-9]+#/g)[0];
           var repo = e.repo.name;
           id = id.substring(1,id.length-1);
-          var title = 'Review for pull request <a href="' + url + '">#' + id + '</a><br>';
-          return title += '<a href="https://github.com/' + repo + '/pull/'+ id +'/files">View changed files</a>';
+          var title = 'Review for pull request '+ makeLink(url, '#' + id) +'<br>';
+          return title += makeLink('https://github.com/' + repo + '/pull' + id + '/files', 'View changed files');
         }
     },
     'PushEvent': {
