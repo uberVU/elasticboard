@@ -60,6 +60,21 @@ $('.input--owner').on('focusout', function() {
 
 });
 
+function showDashboardLink() {
+    $repo.typeahead('destroy');
+    var $container = $('.form');
+    $('input', $container).attr('disabled', true);
+    $container.removeClass('hide-link').addClass('show-link');
+}
+
+function checkRepoExists(repoName) {
+    var url = 'https://api.github.com/repos/' + user_data.owner + '/' + repoName;
+    $.get(url).success(function () {
+        user_data.repository = repoName;
+        showDashboardLink();
+    });
+}
+
 function selectedRepo(repoName) {
 
   if (!data) return; // data has not loaded just yet
@@ -67,12 +82,11 @@ function selectedRepo(repoName) {
   if (data.some(equal(repoName))) {
     // show dashboard link
     user_data.repository = repoName;
-    $repo.typeahead('destroy');
-    var $container = $('.form');
-    $('input', $container).attr('disabled', true);
-    $container.removeClass('hide-link').addClass('show-link');
+    showDashboardLink();
+  } else {
+      // might still be a good repo, just autocomplete didn't work
+    checkRepoExists(repoName);
   }
-
 }
 
 function showRedirectModal() {
