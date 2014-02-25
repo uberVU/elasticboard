@@ -425,6 +425,7 @@ function populateTimeline(count, starting_from) {
 
       if (!data.data.length) {
         mapping = TIMELINE_MAPPING['EndOfTimeline'];
+        $(document).off('scroll');
         context = {
           author: "Sorry!",
           action: mapping.action(),
