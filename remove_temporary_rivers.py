@@ -24,3 +24,5 @@ for river in rivers:
             index_name = '%s&%s' % (owner, repository)
             ES.indices.delete(index_name)
             ES.transport.perform_request(url='/_river/%s' % index_name, method='DELETE')
+            print "Removed %s/%s" % (owner, repository)
+
