@@ -1,12 +1,14 @@
 elasticboard
 ============
 
+http://elasticboard.mihneadb.net/landing.html
+
 Dashboard providing an easy way to track a GitHub repo's evolution. There's a timeline to quickly bring you up to
 speed, graphs to view aggregated statistics and useful insights
 so that you never miss an issue again.
 
-You can view a running demo at
-[http://elasticboard.mihneadb.net/#/gabrielfalcao/lettuce](http://elasticboard.mihneadb.net/#/gabrielfalcao/lettuce).
+You can view an example dashboard
+[here](http://elasticboard.mihneadb.net/#/gabrielfalcao/lettuce).
 
 ##Setting it up
 
@@ -24,32 +26,17 @@ You also have to install the necessary Python dependencies:
 pip install -r data_processor/requirements-pip
 ```
 
-###Get some data
+Install the GitHub [river](https://github.com/uberVU/elasticsearch-river-github). (link has instructions)
 
-There are **two options** here - if you want just a quick demo, you can start off
-with some *sample* data, like this:
-
-    $ python
-    >>> from data_processor.es import index_events, index_issues
-    >>> from data_processor.github import parse_json_file
-    >>> events = parse_json_file('contrib/lettuce-events')
-    >>> index_events(events, index_name='gabrielfalcao&lettuce')
-    >>> issues = parse_json_file('contrib/lettuce-issues')
-    >>> index_other(issues, index_name='gabrielfalcao&lettuce', doc_type='IssueData')
-    >>> pulls = parse_json_file('contrib/lettuce-pulls')
-    >>> index_other(pulls, index_name='gabrielfalcao&lettuce', doc_type='PullRequestData')
-
-**Otherwise**, we suggest you use the GitHub [river](https://github.com/uberVU/elasticsearch-river-github)
-so you can always have up-to-date data. After installing the river plugin, feel free to add
-the repositories that interest you in the `config.json` file.
+Add the repositories that interest you to the `config.json` file.
 
 You can also add authentication
 data in there, if you want to access private repos or to make more requests:
 
 ```json
 {
-    "owner": "scala",
-    "repository": "scala",
+    "owner": "facebook",
+    "repository": "react",
     "interval": 3600,
     "authentication": {
         "username": "SOMEUSER",
@@ -59,18 +46,18 @@ data in there, if you want to access private repos or to make more requests:
 ```
 
 After setting up `config.json`, just run the `init_rivers.py` file (make sure you
-installed the dependencies):
+installed the python dependencies):
 
 ```bash
 python init_rivers.py
 ```
 
-###Fire up the API server
+Fire up the API server:
 
 	gunicorn -k eventlet -w 4 -b 0.0.0.0:5000 data_processor.api:app
 
 
-###Serve the dashboard
+Serve the dashboard:
 
 Start a webserver in `dashboard`:
 
@@ -78,6 +65,7 @@ Start a webserver in `dashboard`:
 
 Point your browser to [http://localhost:8000](http://localhost:8000)
 (or whatever URL you are using) and you are good to go!
+
 
 
 ##Current status

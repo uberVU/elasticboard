@@ -259,6 +259,14 @@ var TIMELINE_MAPPING = {
         },
         link: function(e) {
             return e.payload.comment.html_url;
+        },
+        title: function(e) {
+          var url = e.payload.comment.html_url;
+          var id = url.match(/\/[0-9]+#/g)[0];
+          var repo = e.repo.name;
+          id = id.substring(1,id.length-1);
+          var title = 'Review for pull request '+ makeLink(url, '#' + id) +'<br>';
+          return title += makeLink('https://github.com/' + repo + '/pull' + id + '/files', 'View changed files');
         }
     },
     'PushEvent': {
@@ -351,7 +359,7 @@ function formatContext (e) {
   }
 
   if (context.number && context.title) {
-    if (mapping) {
+    if (mapping && mapping.issueURL) {
       context.issueURL = mapping.issueURL(e);
     } else {
       context.issueURL = e.html_url;
