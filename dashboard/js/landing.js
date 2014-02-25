@@ -16,7 +16,10 @@ $('#temporary-dashboard').on('click', function() {
       console.log(data);
         showModal({
           title: 'Could not set things up :(',
-          body: 'Please try again or <a href="/">check out the existing repos</a> in the dashboard'
+          body:  user_data.owner + '/' + user_data.repository +
+              ' is not a valid public repository, or the GitHub API rate limit ' +
+              'was reached. Please try again or <a href="/">check out</a> the ' +
+              'existing repositories in the dashboard'
         });
         $(window).on('click', function() {
           $(window).off('click');
