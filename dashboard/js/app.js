@@ -191,7 +191,7 @@ function displayFailMessage(fail) {
 
     var msg = "<p class=\"text-center\">No data for this repository yet. Retrying in 2 minutes. If this persists," +
         " it means that the GitHub API rate limit was reached for this hour. Feel free to check the already" +
-        "added repositories.</p>";
+        " added repositories.</p>";
     $tabContainer = $('#tab-container');
     $tabContainer.append(msg);
 
