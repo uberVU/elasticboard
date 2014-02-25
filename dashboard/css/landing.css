@@ -290,11 +290,17 @@ body {
     max-width: 100%;
 }
 
+.dark-bg {
+    background-color: #3f484d;
+}
 
 .footer {
-    background-color: #3f484d;
     padding: 0;
     font-size: 1rem;
+}
+
+.footer-content {
+    border-top: 1px solid #505b61;
 }
 
 a {
