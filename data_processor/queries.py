@@ -258,3 +258,27 @@ def milestones(index):
     q = S().indexes(index).doctypes('MilestoneData').values_dict()
     q = all(q)
     return list(q)
+
+def unassigned_issues(index, label=None):
+    """
+    Open issues that are assigned to nobody.
+    max LIMIT results.
+    """
+    q = S().indexes(index).doctypes('IssueData') \
+        .filter(state='open') \
+        .filter(assignee=None) \
+        .values_dict()
+    q = all(q)
+
+    if label:
+        # filter out the ones that don't have {label} as a label
+        new_q = []
+        for issue in q:
+            for label_item in issue['labels']:
+                if label_item['name'] == label:
+                    new_q.append(issue)
+                    break
+        q = new_q
+
+    q = q[:LIMIT]
+    return list(q)

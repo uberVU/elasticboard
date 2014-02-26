@@ -205,5 +205,15 @@ def add_temporary_river():
 
     return "OK", 200
 
+@app.route('/<owner>/<repo>/unassigned_issues')
+@crossdomain(origin='*')
+@cached()
+def unassigned_issues(owner, repo):
+    index = index_name(owner, repo)
+    label = request.args.get('label', None)
+    issues = queries.unassigned_issues(index, label)
+    return jsonify(data=issues)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
