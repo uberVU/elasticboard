@@ -197,6 +197,8 @@ var TIMELINE_MAPPING = {
           if (e.payload && e.payload.comment) {
             var url = e.payload.comment.html_url.split('#')[0];
             return url;
+          } else if (e.payload && e.payload.issue) {
+              return e.payload.issue.html_url;
           } else {
             return '';
           }
