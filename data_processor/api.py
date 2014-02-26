@@ -157,6 +157,14 @@ def milestone(owner, repo):
     milestones = queries.milestones(index)
     return jsonify(data=milestones)
 
+@app.route('/<owner>/<repo>/unassigned_issues')
+@crossdomain(origin='*')
+@cached()
+def unassigned_issues(owner, repo):
+    index = index_name(owner, repo)
+    issues = queries.unassigned_issues(index)
+    return jsonify(data=issues)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
