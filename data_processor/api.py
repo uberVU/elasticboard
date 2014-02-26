@@ -162,7 +162,8 @@ def milestone(owner, repo):
 @cached()
 def unassigned_issues(owner, repo):
     index = index_name(owner, repo)
-    issues = queries.unassigned_issues(index)
+    label = request.args.get('label', None)
+    issues = queries.unassigned_issues(index, label)
     return jsonify(data=issues)
 
 
