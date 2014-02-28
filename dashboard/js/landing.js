@@ -3,7 +3,7 @@
 'use strict';
 
 var $repo = $('.input--repository');
-var data;
+var data = [{name:'kreator.js'}];
 var user_data = {
   owner: '',
   repository: ''
@@ -12,8 +12,7 @@ var user_data = {
 $('#temporary-dashboard').on('click', function() {
   $.post('http://' + location.hostname + ':5000/add_temporary_river', user_data)
     .success(showRedirectModal)
-    .fail(function(data) {
-      console.log(data);
+    .fail(function() {
         showModal({
           title: 'Could not set things up :(',
           body:  user_data.owner + '/' + user_data.repository +
@@ -26,19 +25,6 @@ $('#temporary-dashboard').on('click', function() {
           toggleModal();
         });
     });
-});
-
-$repo.on('keyup', function() {
-
-  var repoName = $(this).val();
-
-  if (window._timeout) {
-    clearTimeout(window._timeout);
-  }
-  window._timeout = setTimeout(function() {
-    selectedRepo(repoName);
-  }, 300);
-
 });
 
 $('.input--owner').on('focusout', function() {
@@ -63,11 +49,15 @@ $('.input--owner').on('focusout', function() {
 
 });
 
+$repo.on('keydown', function(e) {
+  if (e.keyCode === 13 || e.which === 13) {
+    selectedRepo($(this).val());
+  }
+});
+
 function showDashboardLink() {
     $repo.typeahead('destroy');
-    var $container = $('.form');
-    $('input', $container).attr('disabled', true);
-    $container.removeClass('hide-link').addClass('show-link');
+    $('.hide-link').removeClass('hide-link');
 }
 
 function checkRepoExists(repoName) {
@@ -142,8 +132,7 @@ function autocompleteRepos(d) {
   $repo.focus();
 }
 
-function handleFail(data) {
-  console.log(data);
+function handleFail() {
   showModal({
     title: 'Could not get your repos',
     body: 'Did you type in the correct GitHub username?'
