@@ -3,7 +3,7 @@
 'use strict';
 
 var $repo = $('.input--repository');
-var data = [{name:'kreator.js'}];
+var data;
 var user_data = {
   owner: '',
   repository: ''
