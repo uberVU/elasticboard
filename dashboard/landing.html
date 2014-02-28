@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elasticboard</title>
+    <link rel="stylesheet" href="/css/normalize.css"/>
+    <link rel="stylesheet" href="/css/foundation-grid.css"/>
+    <link rel="stylesheet" href="/css/landing.css"/>
+    <meta charset="UTF-8">
+
+    <meta name="description" content="Open Source GitHub Dashboard. The easiest way to track the evolution of your GitHub project." />
+    <meta property="og:title" content="Elasticboard"/>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+<body>
+
+<div class="menu row full-width">
+    <div class="container row">
+        <div class="brand small-4 columns">
+            Elasticboard
+        </div>
+        <div class="text-right small-8 columns">
+            <small class="github-tagline">100% open source</small>
+            <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&amp;repo=elasticboard&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="hero text-centered row full-width">
+    <div class="container">
+        <h1>Meaningful tracking</h1>
+        <h4>The easiest way to track the evolution of your GitHub project</h4>
+        <div class="macbook">
+            <img width="850px" src="/imgs/macbook.png">
+        </div>
+        <h3>Try with a repository</h3>
+        <div class="form row">
+
+           <div class="small-12 columns hide-for-medium-up">
+                <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="small-12 columns hide-for-medium-up">
+                <input class="input--demo input--repository" type="text" placeholder="repository" />
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-right hide-for-small">
+                <input class="input--demo input--owner" type="text" placeholder="owner" />
+            </div>
+
+            <div class="large-6 medium-6 small-12 columns text-left hide-for-small">
+                <input class="input--demo input--repository" type="text" placeholder="repository" />
+            </div>
+
+
+        </div>
+        <h2 class="hide-link transition-1000">
+            <a href="#" id="temporary-dashboard">Go to your dashboard</a>
+        </h2>
+        <h4>or <a href="/">check out</a> the existing ones.</h4>
+    </div>
+</div>
+
+<!--TODO: We should add a small border-bottom to the .feature for when we get one col / row (mobile)-->
+
+<div class="row features text-centered">
+    <div class="large-4 small-12 columns feature">
+        <h2>Timeline</h2>
+        <p class="subtitle">To quickly bring you up to speed</p>
+        <img class="timeline-picture" src="/imgs/timeline.png">
+    </div>
+    <div class="large-4 small-12 columns feature">
+        <h2>Insights</h2>
+        <p class="subtitle">So you'll never miss an issue again</p>
+        <img class="insight-picture" src="/imgs/insights.png">
+    </div>
+
+    <div class="large-4 small-12 columns feature">
+        <h2>Graphs</h2>
+        <p class="subtitle">To view aggregated statistics</p>
+        <img class="graph-picture" src="/imgs/graphs.png">
+    </div>
+</div>
+
+<div class="row">
+    <br><br>
+</div>
+
+<div class="row text-centered full-width no-border dark-bg">
+    <div class="small-12 columns">
+        <br>
+        <h2>Easy deployment</h2>
+        <p class="subtitle">Get up and running in no time - all you need is
+            <a href="http://www.elasticsearch.org/">elasticsearch</a> and a Web server</p>
+        <h4><a href="http://github.com/uberVU/elasticboard" class="button">Visit our GitHub project</a></h4>
+    </div>
+</div>
+
+<div class="row footer full-width dark-bg">
+    <div class="small-12 large-8 large-centered columns footer-content">
+        <div class="small-6 columns">
+            <p class="subtitle">Made in Bucharest, RO</p>
+        </div>
+        <div class="small-6 columns text-right">
+            <p class="subtitle">
+                Macbook photo from
+                <a href="http://paper-leaf.com/blog/2010/01/free-macbook-stock-photo-for-web-design/">paper-leaf</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal-window--error modal-window--hidden">
+    <button id="close-modal" class="modal-window--close">&times;</button>
+    <h2 class="modal-title">
+        Some title
+    </h2>
+    <p>
+        Some content
+    </p>
+</div>
+
+<script src="/js/jquery.js"></script>
+<script src="/js/typeahead.bundle.js"></script>
+<script src="/js/landing.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48162533-1', 'mihneadb.net');
+    ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

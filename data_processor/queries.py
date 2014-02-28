@@ -1,7 +1,7 @@
 import calendar
 import datetime
 
-from es import ES, ES_NODE
+from es import ES, ES_NODE, CONFIG
 from elasticutils import S as _S
 
 def S():

@@ -16,7 +16,7 @@
 
 <div class="row full-width" id="topbar">
     <div class="large-7 small-12 columns">
-        <a href="/"><h1>Elasticboard</h1></a>
+        <a href="/landing.html"><h1>Elasticboard</h1></a>
         <ul class="menu text-center">
             <li data-tab="tab-1">Timeline</li>
             <li data-tab="tab-3" data-function="drawInsights">Insights</li>
@@ -30,7 +30,7 @@
     <div class="large-5 small-12 columns text-right">
         <div id="repo-select-trigger">
             <h1 class="inline" id="user-repo">
-              <img class="cog" src="/imgs/cog.svg">
+                <img class="cog" src="/imgs/cog.svg">
             </h1>
             <div class="repo-select hidden">
                 <ul></ul>
@@ -90,8 +90,8 @@
     <div class="timeline-item row">
         {{#if avatar }}
         <div class="small-2 columns position-relative">
-          <img src="{{ avatar }}" class="timeline-item--avatar">
-          <p class="timeline-item--username">{{ username.[username] }}</p>
+            <img src="{{ avatar }}" class="timeline-item--avatar">
+            <p class="timeline-item--username">{{ username.[username] }}</p>
         </div>
         {{/if}}
         <div class="small-8 columns">
@@ -103,45 +103,45 @@
              {{{ title }}}
             </p>
             {{#each labels}}
-                <span class="badge badge--issue" style="background:#{{ color }}" title="{{ name }}">{{ name }}</span>
+            <span class="badge badge--issue" style="background:#{{ color }}" title="{{ name }}">{{ name }}</span>
             {{/each}}
             {{#with changes}}
-              <p>
+            <p>
                 <span class="timeline-item--additions"><span>+</span> {{{ additions }}}</span>
                 <span class="timeline-item--deletions"><span>-</span> {{{ deletions }}}</span>
-              </p>
+            </p>
             {{/with}}
             {{/if}}
             {{#if comment }}
             <p class="timeline-item--comment">
-            {{#with username}}
-              <a href="{{ url }}">{{ username }}</a>
-            {{/with}}
-              <img src="/imgs/inline_comment.svg" class="inline-comment"> {{ comment }}
+                {{#with username}}
+                <a href="{{ url }}">{{ username }}</a>
+                {{/with}}
+                <img src="/imgs/inline_comment.svg" class="inline-comment"> {{ comment }}
             </p>
             {{else}}
             <p>
-              {{#with username }}
+                {{#with username }}
                 <a href="{{ url }}">{{ username }}</a>
-              {{/with}}
+                {{/with}}
                 {{ action }} {{{ object }}}
                 {{#if commits}}
-                  {{#eachCommit commits }}
-                    <p class="timeline-item--comment">
-                        <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
-                          {{{ message }}}
-                        </a>
-                    </p>
-                  {{/eachCommit}}
-                  <p class="timeline-item--read-more">
-                    <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
-                  </p>
-                {{/if}}
+                {{#eachCommit commits }}
+            <p class="timeline-item--comment">
+                <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
+                {{{ message }}}
+                </a>
+            </p>
+            {{/eachCommit}}
+            <p class="timeline-item--read-more">
+                <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
+            </p>
+            {{/if}}
             </p>
             {{/if}}
             {{#if link}}
             <p class="timeline-item--read-more">
-              <a href="{{ link }}">Read more</a>
+                <a href="{{ link }}">Read more</a>
             </p>
             {{/if}}
         </div>
@@ -149,10 +149,10 @@
             <p class="timestamp muted">{{ timestamp }}</p>
             {{#if title}}
             <p>
-              <span class="badge--timestamp">assigned to {{ assignee }}</span>
+                <span class="badge--timestamp">assigned to {{ assignee }}</span>
             </p>
             <p>
-              <span class="badge--timestamp">opened {{ issue_age }} ago</span>
+                <span class="badge--timestamp">opened {{ issue_age }} ago</span>
             </p>
             {{/if}}
         </div>
@@ -160,20 +160,20 @@
 </script>
 
 <script id="timeline-item-basic" type="text/x-handlebars-template">
-  <div class="timeline-item row">
-    <div class="small-2 columns text-centered">
-      <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
+    <div class="timeline-item row">
+        <div class="small-2 columns text-centered">
+            <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
+        </div>
+        <div class="small-8 columns">
+            <p>
+                {{#with username}}
+                <a href="{{ url }}">{{ username }}</a>
+                {{/with}} {{ action }} {{{ object }}}</p>
+        </div>
+        <div class="small-2 columns text-right">
+            <p class="timestamp muted">{{ timestamp }}</p>
+        </div>
     </div>
-    <div class="small-8 columns">
-      <p>
-      {{#with username}}
-        <a href="{{ url }}">{{ username }}</a>
-      {{/with}} {{ action }} {{{ object }}}</p>
-    </div>
-    <div class="small-2 columns text-right">
-        <p class="timestamp muted">{{ timestamp }}</p>
-    </div>
-  </div>
 </script>
 
 <script id="timeline-author-template" type="text/x-handlebars-template">
@@ -233,5 +233,15 @@
 <script src="/js/tabs.js"></script>
 <script src="/js/app.js"></script>
 
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48162533-1', 'mihneadb.net');
+    ga('send', 'pageview');
+
+</script>
 </body>
 </html>

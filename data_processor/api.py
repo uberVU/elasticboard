@@ -1,13 +1,18 @@
 from functools import partial, wraps
 import datetime
+import requests
 import queries
+import time
 
 from utils import crossdomain
 from flask import Flask, jsonify, request
 from werkzeug.contrib.cache import MemcachedCache
 
+
 cache = MemcachedCache(['127.0.0.1:11211'])
 CACHE_TIMEOUT = 5 * 60
+
+
 app = Flask(__name__)
 # app.debug = True
 
@@ -156,6 +161,49 @@ def milestone(owner, repo):
     index = index_name(owner, repo)
     milestones = queries.milestones(index)
     return jsonify(data=milestones)
+
+@app.route('/add_temporary_river', methods=['POST'])
+@crossdomain(origin='*')
+def add_temporary_river():
+    if 'owner' not in request.form or 'repository' not in request.form:
+        return "Incomplete data", 403
+
+    owner = request.form['owner'].lower()
+    repository = request.form['repository'].lower()
+
+    # make sure this repo exists
+    gh_url = 'https://api.github.com/repos/%s/%s' % (owner, repository)
+    r = requests.get(gh_url)
+    if not r.ok:
+        return "Repository does not exist", 403
+
+    body = {
+        'type': 'github',
+        'github': {
+            'owner': owner,
+            'repository': repository,
+            'interval': 7200
+        },
+        'temporary': True,
+        'created_at': time.time()
+    }
+
+    if 'demo_authentication' in queries.CONFIG:
+        body['github']['authentication'] = queries.CONFIG['demo_authentication']
+
+    index_name = '%s&%s' % (owner, repository)
+
+    # don't re-add if it's already there as non-temporary
+    rivers = queries.S().indexes('_river') \
+        .filter(type='github') \
+        .values_dict()
+    rivers = ['%s&%s' % (r['github']['owner'], r['github']['repository'])
+              for r in rivers if 'temporary' not in r]
+    if index_name not in rivers:
+        url = '/_river/%s/_meta' % index_name
+        queries.ES.transport.perform_request(url=url, method='PUT', body=body)
+
+    return "OK", 200
 
 @app.route('/<owner>/<repo>/unassigned_issues')
 @crossdomain(origin='*')
