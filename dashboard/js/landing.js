@@ -3,6 +3,7 @@
 'use strict';
 
 var $repo = $('.input--repository');
+var $user = $('.input--owner');
 var data;
 var user_data = {
   owner: '',
@@ -51,6 +52,8 @@ $('.input--owner').on('focusout', function() {
 
 $repo.on('keydown', function(e) {
   if (e.keyCode === 13 || e.which === 13) {
+    $repo.attr('disabled', true);
+    $user.attr('disabled', true);
     selectedRepo($(this).val());
   }
 });
