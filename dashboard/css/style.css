@@ -420,3 +420,22 @@ body {
     top: 100%;
     left: 0;
 }
+
+.insights-milestone {
+  background: #222;
+}
+
+  .milestone-title {
+    padding: .2rem;
+    border-bottom: 1px solid rgb(51, 51, 51);
+  }
+
+  .milestone-title span {
+    font: 12px Lucida Grande,Lucida Sans Unicode,Verdana,Arial,Helvetica,sans-serif;
+    color: #ddd;
+    float: right;
+  }
+
+  .insights-milestone .meter {
+    text-align: center;
+  }

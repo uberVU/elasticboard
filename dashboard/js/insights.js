@@ -254,10 +254,65 @@ function drawIssuesInvolvement() {
         .fail(displayFailMessage);
 }
 
+function addMilestoneStatus() {
+
+    var endpoint = API_HOST + REPO + '/milestones';
+    var $milestones = $('#milestones');
+
+    $.get(endpoint)
+        .success(displayData)
+        .fail(displayFailMessage);
+
+    function displayData(data) {
+
+        if (data.data.length) {
+
+            var template = Handlebars.compile($('#insights-milestone').html());
+
+            $.each(data.data, function(idx, milestone) {
+
+                var due_date = 0;
+                var row;
+                var delay = false;
+
+                if (idx % 2 == 0) { // two milestones per row
+                    row = $('<div/>').addClass('row');
+                    $milestones.append(row);
+                }
+
+                if (milestone.due_on) {
+                    var start = moment(new Date());
+                    var end = moment((new Date(milestone.due_on)).getTime());
+                    due_date = start.from(end, true);
+                    if ((new Date(milestone.due_on)).getTime() > (new Date()).getTime()) {
+                        due_date = 'in ' + due_date;
+                    } else {
+                        due_date += ' ago';
+                        delay = true;
+                    }
+                }
+
+                var context = {
+                    title: milestone.title,
+                    due: due_date,
+                    progress: parseInt(milestone.closed_issues / milestone.open_issues * 100, 10),
+                    delay: delay
+                }
+
+                $('.row:last-child', $milestones).append(template(context));
+
+            });
+        }
+
+    }
+
+}
+
 function drawInsights () {
     drawIssuesActivity();
     drawUntouchedIssues();
     drawInactiveIssues();
     drawAvgIssueTime();
     drawIssuesInvolvement();
+    addMilestoneStatus();
 }
