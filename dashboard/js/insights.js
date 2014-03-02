@@ -1,7 +1,11 @@
+/* globals API_BASE, REPO, API_HOST, $, Handlebars, d3, moment */
+
+'use strict';
+
 function drawIssuesActivity() {
     $.getJSON(API_BASE + '/issues_activity')
         .done(function (json) {
-            data = json.data;
+            var data = json.data;
             var opened = data.opened;
             var closed = data.closed;
             $('#issues-activity').highcharts({
@@ -55,7 +59,7 @@ function drawUntouchedIssues() {
                 issues: data,
                 title: "Untouched Issues",
                 subtitle: "(max. 20 results)"
-            }
+            };
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
@@ -99,7 +103,7 @@ function drawAvgIssueTime() {
 function makeD3Graph(issues_data) {
     var nodes = [];
     var links = [];
-    for (number in issues_data) {
+    for (var number in issues_data) {
         var user_nodes = [];
         var issue = issues_data[number];
         issue.users.forEach(function(user) {
@@ -113,7 +117,7 @@ function makeD3Graph(issues_data) {
         var issue_node = {
             type: 'issue',
             data: issue.issue
-        }
+        };
         nodes.push(issue_node);
 
         // make links
@@ -275,7 +279,7 @@ function addMilestoneStatus() {
                 var row;
                 var delay = false;
 
-                if (idx % 2 == 0) { // two milestones per row
+                if (idx % 2 === 0) { // two milestones per row
                     row = $('<div/>').addClass('row');
                     $milestones.append(row);
                 }
@@ -297,7 +301,7 @@ function addMilestoneStatus() {
                     due: due_date,
                     progress: parseInt(milestone.closed_issues / milestone.open_issues * 100, 10),
                     delay: delay
-                }
+                };
 
                 $('.row:last-child', $milestones).append(template(context));
 
