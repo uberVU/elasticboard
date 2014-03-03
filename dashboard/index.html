@@ -63,7 +63,9 @@
         </div>
 
         <div class="tab hide" id="tab-3">
-            <div id="milestones"></div>
+            <div id="milestones" class="graph-like">
+                <h6 class="graph-title">Milestone breakdown</h6>
+            </div>
             <div class="graph" id="issues-activity"></div>
             <div class="graph" id="avg-issue-time"></div>
             <div class="graph-like" id="untouched-issues"></div>
@@ -224,9 +226,12 @@
 <script type="text/x-handlebars-template" id="insights-milestone">
     <div class="large-6 columns insights-milestone">
         <p class="milestone-title">
-            <strong>{{ title }}</strong>
+            <strong>{{ title }}
+            <span class="color--success"> {{ closed }} closed issues</span>
+            <span class="color--alert"> {{ opened }} open issues</span> 
+            </strong>
             {{#if due }}
-                <span class="{{ warning }} pull-right">{{ due }}</span>
+                <span class="{{ warning }} pull-right">due {{ due }}</span>
             {{else}}
                 <span class="{{ warning }} pull-right">No due date set</span>
             {{/if}}

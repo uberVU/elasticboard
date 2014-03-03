@@ -297,6 +297,8 @@ function addMilestoneStatus() {
                 }
 
                 var context = {
+                    closed: milestone.closed_issues,
+                    opened: milestone.open_issues,
                     title: milestone.title,
                     due: due_date,
                     progress: parseInt(milestone.closed_issues / milestone.open_issues * 100, 10),
