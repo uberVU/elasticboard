@@ -38,8 +38,8 @@ RUN chown root:root /etc/sudoers
 
 USER elasticboard
 
-ADD docker_configs/start.sh /tmp/start.sh
+ADD docker_configs/start.sh /bin/start.sh
 
 # fire away
-ENTRYPOINT ["/tmp/start.sh"]
+ENTRYPOINT ["/bin/start.sh"]
 
