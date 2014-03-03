@@ -301,7 +301,7 @@ function addMilestoneStatus() {
                     opened: milestone.open_issues,
                     title: milestone.title,
                     due: due_date,
-                    progress: parseInt(milestone.closed_issues / milestone.open_issues * 100, 10),
+                    progress: parseInt(milestone.closed_issues / (milestone.closed_issues + milestone.open_issues) * 100, 10),
                     delay: delay
                 };
 
