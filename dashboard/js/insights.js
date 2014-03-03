@@ -306,10 +306,10 @@ function addMilestoneStatus() {
                 };
 
                 $('.row:last-child', $milestones).append(template(context));
-
             });
+        } else {
+            $('.row:last-child', $milestones).append($("<p>No milestones available.</p>"));
         }
-
     }
 
 }
