@@ -13,9 +13,7 @@ EXPOSE 80
 
 # copy nginx configs
 ADD docker_configs/dashboard /etc/nginx/sites-available/dashboard
-ADD docker_configs/elasticsearch /etc/nginx/sites-available/elasticsearch
 RUN ln -s /etc/nginx/sites-available/dashboard /etc/nginx/sites-enabled/dashboard
-RUN ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/elasticsearch
 RUN rm /etc/nginx/sites-enabled/default
 
 RUN chmod o+rx /root
