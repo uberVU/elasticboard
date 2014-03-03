@@ -446,6 +446,7 @@ body {
 
   .insights-milestone .meter {
     text-align: center;
+    padding-top: 2px;
   }
 
 .color--alert {
