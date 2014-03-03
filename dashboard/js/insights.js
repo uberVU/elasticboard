@@ -294,6 +294,7 @@ function addMilestoneStatus() {
                     closed: milestone.closed_issues,
                     opened: milestone.open_issues,
                     title: milestone.title,
+                    url: 'https://github.com/' + REPO + '/issues?state=open&milestone=' + milestone.number,
                     due: due_date,
                     progress: parseInt(milestone.closed_issues / (milestone.closed_issues + milestone.open_issues) * 100, 10),
                     delay: delay

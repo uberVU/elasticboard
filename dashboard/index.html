@@ -227,10 +227,10 @@
 <div class="row">
     <div class="large-9 large-centered small-12 columns insights-milestone">
         <p class="milestone-title">
-            <strong>{{ title }}
+            <strong><a href="{{ url }}">{{ title }}
             <span class="color--success"> {{ closed }} closed issues</span>
             <span class="color--alert"> {{ opened }} open issues</span>
-            </strong>
+            </strong></a>
             {{#if due }}
                 <span class="{{ warning }} pull-right">due {{ due }}</span>
             {{else}}
