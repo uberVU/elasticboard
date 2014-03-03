@@ -219,7 +219,7 @@ network.host: 127.0.0.1
 
 # Set a custom port to listen for HTTP traffic:
 #
-# http.port: 9200
+http.port: 9201
 
 # Set a custom allowed content length:
 #
