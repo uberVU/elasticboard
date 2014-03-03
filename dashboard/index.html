@@ -63,6 +63,9 @@
         </div>
 
         <div class="tab hide" id="tab-3">
+            <div id="milestones" class="graph-like">
+                <h6 class="graph-title">Milestone breakdown</h6>
+            </div>
             <div class="graph" id="issues-activity"></div>
             <div class="graph" id="avg-issue-time"></div>
             <div class="graph-like" id="untouched-issues"></div>
@@ -218,6 +221,39 @@
             <span>Opened {{ ago }} ago</span>
         </div>
     </div>
+</script>
+
+<script type="text/x-handlebars-template" id="insights-milestone">
+<div class="row">
+    <div class="large-9 large-centered small-12 columns insights-milestone">
+        <p class="milestone-title">
+            <strong><a href="{{ url }}">{{ title }}
+            <span class="color--success"> {{ closed }} closed issues</span>
+            <span class="color--alert"> {{ opened }} open issues</span>
+            </strong></a>
+            {{#if due }}
+                <span class="{{ warning }} pull-right">due {{ due }}</span>
+            {{else}}
+                <span class="{{ warning }} pull-right">No due date set</span>
+            {{/if}}
+        </p>
+        {{#if due}}
+            {{#if delay}}
+                <div class="progress large-12 columns alert round">
+                    <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
+                </div>
+            {{else}}
+                <div class="progress large-12 columns success round">
+                    <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
+                </div>
+            {{/if}}
+        {{else}}
+            <div class="progress large-12 columns round">
+                <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
+            </div>
+        {{/if}}
+    </div>
+</div>
 </script>
 
 <script src="/js/jquery.js"></script>

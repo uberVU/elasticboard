@@ -1,7 +1,11 @@
+/* globals API_BASE, REPO, API_HOST, $, Handlebars, d3, moment */
+
+'use strict';
+
 function drawIssuesActivity() {
     $.getJSON(API_BASE + '/issues_activity')
         .done(function (json) {
-            data = json.data;
+            var data = json.data;
             var opened = data.opened;
             var closed = data.closed;
             $('#issues-activity').highcharts({
@@ -55,7 +59,7 @@ function drawUntouchedIssues() {
                 issues: data,
                 title: "Untouched Issues",
                 subtitle: "(max. 20 results)"
-            }
+            };
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
@@ -99,7 +103,7 @@ function drawAvgIssueTime() {
 function makeD3Graph(issues_data) {
     var nodes = [];
     var links = [];
-    for (number in issues_data) {
+    for (var number in issues_data) {
         var user_nodes = [];
         var issue = issues_data[number];
         issue.users.forEach(function(user) {
@@ -113,7 +117,7 @@ function makeD3Graph(issues_data) {
         var issue_node = {
             type: 'issue',
             data: issue.issue
-        }
+        };
         nodes.push(issue_node);
 
         // make links
@@ -254,10 +258,62 @@ function drawIssuesInvolvement() {
         .fail(displayFailMessage);
 }
 
+function addMilestoneStatus() {
+
+    var endpoint = API_HOST + REPO + '/milestones';
+    var $milestones = $('#milestones');
+
+    $.get(endpoint)
+        .success(displayData)
+        .fail(displayFailMessage);
+
+    function displayData(data) {
+
+        if (data.data.length) {
+
+            var template = Handlebars.compile($('#insights-milestone').html());
+
+            $.each(data.data, function(idx, milestone) {
+
+                var due_date = 0;
+                var delay = false;
+
+                if (milestone.due_on) {
+                    var start = moment(new Date());
+                    var end = moment((new Date(milestone.due_on)).getTime());
+                    due_date = start.from(end, true);
+                    if ((new Date(milestone.due_on)).getTime() > (new Date()).getTime()) {
+                        due_date = 'in ' + due_date;
+                    } else {
+                        due_date += ' ago';
+                        delay = true;
+                    }
+                }
+
+                var context = {
+                    closed: milestone.closed_issues,
+                    opened: milestone.open_issues,
+                    title: milestone.title,
+                    url: 'https://github.com/' + REPO + '/issues?state=open&milestone=' + milestone.number,
+                    due: due_date,
+                    progress: parseInt(milestone.closed_issues / (milestone.closed_issues + milestone.open_issues) * 100, 10),
+                    delay: delay
+                };
+
+                $milestones.append(template(context));
+            });
+        } else {
+            $($milestones).append($('<p class="muted text-center">No milestones available.</p>'));
+        }
+    }
+
+}
+
 function drawInsights () {
     drawIssuesActivity();
     drawUntouchedIssues();
     drawInactiveIssues();
     drawAvgIssueTime();
     drawIssuesInvolvement();
+    addMilestoneStatus();
 }
