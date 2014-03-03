@@ -37,15 +37,11 @@ and private repositories).
 
 ###Deploy with docker
 
-1. Build the image:
+1. Download and run the docker image:
 
-     ```sudo docker build -t elasticboard .```
+    ```sudo docker run -v `pwd`:/home/elasticboard -p 8080:80 -p 5000:5000 -i mihneadb/elasticboard /bin/start.sh```
 
-2. Run it:
-
-    ```sudo docker run -v `pwd`:/home/elasticboard -p 8080:80 -p 5000:5000 -i -t elasticboard```
-
-3. No step 3 :smile:. You now have elasticboard running at
+2. There is no step 2 :smile:. You now have elasticboard running at
 [http://localost:8080](http://localhost:8080).
 
 
