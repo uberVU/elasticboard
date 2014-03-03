@@ -42,7 +42,7 @@ USER elasticboard
 ENTRYPOINT true && sudo service elasticsearch start &&\
      sudo service nginx start &&\
      cd /home/elasticboard &&\
-     echo "Waiting 20s for Elasticsearch to start.." &&\ # TODO: make this poll netstat so we don't wait longer than we have to
+     echo "Waiting 20s for Elasticsearch to start.." &&\
      sleep 20 &&\
      python init_rivers.py &&\
      /usr/local/bin/gunicorn -w 4 -b 0.0.0.0:5000 data_processor.api:app
