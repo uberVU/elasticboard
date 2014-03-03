@@ -238,16 +238,16 @@
         </p>
         {{#if due}}
             {{#if delay}}
-                <div class="progress large-12 alert round">
+                <div class="progress large-12 columns alert round">
                     <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
                 </div>
             {{else}}
-                <div class="progress large-12 success round">
+                <div class="progress large-12 columns success round">
                     <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
                 </div>
             {{/if}}
         {{else}}
-            <div class="progress large-12 round">
+            <div class="progress large-12 columns round">
                 <span class="meter" style="width:{{progress}}%">{{progress}}%</span>
             </div>
         {{/if}}
