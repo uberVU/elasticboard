@@ -33,7 +33,13 @@ body {
     padding: 5px;
     margin-bottom: 30px;
     max-height: 38rem;
-    overflow-y: auto;
+    overflow: hidden;
+}
+
+.graph-title {
+  color: white;
+  text-align: center;
+  font-weight: 400;
 }
 
 .full-width {
@@ -419,4 +425,33 @@ body {
     margin: -1px 0 0 0;
     top: 100%;
     left: 0;
+}
+
+.pull-right {
+  float: right;
+}
+
+.insights-milestone {
+  background: #222;
+}
+
+  .milestone-title {
+    padding: .2rem;
+    border-bottom: 1px solid rgb(51, 51, 51);
+  }
+
+  .milestone-title span {
+    font: 12px Lucida Grande,Lucida Sans Unicode,Verdana,Arial,Helvetica,sans-serif;
+  }
+
+  .insights-milestone .meter {
+    text-align: center;
+  }
+
+.color--alert {
+  color: #F04124;
+}
+
+.color--success {
+  color: #5da423;
 }
