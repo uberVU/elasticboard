@@ -28,6 +28,7 @@ ADD docker_configs/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 CMD true && service elasticsearch start &&\
      service nginx start &&\
      cd /tmp/elasticboard &&\
+     python docker_configs/change_host.py config.json &&\
      python init_rivers.py &&\
      /usr/local/bin/gunicorn -w 4 -b 0.0.0.0:5000 data_processor.api:app
 
