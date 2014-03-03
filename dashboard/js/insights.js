@@ -276,13 +276,7 @@ function addMilestoneStatus() {
             $.each(data.data, function(idx, milestone) {
 
                 var due_date = 0;
-                var row;
                 var delay = false;
-
-                if (idx % 2 === 0) { // two milestones per row
-                    row = $('<div/>').addClass('row');
-                    $milestones.append(row);
-                }
 
                 if (milestone.due_on) {
                     var start = moment(new Date());
@@ -305,7 +299,7 @@ function addMilestoneStatus() {
                     delay: delay
                 };
 
-                $('.row:last-child', $milestones).append(template(context));
+                $milestones.append(template(context));
             });
         } else {
             $($milestones).append($('<p class="muted text-center">No milestones available.</p>'));

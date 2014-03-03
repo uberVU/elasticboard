@@ -431,6 +431,10 @@ body {
   float: right;
 }
 
+#milestones .row {
+  margin-bottom: 10px;
+}
+
 .insights-milestone {
   background: #222;
 }

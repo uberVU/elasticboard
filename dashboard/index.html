@@ -224,11 +224,12 @@
 </script>
 
 <script type="text/x-handlebars-template" id="insights-milestone">
+<div class="row">
     <div class="large-9 large-centered small-12 columns insights-milestone">
         <p class="milestone-title">
             <strong>{{ title }}
             <span class="color--success"> {{ closed }} closed issues</span>
-            <span class="color--alert"> {{ opened }} open issues</span> 
+            <span class="color--alert"> {{ opened }} open issues</span>
             </strong>
             {{#if due }}
                 <span class="{{ warning }} pull-right">due {{ due }}</span>
@@ -252,6 +253,7 @@
             </div>
         {{/if}}
     </div>
+</div>
 </script>
 
 <script src="/js/jquery.js"></script>
