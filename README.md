@@ -42,7 +42,7 @@ and private repositories).
     ```sudo docker run -v `pwd`:/home/elasticboard -p 8080:80 -p 5000:5000 -i mihneadb/elasticboard /bin/start.sh```
 
 2. There is no step 2. You now have elasticboard running at
-[http://localost:8080](http://localhost:8080).
+[http://localhost:8080](http://localhost:8080).
 
 
 ###Manual deploy
