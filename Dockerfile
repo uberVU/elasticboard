@@ -45,5 +45,5 @@ ENTRYPOINT true && sudo service elasticsearch start &&\
      echo "Waiting 20s for Elasticsearch to start.." &&\
      sleep 20 &&\
      python init_rivers.py &&\
-     /usr/local/bin/gunicorn -w 4 -b 0.0.0.0:5000 data_processor.api:app
+     /usr/local/bin/gunicorn -k eventlet -w 4 -b 0.0.0.0:5000 data_processor.api:app
 
