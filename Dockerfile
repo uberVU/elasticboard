@@ -9,7 +9,7 @@ RUN pip install -r /root/requirements-pip
 
 EXPOSE 80
 
-# TODO install river
+/usr/share/elasticsearch/bin/plugin -i com.ubervu/elasticsearch-river-github/1.4.2
 
 # copy nginx configs
 ADD docker_configs/dashboard /etc/nginx/sites-available/dashboard
