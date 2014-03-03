@@ -308,7 +308,7 @@ function addMilestoneStatus() {
                 $('.row:last-child', $milestones).append(template(context));
             });
         } else {
-            $('.row:last-child', $milestones).append($("<p>No milestones available.</p>"));
+            $($milestones).append($('<p class="muted text-center">No milestones available.</p>'));
         }
     }
 
