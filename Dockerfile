@@ -21,6 +21,8 @@ RUN chmod o+rx /root
 # es config
 ADD docker_configs/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
+CMD /usr/sbin/useradd --create-home --shell /bin/bash elasticboard
+ADD docker_configs/sudoers /etc/sudoers
 
 # fire away
 CMD true && service elasticsearch start &&\
