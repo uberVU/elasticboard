@@ -12,6 +12,8 @@ You can view an example dashboard
 
 ##Setting it up
 
+###Config file
+
 First, you need to set up your config file:
 
     cp example_config.json config.json
