@@ -78,7 +78,7 @@ body {
     margin:0 0 .2rem 0;
     border: none;
   }
-  
+
   .menu li[data-tab='github']:hover {
     border:none;
   }
@@ -374,20 +374,20 @@ body {
 }
 
 @media (max-width: 1024px) {
-  
+
   #topbar h1 {
     display: block;
     text-align:center;
   }
-  
+
   #repo-select-trigger {
     display: inline-block !important;
   }
-  
+
   #topbar .text-right {
     text-align: center !important;
   }
-  
+
   .menu {
     display: block;
   }
