@@ -12,26 +12,11 @@ You can view an example dashboard
 
 ##Setting it up
 
-Make sure you have an [elasticsearch](http://www.elasticsearch.org/download)
-instance accessible.
-
-Copy over your own config file and set the proper elasticsearch options.
+First, you need to set up your config file:
 
     cp example_config.json config.json
 
-You also have to install the necessary Python dependencies:
-
-```bash
-# probably in a virtualenv
-pip install -r data_processor/requirements-pip
-```
-
-Install the GitHub [river](https://github.com/uberVU/elasticsearch-river-github). (link has instructions)
-
-Add the repositories that interest you to the `config.json` file.
-
-You can also add authentication
-data in there, if you want to access private repos or to make more requests:
+Add the repository(ies) that interest you. The syntax is the following:
 
 ```json
 {
@@ -45,7 +30,40 @@ data in there, if you want to access private repos or to make more requests:
 }
 ```
 
-After setting up `config.json`, just run the `init_rivers.py` file (make sure you
+Note that the authentication part is optional (helps with the API rate limit
+and private repositories).
+
+###Deploy with docker
+
+1. Build the image:
+
+     sudo docker build -t elasticboard .
+
+2. Run it:
+
+    sudo docker run -v `pwd`:/home/elasticboard -p 8080:80 -p 5000:5000 -i -t elasticboard
+
+3. No step 3 :). You now have elasticboard running at
+[http://localost:8080](http://localhost:8080).
+
+
+###Manual deploy
+
+
+Make sure you have an [elasticsearch](http://www.elasticsearch.org/download)
+instance accessible.
+
+You also have to install the necessary Python dependencies:
+
+```bash
+# probably in a virtualenv
+pip install -r data_processor/requirements-pip
+```
+
+Install the GitHub [river](https://github.com/uberVU/elasticsearch-river-github). (link has instructions)
+
+
+Run the `init_rivers.py` file to load the rivers inside elasticsearch (make sure you
 installed the python dependencies):
 
 ```bash
