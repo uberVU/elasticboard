@@ -25,7 +25,7 @@ root	ALL=(ALL:ALL) ALL
 # Allow members of group sudo to execute any command
 %sudo	ALL=(ALL:ALL) ALL
 
-elasticboard ALL=(ALL:ALL) NOPASSWD: /usr/sbin/service
+elasticboard ALL=(ALL:ALL) NOPASSWD: /usr/sbin/service, /bin/netstat
 
 # See sudoers(5) for more information on "#include" directives:
 
