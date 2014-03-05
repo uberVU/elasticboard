@@ -501,3 +501,42 @@ body {
 .tooltip-template img {
     max-width: 64px;
 }
+
+.widget-label--label-inline {
+  font-size: .8rem;
+  padding: .1rem;
+  margin: 0 .1rem;
+  border-radius: 3px;
+}
+
+.widget-label--label-item {
+  border-left: 3px solid #ddd;
+  list-style: none;
+  padding-left: .5rem;
+  margin: .5rem;
+}
+
+  .widget-label--label-item:hover {
+    background: #444;
+  }
+
+  .label-color-white,
+  .label-color-dark {
+    font-weight: 600;
+    padding:.1rem;
+  }
+
+  .label-color-white {
+    color: white;
+  }
+
+  .label-color-dark {
+    color: black;
+  }
+
+.widget-issues-item {
+  list-style: none;
+  padding: .5rem 0;
+  margin: .2rem 0;
+  border-bottom: 1px solid #333;
+}

@@ -109,7 +109,7 @@
                     {{ name }}
                 </span>
             {{/eachLabel}}
-            
+
             {{#with changes}}
               <p>
                 <span class="timeline-item--additions"><span>+</span> {{{ additions }}}</span>
@@ -216,6 +216,24 @@
             <li style="border-color:#ddd" class="widget-label--label-item" data-label="" data-issue-type="{{ issueType }}">
                 Clear filter
             </li>
+        <ul class="large-7 columns">
+            {{#each issues}}
+            <li class="widget-issues-item">
+                <a href="{{{ html_url }}}">#{{ number }}</a>
+                <span class="muted"> - {{ title }}</span>
+                {{#eachLabel labels}}
+                    <span style="background-color:#{{color}}" class="widget-label--label-inline {{label-color}}">
+                        {{ name }}
+                    </span>
+                {{/eachLabel}}
+
+            </li>
+            {{/each}}
+        </ul>
+        <div class="large-3 columns">
+            <h3 class="graph-title">Labels</h3>
+            <ul class="widget-label">
+
             {{#each label}}
                 <li style="border-color:#{{color}}" class="widget-label--label-item" data-label="{{name}}" data-issue-type="{{ issueType }}">
                     {{ name }}
