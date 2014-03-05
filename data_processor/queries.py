@@ -282,3 +282,8 @@ def unassigned_issues(index, label=None):
 
     q = q[:LIMIT]
     return list(q)
+
+def labels(index):
+    q = S().indexes(index).doctypes('LabelData').values_dict()
+    q = all(q)
+    return list(q)
