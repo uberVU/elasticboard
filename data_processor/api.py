@@ -166,6 +166,13 @@ def unassigned_issues(owner, repo):
     issues = queries.unassigned_issues(index, label)
     return jsonify(data=issues)
 
+@app.route('/<owner>/<repo>/labels')
+@crossdomain(origin='*')
+@cached()
+def labels(owner, repo):
+    index = index_name(owner, repo)
+    labels = queries.labels(index)
+    return jsonify(data=labels)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
