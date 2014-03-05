@@ -24,7 +24,7 @@ RUN sed -i 's/MAX_OPEN_FILES=/# MAX_OPEN_FILES=/g' /etc/init.d/elasticsearch
 
 EXPOSE 80 5000
 
-RUN /usr/share/elasticsearch/bin/plugin -i com.ubervu/elasticsearch-river-github/1.4.2
+RUN /usr/share/elasticsearch/bin/plugin -i com.ubervu/elasticsearch-river-github/1.5.1
 
 # copy nginx configs
 ADD docker_configs/dashboard /etc/nginx/sites-available/dashboard
