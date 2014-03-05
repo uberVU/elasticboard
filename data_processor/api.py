@@ -152,7 +152,7 @@ def issues_involvement(owner, repo):
 @app.route('/<owner>/<repo>/milestones')
 @crossdomain(origin='*')
 @cached()
-def milestone(owner, repo):
+def milestones(owner, repo):
     index = index_name(owner, repo)
     milestones = queries.milestones(index)
     return jsonify(data=milestones)
