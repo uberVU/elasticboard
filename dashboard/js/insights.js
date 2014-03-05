@@ -349,7 +349,7 @@ function extractLight(c) {
     var b = (rgb >>  0) & 0xff;
 
     var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    return luma < 40;
+    return luma < 70;
 }
 
 function drawInsights () {
