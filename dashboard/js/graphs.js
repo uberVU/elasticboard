@@ -99,10 +99,11 @@ function getUserIssues () {
 
 }
 
-function makeStackedSeries(data) {
+function makeStackedSeries(data, valueKey) {
+    // find all the series
     var seriesNames = [];
     for (var i = 0; i < data.length; ++i) {
-        var values = data[i].value;
+        var values = data[i][valueKey];
         var keys = Object.keys(values);
         for (var j = 0; j < keys.length; ++j) {
             var category = keys[j];
@@ -112,6 +113,7 @@ function makeStackedSeries(data) {
         }
     }
 
+    // get the actual values
     var series = [];
     for (var i = 0; i < seriesNames.length; ++i) {
         var s = {
@@ -119,7 +121,7 @@ function makeStackedSeries(data) {
             data: []
         };
         for (var j = 0; j < data.length; ++j) {
-            var d = data[j].value;
+            var d = data[j][valueKey];
             if (d[s.name]) {
                 s.data.push(d[s.name]);
             } else {
@@ -180,7 +182,7 @@ function makeStackedGraph(container, options) {
 function drawActivityGraph() {
     $.getJSON(API_BASE + '/total_events_monthly')
         .done(function(data) {
-            var series = makeStackedSeries(data.data);
+            var series = makeStackedSeries(data.data, 'value');
             var categories = data.data.map(function (e) {
                 return e.month;
             });
