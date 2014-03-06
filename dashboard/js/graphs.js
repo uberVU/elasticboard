@@ -131,10 +131,10 @@ function makeStackedSeries(data) {
     return series;
 }
 
-function makeStackedAreaGraph(container, options) {
-    $(container).highcharts({
+function makeStackedGraph(container, options) {
+   var graph = {
         chart: {
-            type: 'column'
+            type: options.type
         },
         title: {
             text: options.title
@@ -162,19 +162,19 @@ function makeStackedAreaGraph(container, options) {
             valueSuffix: ' ' + options.suffix,
             formatter: options.tooltipFormatter
         },
-        plotOptions: {
-            column: {
-                stacking: 'normal',
-                fillOpacity: 1,
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
-                    enabled: false
-                }
-            }
-        },
+        plotOptions: {},
         series: options.series
-    });
+    };
+    graph.plotOptions[options.type] = {
+        stacking: 'normal',
+            fillOpacity: 1,
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+            enabled: false
+        }
+    };
+    $(container).highcharts(graph);
 }
 
 function drawActivityGraph() {
@@ -186,6 +186,7 @@ function drawActivityGraph() {
             });
 
             var options = {
+                type: 'column',
                 title: "Activity",
                 subtitle: "Total monthly events",
                 yTitle: 'Events',
@@ -198,7 +199,7 @@ function drawActivityGraph() {
                     return label.substr(0, idx);
                 }
             };
-            makeStackedAreaGraph('#total-events-monthly', options);
+            makeStackedGraph('#total-events-monthly', options);
         })
         .fail(displayFailMessage);
 }
