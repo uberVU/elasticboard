@@ -10,6 +10,11 @@ for repository in CONFIG['repositories']:
     }
     index_name = '%s&%s' % (repository['owner'], repository['repository'])
     url = '/_river/%s/_meta' % index_name
+    try:
+        # delete it first if it already existed
+        ES.transport.perform_request(url=url[:-5], method='DELETE')
+    except Exception as e:
+        pass
     ES.transport.perform_request(url=url, method='PUT', body=body)
     count += 1
 
