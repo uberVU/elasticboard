@@ -79,7 +79,7 @@ def most_active_people(index, start=None, end=None):
     """
     q = S().indexes(index)
     q = apply_time_filter(q, start, end)
-    return q.facet('actor.login').facet_counts()['actor.login']
+    return q.facet('actor.login', filtered=True).facet_counts()['actor.login']
 
 def total_events(index, start=None, end=None):
     """
@@ -96,7 +96,7 @@ def most_active_issues(index, start=None, end=None):
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q = apply_time_filter(q, start, end)
-    return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
+    return q.facet('payload.issue.number', filtered=True).facet_counts()['payload.issue.number']
 
 def untouched_issues(index):
     """
