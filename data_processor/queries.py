@@ -85,10 +85,24 @@ def total_events(index, start=None, end=None):
     """
     Returns the number of total events for the given time
     interval, or for all the data if no interval is given.
+
+    * they are grouped by event type, like:
+    {
+        "createevent": 11,
+        "issuecommentevent": 32,
+        "issuesevent": 15,
+        "pushevent": 29,
+        "total": 98,
+        "watchevent": 11
+      }
     """
     q = S().indexes(index)
-    q = apply_time_filter(q, start, end)
-    return q.count()
+    q, filtered = apply_time_filter(q, start, end)
+    q = q.facet('type', size=100, filtered=filtered).facet_counts()['type']
+    counts = {}
+    for c in q:
+        counts[c['term']] = c['count']
+    return counts
 
 def most_active_issues(index, start=None, end=None):
     """

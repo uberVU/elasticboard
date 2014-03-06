@@ -99,6 +99,110 @@ function getUserIssues () {
 
 }
 
+function makeStackedSeries(data) {
+    var seriesNames = [];
+    for (var i = 0; i < data.length; ++i) {
+        var values = data[i].value;
+        var keys = Object.keys(values);
+        for (var j = 0; j < keys.length; ++j) {
+            var category = keys[j];
+            if (seriesNames.indexOf(category) === -1) {
+                seriesNames.push(category);
+            }
+        }
+    }
+
+    var series = [];
+    for (var i = 0; i < seriesNames.length; ++i) {
+        var s = {
+            name: seriesNames[i],
+            data: []
+        };
+        for (var j = 0; j < data.length; ++j) {
+            var d = data[j].value;
+            if (d[s.name]) {
+                s.data.push(d[s.name]);
+            } else {
+                s.data.push(0);
+            }
+        }
+        series.push(s);
+    }
+    return series;
+}
+
+function makeStackedAreaGraph(container, options) {
+    $(container).highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: options.title
+        },
+        subtitle: {
+            text: options.subtitle
+        },
+        xAxis: {
+            categories: options.categories,
+            title: {
+                enabled: true
+            }
+        },
+        yAxis: {
+            title: {
+                text: options.yTitle
+            },
+            min: 0
+        },
+        legend: {
+            labelFormatter: options.legendFormatter
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' ' + options.suffix,
+            formatter: options.tooltipFormatter
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                fillOpacity: 1,
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        series: options.series
+    });
+}
+
+function drawActivityGraph() {
+    $.getJSON(API_BASE + '/total_events_monthly')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data);
+            var categories = data.data.map(function (e) {
+                return e.month;
+            });
+
+            var options = {
+                title: "Activity",
+                subtitle: "Total monthly events",
+                yTitle: 'Events',
+                suffix: 'events',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    var label = this.name;
+                    var idx = label.indexOf("event");
+                    return label.substr(0, idx);
+                }
+            };
+            makeStackedAreaGraph('#total-events-monthly', options);
+        })
+        .fail(displayFailMessage);
+}
+
 function drawGraphs() {
     makeXYGraph('#most-active-people', {
         endpoint: '/most_active_people',
@@ -112,16 +216,7 @@ function drawGraphs() {
         label: 'events'
     });
 
-    makeXYGraph('#total-events-monthly', {
-        endpoint: '/total_events_monthly',
-        type: 'area',
-        title: "Activity",
-        subtitle: "Total monthly events",
-        keyName: 'month',
-        valueName: 'value',
-        yTitle: 'Events',
-        label: 'events'
-    });
+    drawActivityGraph();
 
     makeXYGraph('#most-active-issues', {
         endpoint: '/most_active_issues',
