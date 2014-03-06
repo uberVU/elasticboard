@@ -84,7 +84,6 @@ function getUserIssues () {
     if (username) {
         $.get(API_BASE + username +'/issues_assigned')
             .success(function (data) {
-                console.log(data);
                 var source   = $("#user-issues").html();
                 var template = Handlebars.compile(source);
                 var issues = data.data.length ? data.data.join('') : 'No issues assigned to this user';
