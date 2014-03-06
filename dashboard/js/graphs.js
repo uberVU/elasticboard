@@ -99,10 +99,11 @@ function getUserIssues () {
 
 }
 
-function makeStackedSeries(data) {
+function makeStackedSeries(data, valueKey) {
+    // find all the series
     var seriesNames = [];
     for (var i = 0; i < data.length; ++i) {
-        var values = data[i].value;
+        var values = data[i][valueKey];
         var keys = Object.keys(values);
         for (var j = 0; j < keys.length; ++j) {
             var category = keys[j];
@@ -112,6 +113,7 @@ function makeStackedSeries(data) {
         }
     }
 
+    // get the actual values
     var series = [];
     for (var i = 0; i < seriesNames.length; ++i) {
         var s = {
@@ -119,7 +121,7 @@ function makeStackedSeries(data) {
             data: []
         };
         for (var j = 0; j < data.length; ++j) {
-            var d = data[j].value;
+            var d = data[j][valueKey];
             if (d[s.name]) {
                 s.data.push(d[s.name]);
             } else {
@@ -131,10 +133,10 @@ function makeStackedSeries(data) {
     return series;
 }
 
-function makeStackedAreaGraph(container, options) {
-    $(container).highcharts({
+function makeStackedGraph(container, options) {
+   var graph = {
         chart: {
-            type: 'column'
+            type: options.type
         },
         title: {
             text: options.title
@@ -162,30 +164,31 @@ function makeStackedAreaGraph(container, options) {
             valueSuffix: ' ' + options.suffix,
             formatter: options.tooltipFormatter
         },
-        plotOptions: {
-            column: {
-                stacking: 'normal',
-                fillOpacity: 1,
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
-                    enabled: false
-                }
-            }
-        },
+        plotOptions: {},
         series: options.series
-    });
+    };
+    graph.plotOptions[options.type] = {
+        stacking: 'normal',
+            fillOpacity: 1,
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+            enabled: false
+        }
+    };
+    $(container).highcharts(graph);
 }
 
 function drawActivityGraph() {
     $.getJSON(API_BASE + '/total_events_monthly')
         .done(function(data) {
-            var series = makeStackedSeries(data.data);
+            var series = makeStackedSeries(data.data, 'value');
             var categories = data.data.map(function (e) {
                 return e.month;
             });
 
             var options = {
+                type: 'column',
                 title: "Activity",
                 subtitle: "Total monthly events",
                 yTitle: 'Events',
@@ -198,24 +201,40 @@ function drawActivityGraph() {
                     return label.substr(0, idx);
                 }
             };
-            makeStackedAreaGraph('#total-events-monthly', options);
+            makeStackedGraph('#total-events-monthly', options);
+        })
+        .fail(displayFailMessage);
+}
+
+function drawActivePeopleGraph() {
+    $.getJSON(API_BASE + '/most_active_people')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data, 'events');
+            var categories = data.data.map(function (e) {
+                return e.login;
+            });
+
+            var options = {
+                type: 'bar',
+                title: "Activity",
+                subtitle: "Total monthly events",
+                yTitle: 'Events',
+                suffix: 'events',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    var label = this.name;
+                    var idx = label.indexOf("event");
+                    return label.substr(0, idx);
+                }
+            };
+            makeStackedGraph('#most-active-people', options);
         })
         .fail(displayFailMessage);
 }
 
 function drawGraphs() {
-    makeXYGraph('#most-active-people', {
-        endpoint: '/most_active_people',
-        type: 'bar',
-        title: "Most active people",
-        keyName: function (e) {
-            return makeLink("http://github.com/" + e.term, e.term);
-        },
-        valueName: 'count',
-        yTitle: 'Events',
-        label: 'events'
-    });
-
+    drawActivePeopleGraph();
     drawActivityGraph();
 
     makeXYGraph('#most-active-issues', {

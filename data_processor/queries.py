@@ -72,14 +72,34 @@ def past_n_months(index, query, n):
 
 def most_active_people(index, start=None, end=None):
     """
-    Finds the 10 most active users - as actors in all the events.
+    Finds the 10 most active users - as actors in all the events,
+    and the event counts.
 
     Returns a list of dicts like:
-    {'count': N, 'term': NAME}
+     {'events': {u'watchevent': 1}, 'login': u'someone'},
     """
     q = S().indexes(index)
     q, filtered = apply_time_filter(q, start, end)
-    return q.facet('actor.login', filtered=filtered).facet_counts()['actor.login']
+    people = q.facet('actor.login', size=10, filtered=filtered).facet_counts()['actor.login']
+    people = [p['term'] for p in people]
+
+    data = []
+    for p in people:
+        events = S().indexes(index)
+        events, _ = apply_time_filter(q, start, end)
+        events = events \
+            .filter(**{'actor.login': p}) \
+            .facet('type', size=100, filtered=True).facet_counts()['type']
+
+        counts = {}
+        for c in events:
+            counts[c['term']] = c['count']
+        data.append({
+            'login': p,
+            'events': counts
+        })
+
+    return data
 
 def total_events(index, start=None, end=None):
     """
