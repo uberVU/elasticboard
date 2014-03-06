@@ -216,8 +216,8 @@ function drawActivePeopleGraph() {
 
             var options = {
                 type: 'bar',
-                title: "Activity",
-                subtitle: "Total monthly events",
+                title: "Most active people",
+                subtitle: "By number of events",
                 yTitle: 'Events',
                 suffix: 'events',
                 series: series,
