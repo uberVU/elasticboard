@@ -206,19 +206,35 @@ function drawActivityGraph() {
         .fail(displayFailMessage);
 }
 
-function drawGraphs() {
-    makeXYGraph('#most-active-people', {
-        endpoint: '/most_active_people',
-        type: 'bar',
-        title: "Most active people",
-        keyName: function (e) {
-            return makeLink("http://github.com/" + e.term, e.term);
-        },
-        valueName: 'count',
-        yTitle: 'Events',
-        label: 'events'
-    });
+function drawActivePeopleGraph() {
+    $.getJSON(API_BASE + '/most_active_people')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data, 'events');
+            var categories = data.data.map(function (e) {
+                return e.login;
+            });
 
+            var options = {
+                type: 'bar',
+                title: "Activity",
+                subtitle: "Total monthly events",
+                yTitle: 'Events',
+                suffix: 'events',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    var label = this.name;
+                    var idx = label.indexOf("event");
+                    return label.substr(0, idx);
+                }
+            };
+            makeStackedGraph('#most-active-people', options);
+        })
+        .fail(displayFailMessage);
+}
+
+function drawGraphs() {
+    drawActivePeopleGraph();
     drawActivityGraph();
 
     makeXYGraph('#most-active-issues', {
