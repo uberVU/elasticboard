@@ -38,10 +38,10 @@ def apply_time_filter(query, start, end, field='created_at'):
     start, end = fit_time_range(start, end)
     if start and end:
         if field == 'created_at':
-            return query.filter(created_at__range=(start, end))
+            return query.filter(created_at__range=(start, end)), True
         elif field == 'closed_at':
-            return query.filter(closed_at__range=(start, end))
-    return query
+            return query.filter(closed_at__range=(start, end)), True
+    return query, False
 
 def past_n_months(index, query, n):
     """
@@ -78,25 +78,39 @@ def most_active_people(index, start=None, end=None):
     {'count': N, 'term': NAME}
     """
     q = S().indexes(index)
-    q = apply_time_filter(q, start, end)
-    return q.facet('actor.login').facet_counts()['actor.login']
+    q, filtered = apply_time_filter(q, start, end)
+    return q.facet('actor.login', filtered=filtered).facet_counts()['actor.login']
 
 def total_events(index, start=None, end=None):
     """
     Returns the number of total events for the given time
     interval, or for all the data if no interval is given.
+
+    * they are grouped by event type, like:
+    {
+        "createevent": 11,
+        "issuecommentevent": 32,
+        "issuesevent": 15,
+        "pushevent": 29,
+        "total": 98,
+        "watchevent": 11
+      }
     """
     q = S().indexes(index)
-    q = apply_time_filter(q, start, end)
-    return q.count()
+    q, filtered = apply_time_filter(q, start, end)
+    q = q.facet('type', size=100, filtered=filtered).facet_counts()['type']
+    counts = {}
+    for c in q:
+        counts[c['term']] = c['count']
+    return counts
 
 def most_active_issues(index, start=None, end=None):
     """
     Finds the 10 most active issues - by total number of events.
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
-    q = apply_time_filter(q, start, end)
-    return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
+    q, filtered = apply_time_filter(q, start, end)
+    return q.facet('payload.issue.number', filtered=filtered).facet_counts()['payload.issue.number']
 
 def untouched_issues(index):
     """
@@ -163,7 +177,7 @@ def issue_events_count(index, action, start=None, end=None):
     else:
         field = 'closed_at'
         q = q.filter(state='closed')
-    q = apply_time_filter(q, start, end, field)
+    q, filtered = apply_time_filter(q, start, end, field)
 
     return q.count()
 
@@ -197,7 +211,7 @@ def avg_issue_time(index, start=None, end=None):
     Average time from opening until closing for issues in the given timeframe.
     """
     q = S().indexes(index).doctypes('IssueData').filter(state='closed')
-    q = apply_time_filter(q, start, end, field='closed_at')
+    q, filtered = apply_time_filter(q, start, end, field='closed_at')
     issues = q.values_dict()
     issues = all(issues)
 
@@ -222,7 +236,7 @@ def issues_involvement(index, start=None, end=None):
     ! only for the 10 most popular during this time period
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
-    q = apply_time_filter(q, start, end)
+    q, filtered = apply_time_filter(q, start, end)
     q = all(q)
 
     active_issues = most_active_issues(index, start, end)
