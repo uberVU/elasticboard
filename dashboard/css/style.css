@@ -460,3 +460,7 @@ body {
 .color--success {
   color: #5da423;
 }
+
+.tooltip-template img {
+    max-width: 64px;
+}
