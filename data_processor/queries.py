@@ -98,7 +98,7 @@ def most_active_issues(index, start=None, end=None):
     q = apply_time_filter(q, start, end)
     return q.facet('payload.issue.number').facet_counts()['payload.issue.number']
 
-def untouched_issues(index):
+def untouched_issues(index, label):
     """
     Open issues that haven't seen any action (updated_at == created_at).
     max LIMIT results
@@ -108,6 +108,17 @@ def untouched_issues(index):
     issues = all(issues)
     untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
     untouched = untouched[:LIMIT]
+
+    if label:
+        # filter out the ones that don't have {label} as a label
+        new_q = []
+        for issue in untouched:
+            for label_item in issue['labels']:
+                if label_item['name'] == label:
+                    new_q.append(issue)
+                    break
+        untouched = new_q
+
     return untouched
 
 def issues_assigned_to(index, login):
@@ -178,7 +189,7 @@ def pulls_count(index):
     q = S().indexes(index).doctypes('PullRequestData')
     return q.count()
 
-def inactive_issues(index):
+def inactive_issues(index, label):
     """
     Open issues that haven't seen any activity in the past 2 weeks.
     max LIMIT results
@@ -190,6 +201,17 @@ def inactive_issues(index):
                 .filter(updated_at__lt=limit) \
                 .values_dict()
     issues = issues[:LIMIT]
+
+    if label:
+        # filter out the ones that don't have {label} as a label
+        new_q = []
+        for issue in issues:
+            for label_item in issue['labels']:
+                if label_item['name'] == label:
+                    new_q.append(issue)
+                    break
+        issues = new_q
+
     return list(issues)
 
 def avg_issue_time(index, start=None, end=None):
