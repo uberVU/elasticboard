@@ -154,6 +154,16 @@ def untouched_issues(index, label):
     untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
     untouched = untouched[:LIMIT]
 
+    if label:
+        # filter out the ones that don't have {label} as a label
+        new_q = []
+        for issue in untouched:
+            for label_item in issue['labels']:
+                if label_item['name'] == label:
+                    new_q.append(issue)
+                    break
+        untouched = new_q
+
     return untouched
 
 def issues_assigned_to(index, login):
@@ -248,6 +258,17 @@ def inactive_issues(index, label):
         issues = new_q
 
     issues = issues[:LIMIT]
+
+    if label:
+        # filter out the ones that don't have {label} as a label
+        new_q = []
+        for issue in issues:
+            for label_item in issue['labels']:
+                if label_item['name'] == label:
+                    new_q.append(issue)
+                    break
+        issues = new_q
+
     return list(issues)
 
 def avg_issue_time(index, start=None, end=None):
