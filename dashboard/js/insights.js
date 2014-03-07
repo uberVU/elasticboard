@@ -65,42 +65,70 @@ function drawIssuesActivity() {
 
 var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
 
-function drawUntouchedIssues(labels) {
+function drawUntouchedIssues(labels, label) {
+    var url = API_BASE + '/untouched_issues';
+    if (label) url +=  '?label=' + label;
 
-    $.getJSON(API_BASE + '/untouched_issues')
+    $.getJSON(url)
         .done(function(json) {
             var data = json.data;
-            var context = {
-                issues: data,
-                title: "Untouched Issues",
-                subtitle: "(max. 20 results)",
-                label: labels.data,
-                issueType: 'untouched'
-            };
+            if (!data.length) {
+                var context = {
+                    issues: [{
+                        title: 'No issues matching your request'
+                    }],
+                    title: "Untouched Issues",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'untouched'
+                };
+            } else {
+                var context = {
+                    issues: data,
+                    title: "Untouched Issues",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'untouched'
+                };
+            }
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
         .fail(displayFailMessage)
         .complete(function() {
 
-            $('.widget-label--label-item').on('click', function() {
-                drawInactiveIssues(labels.data, $(this).data('label'));
+            $('#untouched-issues .widget-label--label-item').on('click', function() {
+                drawUntouchedIssues(labels, $(this).data('label'));
             });
 
         });
 }
 
-function drawInactiveIssues(labels) {
-    console.log(labels.data);
-    $.getJSON(API_BASE + '/inactive_issues')
+function drawInactiveIssues(labels, label) {
+    var url = API_BASE + '/inactive_issues';
+    if (label) url +=  '?label=' + label;
+
+    $.getJSON(url)
         .done(function(json) {
             var data = json.data;
-            var context = {
-                issues: data,
-                title: "Inactive Issues (2 weeks)",
-                subtitle: "(max. 20 results)",
-                label: labels.data,
-                issueType: 'inactive'
+            if (!data.length) {
+                var context = {
+                    issues: [{
+                        title: 'No issues matching your request'
+                    }],
+                    title: "Inactive Issues (2 weeks)",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'inactive'
+                }
+            } else {
+                var context = {
+                    issues: data,
+                    title: "Inactive Issues (2 weeks)",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'inactive'
+                }
             }
             var $list = $(issuesListTemplate(context));
             $('#inactive-issues').empty().append($list);
@@ -108,8 +136,8 @@ function drawInactiveIssues(labels) {
         .fail(displayFailMessage)
         .complete(function() {
 
-            $('.widget-label--label-item').on('click', function() {
-                drawInactiveIssues(labels.data, $(this).data('label'));
+            $('#inactive-issues .widget-label--label-item').on('click', function() {
+                drawInactiveIssues(labels, $(this).data('label'));
             });
 
         });
@@ -354,13 +382,11 @@ function extractLight(c) {
 
 function drawInsights () {
     drawIssuesActivity();
-
-    $.get('http://elasticboard.mihneadb.net:5000/ubervu/elasticboard/labels')
+    $.get(API_BASE + '/labels')
         .success(function (labels) {
             drawUntouchedIssues(labels);
             drawInactiveIssues(labels);
         });
-    
     drawAvgIssueTime();
     drawIssuesInvolvement();
     addMilestoneStatus();
