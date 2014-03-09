@@ -106,18 +106,19 @@ def untouched_issues(index, label):
     issues = S().indexes(index).doctypes('IssueData') \
                 .filter(state='open').values_dict()
     issues = all(issues)
-    untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
-    untouched = untouched[:LIMIT]
 
     if label:
         # filter out the ones that don't have {label} as a label
         new_q = []
-        for issue in untouched:
+        for issue in issues:
             for label_item in issue['labels']:
                 if label_item['name'] == label:
                     new_q.append(issue)
                     break
-        untouched = new_q
+        issues = new_q
+
+    untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
+    untouched = untouched[:LIMIT]
 
     return untouched
 
@@ -200,8 +201,8 @@ def inactive_issues(index, label):
                 .filter(state='open') \
                 .filter(updated_at__lt=limit) \
                 .values_dict()
-    issues = issues[:LIMIT]
 
+    issues = all(issues)
     if label:
         # filter out the ones that don't have {label} as a label
         new_q = []
@@ -212,6 +213,7 @@ def inactive_issues(index, label):
                     break
         issues = new_q
 
+    issues = issues[:LIMIT]
     return list(issues)
 
 def avg_issue_time(index, start=None, end=None):
