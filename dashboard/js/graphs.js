@@ -84,7 +84,6 @@ function getUserIssues () {
     if (username) {
         $.get(API_BASE + username +'/issues_assigned')
             .success(function (data) {
-                console.log(data);
                 var source   = $("#user-issues").html();
                 var template = Handlebars.compile(source);
                 var issues = data.data.length ? data.data.join('') : 'No issues assigned to this user';
@@ -100,29 +99,143 @@ function getUserIssues () {
 
 }
 
-function drawGraphs() {
-    makeXYGraph('#most-active-people', {
-        endpoint: '/most_active_people',
-        type: 'bar',
-        title: "Most active people",
-        keyName: function (e) {
-            return makeLink("http://github.com/" + e.term, e.term);
-        },
-        valueName: 'count',
-        yTitle: 'Events',
-        label: 'events'
-    });
+function makeStackedSeries(data, valueKey) {
+    // find all the series
+    var seriesNames = [];
+    for (var i = 0; i < data.length; ++i) {
+        var values = data[i][valueKey];
+        var keys = Object.keys(values);
+        for (var j = 0; j < keys.length; ++j) {
+            var category = keys[j];
+            if (seriesNames.indexOf(category) === -1) {
+                seriesNames.push(category);
+            }
+        }
+    }
 
-    makeXYGraph('#total-events-monthly', {
-        endpoint: '/total_events_monthly',
-        type: 'area',
-        title: "Activity",
-        subtitle: "Total monthly events",
-        keyName: 'month',
-        valueName: 'value',
-        yTitle: 'Events',
-        label: 'events'
-    });
+    // get the actual values
+    var series = [];
+    for (var i = 0; i < seriesNames.length; ++i) {
+        var s = {
+            name: seriesNames[i],
+            data: []
+        };
+        for (var j = 0; j < data.length; ++j) {
+            var d = data[j][valueKey];
+            if (d[s.name]) {
+                s.data.push(d[s.name]);
+            } else {
+                s.data.push(0);
+            }
+        }
+        series.push(s);
+    }
+    return series;
+}
+
+function makeStackedGraph(container, options) {
+   var graph = {
+        chart: {
+            type: options.type
+        },
+        title: {
+            text: options.title
+        },
+        subtitle: {
+            text: options.subtitle
+        },
+        xAxis: {
+            categories: options.categories,
+            title: {
+                enabled: true
+            }
+        },
+        yAxis: {
+            title: {
+                text: options.yTitle
+            },
+            min: 0
+        },
+        legend: {
+            labelFormatter: options.legendFormatter
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' ' + options.suffix,
+            formatter: options.tooltipFormatter
+        },
+        plotOptions: {},
+        series: options.series
+    };
+    graph.plotOptions[options.type] = {
+        stacking: 'normal',
+            fillOpacity: 1,
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+            enabled: false
+        }
+    };
+    $(container).highcharts(graph);
+}
+
+function drawActivityGraph() {
+    $.getJSON(API_BASE + '/total_events_monthly')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data, 'value');
+            var categories = data.data.map(function (e) {
+                return e.month;
+            });
+
+            var options = {
+                type: 'column',
+                title: "Activity",
+                subtitle: "Total monthly events",
+                yTitle: 'Events',
+                suffix: 'events',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    var label = this.name;
+                    var idx = label.indexOf("event");
+                    return label.substr(0, idx);
+                }
+            };
+            makeStackedGraph('#total-events-monthly', options);
+        })
+        .fail(displayFailMessage);
+}
+
+function drawActivePeopleGraph() {
+    $.getJSON(API_BASE + '/most_active_people')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data, 'events');
+            var categories = data.data.map(function (e) {
+                return e.login;
+            });
+
+            var options = {
+                type: 'bar',
+                title: "Most active people",
+                subtitle: "By number of events",
+                yTitle: 'Events',
+                suffix: 'events',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    var label = this.name;
+                    var idx = label.indexOf("event");
+                    return label.substr(0, idx);
+                }
+            };
+            makeStackedGraph('#most-active-people', options);
+        })
+        .fail(displayFailMessage);
+}
+
+function drawGraphs() {
+    drawActivePeopleGraph();
+    drawActivityGraph();
 
     makeXYGraph('#most-active-issues', {
         endpoint: '/most_active_issues',

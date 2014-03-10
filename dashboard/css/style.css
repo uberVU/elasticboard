@@ -459,6 +459,7 @@ body {
   color: #5da423;
 }
 
+<<<<<<< HEAD
 .widget-label--label-inline {
   font-size: .8rem;
   padding: .1rem;
@@ -496,4 +497,7 @@ body {
   padding: .5rem 0;
   margin: .2rem 0;
   border-bottom: 1px solid #333;
+
+.tooltip-template img {
+    max-width: 64px;
 }
