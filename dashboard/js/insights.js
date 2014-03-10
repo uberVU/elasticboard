@@ -352,6 +352,11 @@ function drawInsights () {
                 endpoint: '/inactive_issues',
                 title: "Untouched Issues"
             });
+            drawIssuesWidget(labels, {
+                selector: '#unassigned-issues',
+                endpoint: '/unassigned_issues',
+                title: "Unassigned Issues"
+            });
         });
     drawAvgIssueTime();
     drawIssuesInvolvement();
