@@ -496,6 +496,7 @@ body {
   padding: .5rem 0;
   margin: .2rem 0;
   border-bottom: 1px solid #333;
+}
 
 .tooltip-template img {
     max-width: 64px;
@@ -538,4 +539,9 @@ body {
   padding: .5rem 0;
   margin: .2rem 0;
   border-bottom: 1px solid #333;
+}
+
+.widget-label {
+    overflow-y: auto;
+    max-height: 38rem;
 }
