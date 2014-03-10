@@ -65,89 +65,39 @@ function drawIssuesActivity() {
 
 var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
 
-function drawUntouchedIssues(labels, label) {
+function drawIssuesWidget(labels, options, label) {
     labels.data.sort(function (a, b) {
         return a.name.toLowerCase() >= b.name.toLowerCase();
     });
 
-    var url = API_BASE + '/untouched_issues';
-    if (label) url +=  '?label=' + label;
+    var url = API_BASE + options.endpoint;
+    if (label) {
+        url +=  '?label=' + label;
+    }
 
     $.getJSON(url)
         .done(function(json) {
             var data = json.data;
+            var context = {
+                title: options.title,
+                subtitle: "(max. 20 results)",
+                label: labels.data
+            }
             if (!data.length) {
-                var context = {
-                    issues: [{
-                        title: 'No issues matching your request'
-                    }],
-                    title: "Untouched Issues",
-                    subtitle: "(max. 20 results)",
-                    label: labels.data,
-                    issueType: 'untouched'
-                };
+                context.issues = [{
+                    title: 'No issues matching your request'
+                }];
             } else {
-                var context = {
-                    issues: data,
-                    title: "Untouched Issues",
-                    subtitle: "(max. 20 results)",
-                    label: labels.data,
-                    issueType: 'untouched'
-                };
+                context.issues = data;
             }
             var $list = $(issuesListTemplate(context));
-            $('#untouched-issues').empty().append($list);
+            $(options.selector).empty().append($list);
         })
         .fail(displayFailMessage)
         .complete(function() {
-
-            $('#untouched-issues .widget-label--label-item').on('click', function() {
-                drawUntouchedIssues(labels, $(this).data('label'));
+            $(options.selector + ' .widget-label--label-item').on('click', function() {
+                drawIssuesWidget(labels, options, $(this).data('label'));
             });
-
-        });
-}
-
-function drawInactiveIssues(labels, label) {
-    labels.data.sort(function (a, b) {
-        return a.name.toLowerCase() >= b.name.toLowerCase();
-    });
-
-    var url = API_BASE + '/inactive_issues';
-    if (label) url +=  '?label=' + label;
-
-    $.getJSON(url)
-        .done(function(json) {
-            var data = json.data;
-            if (!data.length) {
-                var context = {
-                    issues: [{
-                        title: 'No issues matching your request'
-                    }],
-                    title: "Inactive Issues (2 weeks)",
-                    subtitle: "(max. 20 results)",
-                    label: labels.data,
-                    issueType: 'inactive'
-                }
-            } else {
-                var context = {
-                    issues: data,
-                    title: "Inactive Issues (2 weeks)",
-                    subtitle: "(max. 20 results)",
-                    label: labels.data,
-                    issueType: 'inactive'
-                }
-            }
-            var $list = $(issuesListTemplate(context));
-            $('#inactive-issues').empty().append($list);
-        })
-        .fail(displayFailMessage)
-        .complete(function() {
-
-            $('#inactive-issues .widget-label--label-item').on('click', function() {
-                drawInactiveIssues(labels, $(this).data('label'));
-            });
-
         });
 }
 
@@ -392,8 +342,16 @@ function drawInsights () {
     drawIssuesActivity();
     $.get(API_BASE + '/labels')
         .success(function (labels) {
-            drawUntouchedIssues(labels);
-            drawInactiveIssues(labels);
+            drawIssuesWidget(labels, {
+                selector: '#untouched-issues',
+                endpoint: '/untouched_issues',
+                title: "Inactive Issues (2 weeks)"
+            });
+            drawIssuesWidget(labels, {
+                selector: '#inactive-issues',
+                endpoint: '/inactive_issues',
+                title: "Untouched Issues"
+            });
         });
     drawAvgIssueTime();
     drawIssuesInvolvement();
