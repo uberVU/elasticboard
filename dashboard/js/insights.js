@@ -66,6 +66,10 @@ function drawIssuesActivity() {
 var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
 
 function drawUntouchedIssues(labels, label) {
+    labels.data.sort(function (a, b) {
+        return a.name.toLowerCase() >= b.name.toLowerCase();
+    });
+
     var url = API_BASE + '/untouched_issues';
     if (label) url +=  '?label=' + label;
 
@@ -105,6 +109,10 @@ function drawUntouchedIssues(labels, label) {
 }
 
 function drawInactiveIssues(labels, label) {
+    labels.data.sort(function (a, b) {
+        return a.name.toLowerCase() >= b.name.toLowerCase();
+    });
+
     var url = API_BASE + '/inactive_issues';
     if (label) url +=  '?label=' + label;
 
