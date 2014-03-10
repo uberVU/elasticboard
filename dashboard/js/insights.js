@@ -2,6 +2,20 @@
 
 'use strict';
 
+Handlebars.registerHelper('eachLabel', function(context, options) {
+  if (!context) return;
+  var ret = "";
+  for(var i=0, j=context.length; i<j; i++) {
+    context[i]['label-color'] = extractLight(context[i]['color']) ? 'label-color-white' : 'label-color-dark';
+    ret = ret + options.fn(context[i]);
+  }
+
+  return ret;
+});
+
+var tooltipUserTemplate = Handlebars.compile($('#tooltip-user-template').html());
+var tooltipIssueTemplate = Handlebars.compile($('#tooltip-issue-template').html());
+
 function drawIssuesActivity() {
     $.getJSON(API_BASE + '/issues_activity')
         .done(function (json) {
@@ -51,34 +65,82 @@ function drawIssuesActivity() {
 
 var issuesListTemplate = Handlebars.compile($('#issues-list-template').html());
 
-function drawUntouchedIssues() {
-    $.getJSON(API_BASE + '/untouched_issues')
+function drawUntouchedIssues(labels, label) {
+    var url = API_BASE + '/untouched_issues';
+    if (label) url +=  '?label=' + label;
+
+    $.getJSON(url)
         .done(function(json) {
             var data = json.data;
-            var context = {
-                issues: data,
-                title: "Untouched Issues",
-                subtitle: "(max. 20 results)"
-            };
+            if (!data.length) {
+                var context = {
+                    issues: [{
+                        title: 'No issues matching your request'
+                    }],
+                    title: "Untouched Issues",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'untouched'
+                };
+            } else {
+                var context = {
+                    issues: data,
+                    title: "Untouched Issues",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'untouched'
+                };
+            }
             var $list = $(issuesListTemplate(context));
             $('#untouched-issues').empty().append($list);
         })
-        .fail(displayFailMessage);
+        .fail(displayFailMessage)
+        .complete(function() {
+
+            $('#untouched-issues .widget-label--label-item').on('click', function() {
+                drawUntouchedIssues(labels, $(this).data('label'));
+            });
+
+        });
 }
 
-function drawInactiveIssues() {
-    $.getJSON(API_BASE + '/inactive_issues')
+function drawInactiveIssues(labels, label) {
+    var url = API_BASE + '/inactive_issues';
+    if (label) url +=  '?label=' + label;
+
+    $.getJSON(url)
         .done(function(json) {
             var data = json.data;
-            var context = {
-                issues: data,
-                title: "Inactive Issues (2 weeks)",
-                subtitle: "(max. 20 results)"
+            if (!data.length) {
+                var context = {
+                    issues: [{
+                        title: 'No issues matching your request'
+                    }],
+                    title: "Inactive Issues (2 weeks)",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'inactive'
+                }
+            } else {
+                var context = {
+                    issues: data,
+                    title: "Inactive Issues (2 weeks)",
+                    subtitle: "(max. 20 results)",
+                    label: labels.data,
+                    issueType: 'inactive'
+                }
             }
             var $list = $(issuesListTemplate(context));
             $('#inactive-issues').empty().append($list);
         })
-        .fail(displayFailMessage);
+        .fail(displayFailMessage)
+        .complete(function() {
+
+            $('#inactive-issues .widget-label--label-item').on('click', function() {
+                drawInactiveIssues(labels, $(this).data('label'));
+            });
+
+        });
 }
 
 function drawAvgIssueTime() {
@@ -135,8 +197,6 @@ function makeD3Graph(issues_data) {
     }
 }
 
-var tooltipUserTemplate = Handlebars.compile($('#tooltip-user-template').html());
-var tooltipIssueTemplate = Handlebars.compile($('#tooltip-issue-template').html());
 function drawIssuesInvolvement() {
     $.getJSON(API_BASE + '/issues_involvement')
         .done(function(json) {
@@ -309,10 +369,24 @@ function addMilestoneStatus() {
 
 }
 
+//http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
+function extractLight(c) {
+    var rgb = parseInt(c, 16);
+    var r = (rgb >> 16) & 0xff;
+    var g = (rgb >>  8) & 0xff;
+    var b = (rgb >>  0) & 0xff;
+
+    var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    return luma < 70;
+}
+
 function drawInsights () {
     drawIssuesActivity();
-    drawUntouchedIssues();
-    drawInactiveIssues();
+    $.get(API_BASE + '/labels')
+        .success(function (labels) {
+            drawUntouchedIssues(labels);
+            drawInactiveIssues(labels);
+        });
     drawAvgIssueTime();
     drawIssuesInvolvement();
     addMilestoneStatus();

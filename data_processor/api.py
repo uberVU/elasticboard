@@ -67,7 +67,8 @@ def most_active_issues(owner, repo):
 @cached()
 def untouched_issues(owner, repo):
     index = index_name(owner, repo)
-    data = queries.untouched_issues(index)
+    label = request.args.get('label', None)
+    data = queries.untouched_issues(index, label)
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/<login>/issues_assigned')
@@ -128,7 +129,8 @@ def pulls_count(owner, repo):
 @cached()
 def inactive_issues(owner, repo):
     index = index_name(owner, repo)
-    data = queries.inactive_issues(index)
+    label = request.args.get('label', None)
+    data = queries.inactive_issues(index, label)
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/avg_issue_time')
