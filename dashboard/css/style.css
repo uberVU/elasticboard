@@ -540,3 +540,8 @@ body {
   margin: .2rem 0;
   border-bottom: 1px solid #333;
 }
+
+.widget-label {
+    overflow-y: auto;
+    max-height: 38rem;
+}
