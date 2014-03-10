@@ -32,8 +32,6 @@ body {
     background: rgb(31, 31, 31);
     padding: 5px;
     margin-bottom: 30px;
-    max-height: 38rem;
-    overflow: hidden;
 }
 
 .graph-title {
@@ -461,6 +459,83 @@ body {
   color: #5da423;
 }
 
+.widget-label--label-inline {
+  font-size: .8rem;
+  padding: .1rem;
+  margin: 0 .1rem;
+  border-radius: 3px;
+}
+
+.widget-label--label-item {
+  border-left: 3px solid #ddd;
+  list-style: none;
+  padding-left: .5rem;
+  margin: .5rem;
+}
+
+  .widget-label--label-item:hover {
+    background: #444;
+  }
+
+  .label-color-white,
+  .label-color-dark {
+    font-weight: 600;
+    padding:.1rem;
+  }
+
+  .label-color-white {
+    color: white;
+  }
+
+  .label-color-dark {
+    color: black;
+  }
+
+.widget-issues-item {
+  list-style: none;
+  padding: .5rem 0;
+  margin: .2rem 0;
+  border-bottom: 1px solid #333;
+
 .tooltip-template img {
     max-width: 64px;
+}
+
+.widget-label--label-inline {
+  font-size: .8rem;
+  padding: .1rem;
+  margin: 0 .1rem;
+  border-radius: 3px;
+}
+
+.widget-label--label-item {
+  border-left: 3px solid #ddd;
+  list-style: none;
+  padding-left: .5rem;
+  margin: .5rem;
+}
+
+  .widget-label--label-item:hover {
+    background: #444;
+  }
+
+  .label-color-white,
+  .label-color-dark {
+    font-weight: 600;
+    padding:.1rem;
+  }
+
+  .label-color-white {
+    color: white;
+  }
+
+  .label-color-dark {
+    color: black;
+  }
+
+.widget-issues-item {
+  list-style: none;
+  padding: .5rem 0;
+  margin: .2rem 0;
+  border-bottom: 1px solid #333;
 }
