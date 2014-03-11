@@ -166,16 +166,6 @@ def untouched_issues(index, label):
 
     return untouched
 
-def issues_assigned_to(index, login):
-    """
-    List of open issues assigned to {{ login }}.
-    """
-    issues = S().indexes(index).doctypes('IssueData') \
-                .filter(**{'assignee.login': login, 'state': 'open'}) \
-                .values_dict()
-    issues = issues[:LIMIT]
-    return list(issues)
-
 def recent_events(index, count=200, starting_from=0):
     """
     Returns the <count> most recent events, starting from
@@ -366,3 +356,75 @@ def labels(index):
     q = S().indexes(index).doctypes('LabelData').values_dict()
     q = all(q)
     return list(q)
+
+def outstanding_pull_requests(index, limit=20):
+    """
+    Open pull requests that should be actioned.
+    * there were no events - fresh opened PR
+    * last event is by the PR initiator
+    * [or, when that is not true] PR's updated_at timestamp
+      is newer than the latest event found
+      (means that some code was updated)
+    """
+    prs = []
+
+    q = S().indexes(index).doctypes('PullRequestData').order_by('updated_at').values_dict()
+    q = all(q)
+
+    for pr in q:
+        if len(prs) == limit:
+            break
+
+        number = pr['number']
+        login = pr['user']['login']
+
+        # find the most recent event related to this PR
+
+        # might be a IssueComment event
+        q1 = S().indexes(index).doctypes('IssueCommentEvent') \
+                .filter(**{'payload.issue.number': number}) \
+                .order_by('-created_at') \
+                .values_dict()
+        try:
+            comment = q1[0]
+        except:
+            comment = None
+
+        # or a PullRequestReviewCommentEvent
+        q2 = S().indexes(index).doctypes('PullRequestReviewCommentEvent') \
+                .filter_raw({
+                    'regexp': {
+                        'payload.comment.pull_request_url': '.*%d' % number
+                    }
+                }) \
+                .order_by('-created_at') \
+                .values_dict()
+        try:
+            review = q2[0]
+        except:
+            review = None
+
+        # find which one between the two is the latest event
+        latest = comment or review
+        if comment and review:
+            ts_comment = make_datetime(comment['created_at'])
+            ts_review = make_datetime(review['created_at'])
+            latest = comment if ts_comment > ts_review else review
+
+        # if there's no event then there's definitely a need to review the PR
+        if not latest:
+            pr['last_activity'] = pr['updated_at']
+            prs.append(pr)
+            continue
+
+        # if the last event is by the PR initiator, need to review
+        if latest['actor']['login'] == login:
+            pr['last_activity'] = latest['created_at']
+            prs.append(pr)
+        # maybe there was a comment made and the initiator updated the code
+        else:
+            if make_datetime(pr['updated_at']) > make_datetime(latest['created_at']):
+                pr['last_activity'] = pr['updated_at']
+                prs.append(pr)
+
+    return prs

@@ -224,5 +224,13 @@ def labels(owner, repo):
     labels = queries.labels(index)
     return jsonify(data=labels)
 
+@app.route('/<owner>/<repo>/outstanding_pull_requests')
+@crossdomain(origin='*')
+@cached()
+def outstanding_pull_requests(owner, repo):
+    index = index_name(owner, repo)
+    prs = queries.outstanding_pull_requests(index, limit=20)
+    return jsonify(data=prs)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

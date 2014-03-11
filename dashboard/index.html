@@ -66,6 +66,7 @@
             <div id="milestones" class="graph-like">
                 <h6 class="graph-title">Milestone breakdown</h6>
             </div>
+            <div class="graph-like" id="outstanding-pull-requests"></div>
             <div class="graph" id="issues-activity"></div>
             <div class="graph" id="avg-issue-time"></div>
             <div class="graph-like" id="inactive-issues"></div>
@@ -83,11 +84,6 @@
     </div>
 
 </div>
-
-<script id="user-issues" type="text/x-handlebars-template">
-    <p>All issues assigned to {{user}}</p>
-    <ul>{{list}}</ul>
-</script>
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
     <div class="timeline-item row">
@@ -190,6 +186,26 @@
         </span>
 </script>
 
+<script id="pull-requests-list-template" type="text/x-handlebars-template">
+    <div class="text-center">
+        <p class="graph-title">{{ title }}</p>
+        <p class="graph-subtitle">{{ subtitle }}</p>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <ul>
+                {{#each prs}}
+                <li class="widget-issues-item">
+                    <a href="{{{ html_url }}}">#{{ number }}</a>
+                    <span class="muted"> - {{ title }}</span>
+                    <span class="last-active">(last active {{ last_activity }} ago)</span>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</script>
+
 <script id="issues-list-template" type="text/x-handlebars-template">
     <div class="text-center">
         <p class="graph-title">{{ title }}</p>
@@ -253,7 +269,7 @@
     </div>
 </script>
 
-<script type="text/x-handlebars-template" id="insights-milestone">
+<script id="insights-milestone" type="text/x-handlebars-template">
 <div class="row">
     <div class="large-9 large-centered small-12 columns insights-milestone">
         <p class="milestone-title">
