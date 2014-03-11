@@ -71,14 +71,6 @@ def untouched_issues(owner, repo):
     data = queries.untouched_issues(index, label)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/<login>/issues_assigned')
-@crossdomain(origin='*')
-@cached()
-def issues_assigned_to(owner, repo, login):
-    index = index_name(owner, repo)
-    data = queries.issues_assigned_to(index, login)
-    return jsonify(data=data)
-
 @app.route('/<owner>/<repo>/recent_events')
 @crossdomain(origin='*')
 @cached()
