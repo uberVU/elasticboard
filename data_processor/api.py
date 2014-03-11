@@ -176,5 +176,13 @@ def outstanding_pull_requests(owner, repo):
     prs = queries.outstanding_pull_requests(index, limit=20)
     return jsonify(data=prs)
 
+@app.route('/<owner>/<repo>/popularity_evolution')
+@crossdomain(origin='*')
+@cached()
+def popularity_evolution(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.past_n_months(index, queries.popularity_events, CHART_MONTHS)
+    return jsonify(data=data)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

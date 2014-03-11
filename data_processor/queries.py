@@ -428,3 +428,16 @@ def outstanding_pull_requests(index, limit=20):
                 prs.append(pr)
 
     return prs
+
+def popularity_events(index, start=None, end=None):
+    q1 = S().indexes(index).doctypes('ForkEvent')
+    q1, _ = apply_time_filter(q1, start, end)
+
+    q2 = S().indexes(index).doctypes('WatchEvent')
+    q2, _ = apply_time_filter(q2, start, end)
+
+    counts = {
+        'forks': q1.count(),
+        'stars': q2.count()
+    }
+    return counts
