@@ -76,14 +76,6 @@ def untouched_issues(owner, repo):
     data = queries.untouched_issues(index, label)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/<login>/issues_assigned')
-@crossdomain(origin='*')
-@cached()
-def issues_assigned_to(owner, repo, login):
-    index = index_name(owner, repo)
-    data = queries.issues_assigned_to(index, login)
-    return jsonify(data=data)
-
 @app.route('/<owner>/<repo>/recent_events')
 @crossdomain(origin='*')
 @cached()
@@ -231,6 +223,14 @@ def outstanding_pull_requests(owner, repo):
     index = index_name(owner, repo)
     prs = queries.outstanding_pull_requests(index, limit=20)
     return jsonify(data=prs)
+
+@app.route('/<owner>/<repo>/popularity_evolution')
+@crossdomain(origin='*')
+@cached()
+def popularity_evolution(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.past_n_months(index, queries.popularity_events, CHART_MONTHS)
+    return jsonify(data=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
