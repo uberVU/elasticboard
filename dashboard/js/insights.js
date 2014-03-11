@@ -325,6 +325,25 @@ function addMilestoneStatus() {
     }
 }
 
+var pullRequestListTemplate = Handlebars.compile($('#pull-requests-list-template').html());
+
+function drawOutstandingPullRequests() {
+    $.get(API_BASE + '/outstanding_pull_requests')
+        .done(function (data) {
+            var prs = data.data;
+            prs.forEach(function (e) {
+                e.last_activity = moment().from(e.last_activity, true);
+            });
+            var $widget = $(pullRequestListTemplate({
+                prs: prs,
+                title: "Outstanding Pull Requests",
+                subtitle: "(max. 20 results)"
+            }));
+            $('#outstanding-pull-requests').append($widget);
+        })
+        .fail(displayFailMessage);
+}
+
 //http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
 function extractLight(c) {
     var rgb = parseInt(c, 16);
@@ -356,6 +375,7 @@ function drawInsights () {
                 title: "Unassigned Issues"
             });
         });
+    drawOutstandingPullRequests();
     drawAvgIssueTime();
     drawIssuesInvolvement();
     addMilestoneStatus();

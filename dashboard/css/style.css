@@ -545,3 +545,8 @@ body {
     overflow-y: auto;
     max-height: 38rem;
 }
+
+.last-active {
+    opacity: 0.4;
+    margin-left: 0.5rem;
+}
