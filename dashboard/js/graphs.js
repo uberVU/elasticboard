@@ -207,9 +207,35 @@ function drawActivePeopleGraph() {
         .fail(displayFailMessage);
 }
 
+function drawPopularityEvolutionGraph() {
+    $.getJSON(API_BASE + '/popularity_evolution')
+        .done(function(data) {
+            var series = makeStackedSeries(data.data, 'value');
+            var categories = data.data.map(function (e) {
+                return e.month;
+            });
+
+            var options = {
+                type: 'column',
+                title: "Monthly Popularity Increase",
+                subtitle: "Number of new stars and forks",
+                yTitle: 'Events',
+                suffix: '',
+                series: series,
+                categories: categories,
+                legendFormatter: function () {
+                    return this.name;
+                }
+            };
+            makeStackedGraph('#popularity-evolution', options);
+        })
+        .fail(displayFailMessage);
+}
+
 function drawGraphs() {
     drawActivePeopleGraph();
     drawActivityGraph();
+    drawPopularityEvolutionGraph();
 
     makeXYGraph('#most-active-issues', {
         endpoint: '/most_active_issues',
