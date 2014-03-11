@@ -166,16 +166,6 @@ def untouched_issues(index, label):
 
     return untouched
 
-def issues_assigned_to(index, login):
-    """
-    List of open issues assigned to {{ login }}.
-    """
-    issues = S().indexes(index).doctypes('IssueData') \
-                .filter(**{'assignee.login': login, 'state': 'open'}) \
-                .values_dict()
-    issues = issues[:LIMIT]
-    return list(issues)
-
 def recent_events(index, count=200, starting_from=0):
     """
     Returns the <count> most recent events, starting from
