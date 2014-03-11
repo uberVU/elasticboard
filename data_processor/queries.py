@@ -413,15 +413,18 @@ def outstanding_pull_requests(index, limit=20):
 
         # if there's no event then there's definitely a need to review the PR
         if not latest:
+            pr['last_activity'] = pr['updated_at']
             prs.append(pr)
             continue
 
         # if the last event is by the PR initiator, need to review
         if latest['actor']['login'] == login:
+            pr['last_activity'] = latest['created_at']
             prs.append(pr)
         # maybe there was a comment made and the initiator updated the code
         else:
             if make_datetime(pr['updated_at']) > make_datetime(latest['created_at']):
+                pr['last_activity'] = pr['updated_at']
                 prs.append(pr)
 
     return prs
