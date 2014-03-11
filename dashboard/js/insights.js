@@ -286,7 +286,6 @@ function addMilestoneStatus() {
         .fail(displayFailMessage);
 
     function displayData(data) {
-
         if (data.data.length) {
 
             var template = Handlebars.compile($('#insights-milestone').html());
@@ -324,7 +323,6 @@ function addMilestoneStatus() {
             $($milestones).append($('<p class="muted text-center">No milestones available.</p>'));
         }
     }
-
 }
 
 //http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
