@@ -130,17 +130,17 @@
                 {{/with}}
                 {{ action }} {{{ object }}}
                 {{#if commits}}
-                {{#eachCommit commits }}
-            <p class="timeline-item--comment">
-                <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
-                {{{ message }}}
-                </a>
-            </p>
-            {{/eachCommit}}
-            <p class="timeline-item--read-more">
-                <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparasion for commits</a>
-            </p>
-            {{/if}}
+                  {{#eachCommit commits }}
+                    <p class="timeline-item--comment">
+                        <a href="{{{ commitUrl }}}">{{{ sha }}}</a>
+                          {{{ message }}}
+                        </a>
+                    </p>
+                  {{/eachCommit}}
+                  <p class="timeline-item--read-more">
+                    <a href="https://github.com/{{ url }}/compare/{{ diffTree }}">View comparisons for commits</a>
+                  </p>
+                {{/if}}
             </p>
             {{/if}}
             {{#if link}}
