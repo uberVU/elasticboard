@@ -22,7 +22,10 @@ for river in rivers:
             owner = river['github']['owner']
             repository = river['github']['repository']
             index_name = '%s&%s' % (owner, repository)
-            ES.indices.delete(index_name)
-            ES.transport.perform_request(url='/_river/%s' % index_name, method='DELETE')
-            print "Removed %s/%s" % (owner, repository)
+            try:
+                ES.indices.delete(index_name)
+                ES.transport.perform_request(url='/_river/%s' % index_name, method='DELETE')
+                print "Removed %s/%s" % (owner, repository)
+            except:
+                pass
 
