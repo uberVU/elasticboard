@@ -171,7 +171,7 @@ function drawActivityGraph() {
                 categories: categories,
                 legendFormatter: function () {
                     var label = this.name;
-                    var idx = label.indexOf("event");
+                    var idx = label.indexOf("Event");
                     return label.substr(0, idx);
                 }
             };
@@ -198,7 +198,7 @@ function drawActivePeopleGraph() {
                 categories: categories,
                 legendFormatter: function () {
                     var label = this.name;
-                    var idx = label.indexOf("event");
+                    var idx = label.indexOf("Event");
                     return label.substr(0, idx);
                 }
             };
