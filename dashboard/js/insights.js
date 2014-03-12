@@ -343,6 +343,9 @@ function drawOutstandingPullRequests() {
                 subtitle: "(max. 20 results)"
             }));
             $('#outstanding-pull-requests').append($widget);
+            if (!prs.length) {
+                $('#outstanding-pull-requests').append($('<p class="text-center muted">No outstanding pull requests.</p>'));
+            }
         })
         .fail(displayFailMessage);
 }
