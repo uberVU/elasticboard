@@ -172,6 +172,9 @@ function drawActivityGraph() {
                 legendFormatter: function () {
                     var label = this.name;
                     var idx = label.indexOf("Event");
+                    if (idx == -1) {
+                        idx = label.indexOf("event");
+                    }
                     return label.substr(0, idx);
                 }
             };
@@ -199,6 +202,9 @@ function drawActivePeopleGraph() {
                 legendFormatter: function () {
                     var label = this.name;
                     var idx = label.indexOf("Event");
+                    if (idx == -1) {
+                        idx = label.indexOf("event");
+                    }
                     return label.substr(0, idx);
                 }
             };
