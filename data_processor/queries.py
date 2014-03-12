@@ -368,7 +368,11 @@ def outstanding_pull_requests(index, limit=20):
     """
     prs = []
 
-    q = S().indexes(index).doctypes('PullRequestData').order_by('updated_at').values_dict()
+    q = S().indexes(index).doctypes('PullRequestData')
+    if not q.count():
+        # bail if no data, so elasticsearch doesn't yell at us
+        return prs
+    q = q.order_by('updated_at').values_dict()
     q = all(q)
 
     for pr in q:
