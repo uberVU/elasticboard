@@ -42,7 +42,10 @@ function drawIssuesActivity() {
                     }
                 },
                 legend: {
-                    enabled: false
+                    enabled: true
+                },
+                tooltip: {
+                    shared: true
                 },
                 series: [
                     {
