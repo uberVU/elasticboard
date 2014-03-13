@@ -4,8 +4,17 @@ import datetime
 from es import ES, ES_NODE
 from elasticutils import S as _S
 
-def S():
-    return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
+class S(_S):
+    def __call__(self):
+        return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
+
+    def order_by(self, *args, **kwargs):
+        """
+        Doesn't allow the user to call order_by on an empty set.
+        """
+        if not self.count():
+            return self
+        return _S.order_by(self, *args, **kwargs)
 
 # for queries where it makes sense
 LIMIT = 20
@@ -172,8 +181,6 @@ def recent_events(index, count=200, starting_from=0):
     index <starting_from>.
     """
     q = S().indexes(index)
-    if not q.count():
-        return []
     q = q.order_by('-created_at')
     q = q[starting_from : starting_from + count]
     q = q.values_dict()
@@ -371,11 +378,9 @@ def outstanding_pull_requests(index, limit=20):
     """
     prs = []
 
-    q = S().indexes(index).doctypes('PullRequestData')
-    if not q.count():
-        # bail if no data, so elasticsearch doesn't yell at us
-        return prs
-    q = q.order_by('updated_at').values_dict()
+    q = S().indexes(index).doctypes('PullRequestData') \
+        .order_by('updated_at') \
+        .values_dict()
     q = all(q)
 
     for pr in q:
@@ -389,9 +394,8 @@ def outstanding_pull_requests(index, limit=20):
 
         # might be a IssueComment event
         q1 = S().indexes(index).doctypes('IssueCommentEvent') \
-                .filter(**{'payload.issue.number': number})
-        if q1.count():
-            q1 = q1.order_by('-created_at') \
+                .filter(**{'payload.issue.number': number}) \
+                .order_by('-created_at') \
                 .values_dict()
         try:
             comment = q1[0]
@@ -404,9 +408,8 @@ def outstanding_pull_requests(index, limit=20):
                     'regexp': {
                         'payload.comment.pull_request_url': '.*%d' % number
                     }
-                })
-        if q2.count():
-            q2 = q2.order_by('-created_at') \
+                }) \
+                .order_by('-created_at') \
                 .values_dict()
         try:
             review = q2[0]
