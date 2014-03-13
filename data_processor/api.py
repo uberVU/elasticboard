@@ -232,5 +232,13 @@ def popularity_evolution(owner, repo):
     data = queries.past_n_months(index, queries.popularity_events, CHART_MONTHS)
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/collaborators')
+@crossdomain(origin='*')
+@cached()
+def collaborators(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.collaborators(index)
+    return jsonify(data=data)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

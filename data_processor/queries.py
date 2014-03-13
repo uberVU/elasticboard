@@ -453,3 +453,8 @@ def popularity_events(index, start=None, end=None):
         'stars': q2.count()
     }
     return counts
+
+def collaborators(index):
+    q = S().indexes(index).doctypes('CollaboratorData').values_dict()
+    q = all(q)
+    return list(q)
