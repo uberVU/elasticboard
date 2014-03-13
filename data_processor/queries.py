@@ -171,7 +171,10 @@ def recent_events(index, count=200, starting_from=0):
     Returns the <count> most recent events, starting from
     index <starting_from>.
     """
-    q = S().indexes(index).order_by('-created_at')
+    q = S().indexes(index)
+    if not q.count():
+        return []
+    q = q.order_by('-created_at')
     q = q[starting_from : starting_from + count]
     q = q.values_dict()
     return list(q)
@@ -386,8 +389,9 @@ def outstanding_pull_requests(index, limit=20):
 
         # might be a IssueComment event
         q1 = S().indexes(index).doctypes('IssueCommentEvent') \
-                .filter(**{'payload.issue.number': number}) \
-                .order_by('-created_at') \
+                .filter(**{'payload.issue.number': number})
+        if q1.count():
+            q1 = q1.order_by('-created_at') \
                 .values_dict()
         try:
             comment = q1[0]
@@ -400,8 +404,9 @@ def outstanding_pull_requests(index, limit=20):
                     'regexp': {
                         'payload.comment.pull_request_url': '.*%d' % number
                     }
-                }) \
-                .order_by('-created_at') \
+                })
+        if q2.count():
+            q2 = q2.order_by('-created_at') \
                 .values_dict()
         try:
             review = q2[0]
