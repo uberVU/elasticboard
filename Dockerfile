@@ -36,9 +36,9 @@ ADD docker_configs/sudoers /etc/sudoers
 RUN chmod 440 /etc/sudoers
 RUN chown root:root /etc/sudoers
 
-USER elasticboard
-
 ADD docker_configs/start.sh /bin/start.sh
+
+USER elasticboard
 
 # fire away
 ENTRYPOINT ["/bin/start.sh"]
