@@ -25,9 +25,9 @@
 
     App.Router = Backbone.Router.extend({
         routes: {
-            'timeline/:user/:repo': 'timeline',
-            'graphs/:user/:repo'  : 'graphs',
-            'insights/:user/:repo': 'insights',
+            ':user/:repo/timeline': 'timeline',
+            ':user/:repo/graphs'  : 'graphs',
+            ':user/:repo/insights': 'insights',
             '*index'              : 'index'
         }
     });
@@ -42,7 +42,7 @@
         changeView: function(item) {
             var $el = $(item.target);
             var action = $el.text().toLowerCase();
-            location.hash = '/'+ action +'/' + App.REPO;
+            location.hash = '/' + App.REPO + '/' + action;
         }
     });
 
