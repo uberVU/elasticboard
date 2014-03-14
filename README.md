@@ -58,7 +58,8 @@ You also have to install the necessary Python dependencies:
 pip install -r data_processor/requirements-pip
 ```
 
-Install the GitHub [river](https://github.com/uberVU/elasticsearch-river-github). (link has instructions)
+Install the GitHub [river](https://github.com/uberVU/elasticsearch-river-github). (link has instructions, currently
+you need a version `>= 1.6.3`)
 
 
 Run the `init_rivers.py` file to load the rivers inside elasticsearch (make sure you

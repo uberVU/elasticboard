@@ -4,8 +4,17 @@ import datetime
 from es import ES, ES_NODE
 from elasticutils import S as _S
 
-def S():
-    return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
+class S(_S):
+    def __call__(self):
+        return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
+
+    def order_by(self, *args, **kwargs):
+        """
+        Doesn't allow the user to call order_by on an empty set.
+        """
+        if not self.count():
+            return self
+        return _S.order_by(self, *args, **kwargs)
 
 # for queries where it makes sense
 LIMIT = 20
@@ -171,7 +180,8 @@ def recent_events(index, count=200, starting_from=0):
     Returns the <count> most recent events, starting from
     index <starting_from>.
     """
-    q = S().indexes(index).order_by('-created_at')
+    q = S().indexes(index)
+    q = q.order_by('-created_at')
     q = q[starting_from : starting_from + count]
     q = q.values_dict()
     return list(q)
@@ -368,7 +378,9 @@ def outstanding_pull_requests(index, limit=20):
     """
     prs = []
 
-    q = S().indexes(index).doctypes('PullRequestData').order_by('updated_at').values_dict()
+    q = S().indexes(index).doctypes('PullRequestData') \
+        .order_by('updated_at') \
+        .values_dict()
     q = all(q)
 
     for pr in q:
@@ -441,3 +453,8 @@ def popularity_events(index, start=None, end=None):
         'stars': q2.count()
     }
     return counts
+
+def collaborators(index):
+    q = S().indexes(index).doctypes('CollaboratorData').values_dict()
+    q = all(q)
+    return list(q)
