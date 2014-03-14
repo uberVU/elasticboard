@@ -86,7 +86,7 @@
 
     appRouter.on('route:index', function() {
         getRandomRepo(function(repo) {
-            location.hash = '/timeline/' + repo;
+            location.hash = '/' + repo + '/timeline';
         });
     });
 
