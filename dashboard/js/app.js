@@ -1,183 +1,288 @@
-var hash = location.hash.split('/'),
-    API_HOST = 'http://' + window.location.hostname + ':5000/',
-    API_BASE = API_HOST,
-    REPO;
+(function(){
 
-if (hash.length > 1) {
-    REPO = hash[1] + '/' + hash[2];
-    API_BASE += hash[1] + '/' + hash[2];
-    initDashboard();
-} else {
-    getDefaultRepo();
-}
+    'use strict';
 
-/*
- * Bundle together different functions
- * used to load the widgets in the application
- */
-function initDashboard () {
-    populateOpenIssues();
-    populateOpenPulls();
-    populateTimeline();
-    $('#user-repo').html(function(index, html) {
-      return REPO + html;
+    window.App = window.App || {};
+    App.BASE = App.HOST = (function() {
+        var origin = location.origin;
+        // remove the trailer port number if running on local
+        if (origin.match(/[0-9]{4,4}/)) {
+            origin = origin.split(':');
+            origin.pop();
+            origin = origin.join(':') + ':5000';
+        }
+        return origin;
+    })();
+    App.DEBUG = true;
+
+    // get wrapper, logs and calls the callback or fail fn
+    App.utils.httpGet = function httpGet(url, success, fail, always) {
+        if (App.DEBUG) {
+            console.log('[GET] ' + url);
+        }
+        return $.get(url).done(success).fail(fail || logFailure);
+    };
+
+    App.Router = Backbone.Router.extend({
+        routes: {
+            'timeline/:user/:repo': 'timeline',
+            'graphs/:user/:repo'  : 'graphs',
+            'insights/:user/:repo': 'insights',
+            '*index'              : 'index'
+        }
     });
-    changeTabs();
-}
 
-/*
- * According to URL path
- * navigate to different tabs in the application
- */
-function changeTabs() {
-    var parts = location.hash.split('/');
-    if (parts.length > 3) {
-        var tab = parts.pop();
-        var tabs = $('ul.menu li');
-        tabs.each(function (idx, el) {
-            var text = $(el).text().toLowerCase();
-            if (text == tab) {
-                $(el).trigger('click');
-            }
-        });
-    }
-}
+    App.Views = {};
+    App.Views.Topbar = Backbone.View.extend({
+        el: $('#topbar .menu'),
+        events: {
+            'click li': 'changeView'
+        },
 
-function fitTabContainer () {
-    var $container = $('#tab-container');
-    $container.height($(window).height() - $container.offset().top - 20);
-}
+        changeView: function(item) {
+            var $el = $(item.target);
+            var action = $el.text().toLowerCase();
+            location.hash = '/'+ action +'/' + App.REPO;
+        }
+    });
 
-window.onresize = fitTabContainer;
-fitTabContainer();
+    App.Views.RepoSelector = Backbone.View.extend({
+        el: $('#repo-select-trigger'),
+        initialize: function() {
+            getAllRepos(addRepos);
+        },
+        events: {
+            'click'   : 'toggle',
+            'click li': 'switchRepo'
+        },
+        toggle: function() {
+            var $container = $('.repo-select');
+            var $repoList = $('ul', $container);
 
-$('#repo-select-trigger').on('click', function (e) {
-    e.stopPropagation();
-
-    var $container = $('.repo-select');
-    var $repoList = $('ul', $container);
-
-    $container.toggleClass('hidden');
-
-    if (!$container.hasClass('hidden')) {
-        getAvailableRepos(addRepos);
-        $(window).on('click', function () {
-            $('.show--fade-in').removeClass('show--fade-in');
-            setTimeout(function () {
-                $repoList.empty();
-            }, 200);
-            $(window).off('click');
             $container.toggleClass('hidden');
-        })
-    } else {
-        $('.show--fade-in').removeClass('show--fade-in');
-        setTimeout(function () {
-            $repoList.empty();
-        }, 200);
-    }
-});
+            $repoList.addClass('show--fade-in');
 
-function getAvailableRepos (cb) {
-    $.get(API_HOST + 'available_repos')
-        .success(function (data) {
-            if (data.data.length == 0) {
-                $('#counts-container').remove();
-                $('#tab-container').empty();
-
-                var msg = "<p class=\"text-center\">No data available. Please follow the " +
-                    "<a href=\"https://github.com/uberVU/elasticboard/blob/master/README.md\">README</a>.</p>";
-                $tabContainer = $('#tab-container');
-                $tabContainer.append(msg);
-
-                return;
+            if ($container.hasClass('hidden')) {
+                $('.show--fade-in').removeClass('show--fade-in');
             }
-            cb(data);
-        })
-    .fail(function (data) {
-        console.log('An error has occured');
+        },
+        switchRepo: function() {
+            console.log('switch repo');
+        }
     });
-}
 
-function addRepos (data) {
-    var $container = $('.repo-select');
+    App.Views.PullIssueBadge = Backbone.View.extend({
+        el: $('#pull-issue-badges'),
+        initialize: function() {
+            populateOpenIssues();
+            populateOpenPulls();
+        }
+    });
 
-    var $repoList = $('ul', $container);
-    data.data.forEach(function (repo) {
-        var repoLink = document.createElement('a');
-        var repoLI = document.createElement('li');
-        repoLink.href = location.origin + location.pathname + '#/' + repo;
-        repoLink.textContent = repo;
-        repoLink.target = '_blank';
-        repoLI.appendChild(repoLink);
-        repoLI = $(repoLI);
-        repoLI.on('click', function (e) {
-            e.preventDefault();
-            loadDashboard(repoLink.href);
+    var topbar = new App.Views.Topbar();
+    var repoSelecttor = new App.Views.RepoSelector();
+    var pullIssueBadge;
+    var appRouter = new App.Router();
+
+    appRouter.on('route:index', function() {
+        getRandomRepo(function(repo) {
+            location.hash = '/timeline/' + repo;
         });
-        $repoList.append(repoLI);
     });
 
-    $repoList.toggleClass('show--fade-in');
-}
+    function initIssuePullBadges() {
+        if (!pullIssueBadge)
+            pullIssueBadge = new App.Views.PullIssueBadge();
+    }
 
-function getDefaultRepo() {
-    getAvailableRepos(function (data) {
-        setLocation(location.origin + location.pathname + '#/' + data.data[0]); // load first repo
-        hash = data.data[0].split('/');
-        REPO = hash[0] + '/' + hash[1];
-        API_BASE += hash[0] + '/' + hash[1];
-        initDashboard();
+    appRouter.on('route:insights', function(user, repo){
+        console.log('[INSIGHTS]');
+        if (arguments.length > 3) {
+            console.error('Bad request. Format is timeline/<user>/<repo>');
+            if (App.DEBUG) {
+                console.log(arguments);
+            }
+            return;
+        }
+        checkForRepo(user, repo, function(res) {
+            if (res) {
+
+                App.REPO = user + '/' + repo;
+                App.BASE = App.HOST + '/' + App.REPO;
+
+                $('#user-repo').text(App.REPO);
+
+                drawInsights();
+                $('.tab').hide();
+                $('#tab-3').show();
+
+                stopScrollListener();
+                initIssuePullBadges();
+
+            }
+        });
     });
-}
 
-function setLocation (newlocation) {
-    location.href = newlocation;
-}
+    appRouter.on('route:graphs', function(user, repo) {
+        console.log('[GRAPHS]');
+        if (arguments.length > 3) {
+            console.error('Bad request. Format is timeline/<user>/<repo>');
+            if (App.DEBUG) {
+                console.log(arguments);
+            }
+            return;
+        }
+        checkForRepo(user, repo, function(res) {
+            if (res) {
 
-function loadDashboard (newlocation) {
-    setLocation(newlocation);
-    location.reload();
-}
+                App.REPO = user + '/' + repo;
+                App.BASE = App.HOST + '/' + App.REPO;
 
-function populateOpenIssues() {
-    $.get(API_BASE + "/issues_count").success(function (data) {
-        var count = data.data.open;
-        $('#open-issues-count').text(count);
+                $('#user-repo').text(App.REPO);
 
-        if (!count) {
+                drawGraphs();
+                $('.tab').hide();
+                $('#tab-2').show();
+
+                stopScrollListener();
+                initIssuePullBadges();
+
+            }
+        });
+    });
+
+    appRouter.on('route:timeline', function(user, repo) {
+        if (arguments.length > 3) {
+            console.error('Bad request. Format is timeline/<user>/<repo>');
+            if (App.DEBUG) {
+                console.log(arguments);
+            }
             return;
         }
 
-        var $p = $('#open-issues');
-        $p.click(function () {
-            var url = 'http://github.com/' + REPO + '/issues?state=open';
-            window.location.href = url;
+        checkForRepo(user, repo, function(res) {
+            if (res) {
+                console.log('[TIMELINE] ' + user + ' ' + repo);
+                $('.tab').hide();
+                $('#tab-1').show();
+
+                fitTabContainer();
+                window.onresize = fitTabContainer;
+                App.REPO = user + '/' + repo;
+                App.BASE = App.HOST + '/' + App.REPO;
+
+                $('#user-repo').text(App.REPO);
+
+                initTimeline();
+                initIssuePullBadges();
+            } else {
+                console.error('No such repo');
+            }
         });
-        $p.addClass('clickable');
     });
-}
 
-function populateOpenPulls() {
-    $.get(API_BASE + "/pulls_count").success(function (data) {
-        var count = data.data.open;
-        $('#open-pulls-count').text(count);
+    function checkForRepo(user, repo, fn) {
+        var url = App.HOST + '/available_repos';
+        var s = user + '/' + repo;
+        App.utils.httpGet(url, function(data) {
+            var r = data.data.some(function(repo) {
+                return repo.match(s);
+            });
+            fn(r);
+        });
+    }
 
-        if (!count) {
-            return;
+    // FIXME?
+    function fitTabContainer () {
+        var $container = $('#tab-container');
+        $container.height($(window).height() - $container.offset().top - 20);
+    }
+
+    function getAllRepos(cb) {
+        var url = App.HOST + '/available_repos';
+        App.utils.httpGet(url, cb);
+    }
+
+    // make a request for all available repos
+    // call the callback with a random repo
+    function getRandomRepo(fn) {
+        getAllRepos(function(data) {
+            var idx = parseInt(Math.random() * 100 % (data.data.length - 1), 10);
+            var randomRepo = data.data[idx];
+            fn(randomRepo);
+        });
+    }
+
+
+    // generic fail method for logging
+    function logFailure(data) {
+        if (App.DEBUG) {
+            console.log('Request failed.');
+            console.log(data);
         }
+    }
 
-        var $p = $('#open-pulls');
-        $p.click(function () {
-            var url = 'http://github.com/' + REPO + '/pulls?state=open';
-            window.location.href = url;
+    // populate repo tooltip with all available repos
+    function addRepos (data) {
+        var $container = $('.repo-select');
+
+        var $repoList = $('ul', $container);
+        data.data.forEach(function (repo) {
+            // TODO add actual links
+            var repoLink = $('<a/>').text(repo);
+            var repoLI = $('<li/>').append(repoLink);
+            $repoList.append(repoLI);
         });
-        $p.addClass('clickable');
-    });
-}
+    }
 
-function logFailure(fail) {
-    console.log("Trouble getting data. API server down?");
-    console.log(fail);
+    function initTimeline() {
+        populateTimeline();
+        addScrollListener();
+    }
+
+    function addScrollListener() {
+        var $timeline = $('#timeline');
+        $(document).on('scroll', function () {
+            if (App.DEBUG) {
+                console.log('[TIMELINE] scroll listener');
+            }
+            if($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+                populateTimeline(App.PER_PAGE, $timeline.children('.timeline-item').length);
+            }
+        });
+    }
+
+    function stopScrollListener() {
+        $(document).off('scroll');
+    }
+
+    function populateOpenIssues() {
+        App.utils.httpGet(App.BASE + "/issues_count", function (data) {
+            var count = data.data.open;
+            var $el = $('#open-issues-count');
+            var url = 'http://github.com/' + App.REPO + '/issues?state=open';
+
+            $el.text(count).attr('href', url);
+        });
+    }
+
+    function populateOpenPulls() {
+        App.utils.httpGet(App.BASE + "/pulls_count", function (data) {
+            var count = data.data.open;
+            var $el = $('#open-pulls-count');
+            var url = 'http://github.com/' + App.REPO + '/pulls?state=open';
+
+            $el.text(count).attr('href', url);
+        });
+    }
+
+
+    Backbone.history.start();
+
+})();
+
+function logFailure(msg) {
+    console.log('[FAILURE]', msg.statusText);
 }
 
 function displayFailMessage(fail) {
