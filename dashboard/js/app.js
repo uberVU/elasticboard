@@ -100,7 +100,9 @@
     }
 
     appRouter.on('route:insights', function(user, repo){
-        console.log('[INSIGHTS]');
+        if (App.DEBUG) {
+            console.log('[INSIGHTS]');
+        }
         if (arguments.length > 3) {
             console.error('Bad request. Format is timeline/<user>/<repo>');
             if (App.DEBUG) {
@@ -128,7 +130,9 @@
     });
 
     appRouter.on('route:graphs', function(user, repo) {
-        console.log('[GRAPHS]');
+        if (App.DEBUG) {
+            console.log('[GRAPHS]');
+        }
         if (arguments.length > 3) {
             console.error('Bad request. Format is timeline/<user>/<repo>');
             if (App.DEBUG) {
@@ -166,7 +170,9 @@
 
         checkForRepo(user, repo, function(res) {
             if (res) {
-                console.log('[TIMELINE] ' + user + ' ' + repo);
+                if (App.DEBUG) {
+                    console.log('[TIMELINE] ' + user + ' ' + repo);
+                }
                 $('.tab').hide();
                 $('#tab-1').show();
 
