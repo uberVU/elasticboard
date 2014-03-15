@@ -67,6 +67,8 @@
             }
         },
         switchRepo: function(event) {
+            // remove all the events in the timeline
+            // leave in only the loading spinner
             var repo = $(event.target).text();
             var $timeline = $('#timeline');
             var $loading = $('.timeline-item:last-child', $timeline).clone();
