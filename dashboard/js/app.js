@@ -66,8 +66,12 @@
                 $('.show--fade-in').removeClass('show--fade-in');
             }
         },
-        switchRepo: function() {
-            console.log('switch repo');
+        switchRepo: function(event) {
+            var repo = $(event.target).text();
+            var $timeline = $('#timeline');
+            var $loading = $('.timeline-item:last-child', $timeline).clone();
+            $timeline.empty().append($loading);
+            location.hash = '/' + repo + '/timeline';
         }
     });
 
