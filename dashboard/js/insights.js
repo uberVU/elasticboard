@@ -115,7 +115,7 @@ function drawAvgIssueTime() {
             var m = moment.duration(e.value, 'seconds');
             return {
                 name: m.humanize(),
-                y: Math.ceil(e.value / (3600 * 24))
+                y: Math.floor(e.value / (3600 * 24))
             };
         },
         yTitle: 'Days',
