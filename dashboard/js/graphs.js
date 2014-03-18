@@ -7,7 +7,7 @@
     App.utils.makeLink = function makeLink(url, text) {
         var link = $('<a />', {
             href: url,
-            text: text,
+            text: text
         });
         return $('<div />').append(link).html();
     };
@@ -75,7 +75,7 @@
                     }]
                 });
             }).fail(displayFailMessage);
-    }
+    };
 
     function makeStackedSeries(data, valueKey) {
         // find all the series
@@ -113,7 +113,7 @@
         return series;
     }
 
-    window.makeStackedGraph = function makeStackedGraph(container, options) {
+    function makeStackedGraph(container, options) {
         var graph = {
             chart: {
                 type: options.type

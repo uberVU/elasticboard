@@ -76,7 +76,7 @@
 
         var url = App.BASE + options.endpoint;
         if (label) {
-            url +=  '?label=' + label;
+            url += '?label=' + label;
         }
 
         $.getJSON(url)
@@ -160,7 +160,7 @@
     }
 
     function drawIssuesInvolvement() {
-        var url = App.BASE + '/issue_involvement';
+        var url = App.BASE + '/issues_involvement';
         App.utils.httpGet(url, function(json) {
             var $container = $('#issues-involvement-graph-container');
             var width = $container.width();

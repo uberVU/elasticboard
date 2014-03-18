@@ -26,7 +26,7 @@
                 username: login,
                     url: githubURL
             },
-                avatar: avatarURL,
+                avatar: avatarURL
         };
     }
 
@@ -103,7 +103,7 @@
             },
             object: function(e) {
                 return e.payload.ref;
-            },
+            }
         },
         'DeleteEvent': {
             action: function(e) {
@@ -117,7 +117,7 @@
             },
             object: function(e) {
                 return e.payload.ref;
-            },
+            }
         },
         'ForkEvent': {
             action: function(e) {
@@ -250,7 +250,7 @@
             },
             issue_age: function(e) {
                 return moment().from(e.payload.pull_request.created_at, true);
-            },
+            }
         },
         'PullRequestReviewCommentEvent': {
             action: function(e) {
@@ -385,11 +385,6 @@
         var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
         var $loading = $('#timeline-loading');
 
-        // if we don't have a specified index, don't do anythin
-        if (App.BASE.indexOf('undefined/undefined') >= 0) {
-            return;
-        }
-
         if (!count) {
             count = App.PER_PAGE || 50;
         }
@@ -400,8 +395,9 @@
         $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
             .success(function(data) {
                 var fragment = document.createDocumentFragment();
+                var mapping;
                 data.data.forEach(function(e) {
-                    var mapping = TIMELINE_MAPPING[e.type];
+                    mapping = TIMELINE_MAPPING[e.type];
                     var context = formatContext(e);
 
                     if (!context) return;
@@ -433,7 +429,7 @@
                 if (!data.data.length) {
                     mapping = TIMELINE_MAPPING.EndOfTimeline;
                     $(document).off('scroll');
-                    context = {
+                    var context = {
                         author: "Sorry!",
                         action: '',
                         object: mapping.object(),
