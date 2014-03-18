@@ -298,16 +298,18 @@ function logFailure(msg) {
 }
 
 function displayFailMessage(fail) {
+
+    var $tabContainer = $('#tab-container');
+
     if (fail.status != 404) {
         logFailure(fail);
         return;
     }
 
     $('#counts-container').remove();
-    $('#tab-container').empty();
+    $tabContainer.empty();
 
     var msg = "<p class=\"text-center\">No data for this repository yet. Retrying in 2 minutes.</p>";
-    $tabContainer = $('#tab-container');
     $tabContainer.append(msg);
 
     setTimeout(function() {
