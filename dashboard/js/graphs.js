@@ -12,27 +12,6 @@
         return $('<div />').append(link).html();
     };
 
-    function makeList(container, options) {
-        $.getJSON(App.BASE + options.endpoint)
-            .done(function (json) {
-                $container = $(container);
-                $container.append($('<h3 />').text(options.title).addClass('text-center'));
-                $list = $('<ul />');
-
-                data = json.data;
-                data.forEach(function (e) {
-                    $item = $('<li />');
-                    if (typeof options.keyName === 'function') {
-                        $item.html(options.keyName(e));
-                    } else {
-                        $item.html(e[options.keyName]);
-                    }
-                    $list.append($item);
-                });
-                $container.append($list);
-            }).fail(displayFailMessage);
-    }
-
     App.utils.makeXYGraph = function makeXYGraph(container, options) {
         $.getJSON(App.BASE + options.endpoint)
             .done(function (json) {
