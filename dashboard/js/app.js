@@ -204,7 +204,6 @@
         });
     }
 
-    // FIXME?
     function fitTabContainer () {
         var $container = $('#tab-container');
         $container.height($(window).height() - $container.offset().top - 20);
@@ -224,7 +223,6 @@
             fn(randomRepo);
         });
     }
-
 
     // generic fail method for logging
     function logFailure(data) {
@@ -287,7 +285,6 @@
             $el.text(count).attr('href', url);
         });
     }
-
 
     Backbone.history.start();
 
