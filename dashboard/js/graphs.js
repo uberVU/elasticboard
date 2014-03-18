@@ -148,20 +148,20 @@
 
                 var options = {
                     type: 'column',
-            title: "Activity",
-            subtitle: "Total monthly events",
-            yTitle: 'Events',
-            suffix: 'events',
-            series: series,
-            categories: categories,
-            legendFormatter: function () {
-                var label = this.name;
-                var idx = label.indexOf("Event");
-                if (idx == -1) {
-                    idx = label.indexOf("event");
-                }
-                return label.substr(0, idx);
-            }
+                    title: "Activity",
+                    subtitle: "Total monthly events",
+                    yTitle: 'Events',
+                    suffix: 'events',
+                    series: series,
+                    categories: categories,
+                    legendFormatter: function () {
+                        var label = this.name;
+                        var idx = label.indexOf("Event");
+                        if (idx == -1) {
+                            idx = label.indexOf("event");
+                        }
+                        return label.substr(0, idx);
+                    }
                 };
                 makeStackedGraph('#total-events-monthly', options);
             })
