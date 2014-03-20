@@ -218,7 +218,7 @@
     // call the callback with a random repo
     function getRandomRepo(fn) {
         getAllRepos(function(data) {
-            var idx = parseInt(Math.random() * 100 % (data.data.length - 1), 10);
+            var idx = parseInt(Math.random() * 100 % data.data.length, 10);
             var randomRepo = data.data[idx];
             fn(randomRepo);
         });
