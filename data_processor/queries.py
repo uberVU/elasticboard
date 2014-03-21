@@ -139,7 +139,16 @@ def most_active_issues(index, start=None, end=None):
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q, filtered = apply_time_filter(q, start, end)
-    return q.facet('payload.issue.number', filtered=filtered).facet_counts()['payload.issue.number']
+    counts = q.facet('payload.issue.number', filtered=filtered, size=1000).facet_counts()['payload.issue.number']
+
+    # keep only open issues
+    open_issues = S().indexes(index).doctypes('IssueData') \
+        .filter(state='open') \
+        .values_dict()
+    open_issues = [i['number'] for i in all(open_issues)]
+
+    active_issues = [i for i in counts if i['term'] in open_issues]
+    return active_issues[:10]
 
 def untouched_issues(index, label):
     """

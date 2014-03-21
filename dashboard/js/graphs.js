@@ -246,7 +246,7 @@ function drawGraphs() {
     makeXYGraph('#most-active-issues', {
         endpoint: '/most_active_issues',
         type: 'bar',
-        title: "Most active issues",
+        title: "Most active open issues",
         keyName: function (e) {
             return makeLink('http://github.com/' + REPO + '/issues/' + e.term,
                             "#" + e.term);
