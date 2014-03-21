@@ -32,6 +32,9 @@ body {
     background: rgb(31, 31, 31);
     padding: 5px;
     margin-bottom: 30px;
+    max-height: 70rem;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .graph-title {
