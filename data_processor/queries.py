@@ -334,7 +334,9 @@ def issues_involvement(index, start=None, end=None):
     return issues
 
 def milestones(index):
-    q = S().indexes(index).doctypes('MilestoneData').values_dict()
+    q = S().indexes(index).doctypes('MilestoneData') \
+        .filter(open_issues__gt=0) \
+        .values_dict()
     q = all(q)
     return list(q)
 
