@@ -26,6 +26,7 @@
     App.Router = Backbone.Router.extend({
         routes: {
             ':user/:repo/timeline': 'timeline',
+            ':user/:repo'         : 'timeline',
             ':user/:repo/graphs'  : 'graphs',
             ':user/:repo/insights': 'insights',
             '*index'              : 'index'
@@ -162,14 +163,6 @@
     });
 
     appRouter.on('route:timeline', function(user, repo) {
-        if (arguments.length > 3) {
-            console.error('Bad request. Format is timeline/<user>/<repo>');
-            if (App.DEBUG) {
-                console.log(arguments);
-            }
-            return;
-        }
-
         checkForRepo(user, repo, function(res) {
             if (res) {
                 if (App.DEBUG) {
