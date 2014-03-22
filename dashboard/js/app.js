@@ -107,7 +107,7 @@
             console.log('[INSIGHTS]');
         }
         if (arguments.length > 3) {
-            console.error('Bad request. Format is timeline/<user>/<repo>');
+            console.error('Bad request. Format is /<user>/<repo>/insights');
             if (App.DEBUG) {
                 console.log(arguments);
             }
@@ -137,7 +137,7 @@
             console.log('[GRAPHS]');
         }
         if (arguments.length > 3) {
-            console.error('Bad request. Format is timeline/<user>/<repo>');
+            console.error('Bad request. Format is /<user>/<repo>/graph');
             if (App.DEBUG) {
                 console.log(arguments);
             }
