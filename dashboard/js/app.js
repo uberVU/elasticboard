@@ -171,8 +171,6 @@
                 $('.tab').hide();
                 $('#tab-1').show();
 
-                fitTabContainer();
-                window.onresize = fitTabContainer;
                 App.REPO = user + '/' + repo;
                 App.BASE = App.HOST + '/' + App.REPO;
 
@@ -195,11 +193,6 @@
             });
             fn(r);
         });
-    }
-
-    function fitTabContainer () {
-        var $container = $('#tab-container');
-        $container.height($(window).height() - $container.offset().top - 20);
     }
 
     function getAllRepos(cb) {
