@@ -445,4 +445,10 @@
             }).fail(displayFailMessage);
     };
 
+    window.emptyTimeline = function() {
+        var $timeline = $('#timeline');
+        var $loading = $('.timeline-item:last-child', $timeline).clone();
+        $timeline.empty().append($loading);
+    };
+
 })();

@@ -71,9 +71,7 @@
             // remove all the events in the timeline
             // leave in only the loading spinner
             var repo = $(event.target).text();
-            var $timeline = $('#timeline');
-            var $loading = $('.timeline-item:last-child', $timeline).clone();
-            $timeline.empty().append($loading);
+            emptyTimeline();
             location.hash = '/' + repo + '/timeline';
         }
     });
@@ -98,8 +96,7 @@
     });
 
     function initIssuePullBadges() {
-        if (!pullIssueBadge)
-            pullIssueBadge = new App.Views.PullIssueBadge();
+        pullIssueBadge = new App.Views.PullIssueBadge();
     }
 
     appRouter.on('route:insights', function(user, repo){
@@ -232,6 +229,7 @@
     }
 
     function initTimeline() {
+        emptyTimeline();
         populateTimeline();
         addScrollListener();
     }
