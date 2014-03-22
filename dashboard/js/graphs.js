@@ -136,7 +136,7 @@
             }
         };
         $(container).highcharts(graph);
-    };
+    }
 
     function drawActivityGraph() {
         $.getJSON(App.BASE + '/total_events_monthly')
