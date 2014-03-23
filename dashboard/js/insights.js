@@ -2,6 +2,7 @@
 
     'use strict';
     window.App = window.App || {};
+    App.Insights = {};
 
     Handlebars.registerHelper('eachLabel', function(context, options) {
         if (!context) return;
@@ -279,70 +280,31 @@
         });
     }
 
-    function addMilestoneStatus() {
+    App.Insights.outstandingPullRequests = Backbone.View.extend({
+        el: $('#outstanding-pull-requests'),
 
-        var endpoint = App.BASE + '/milestones';
-        var $milestones = $('#milestones');
+        template: Handlebars.compile($('#pull-requests-list-template').html()),
 
-        App.utils.httpGet(endpoint, displayData, displayFailMessage);
+        initialize: function() {
+            var endpoint = App.BASE + '/outstanding_pull_requests';
+            var cb = this.addPullRequests.bind(this);
+            App.utils.httpGet(endpoint, cb, displayFailMessage);
+        },
 
-        function displayData(data) {
-            if (data.data.length) {
-
-                var template = Handlebars.compile($('#insights-milestone').html());
-
-                $.each(data.data, function(idx, milestone) {
-
-                    var due_date = 0;
-                    var delay = false;
-
-                    if (milestone.due_on) {
-                        var start = moment(new Date());
-                        var end = moment((new Date(milestone.due_on)).getTime());
-                        due_date = start.from(end, true);
-                        if ((new Date(milestone.due_on)).getTime() > (new Date()).getTime()) {
-                            due_date = 'in ' + due_date;
-                        } else {
-                            due_date += ' ago';
-                            delay = true;
-                        }
-                    }
-
-                    var context = {
-                        closed: milestone.closed_issues,
-                    opened: milestone.open_issues,
-                    title: milestone.title,
-                    url: 'https://github.com/' + App.REPO + '/issues?state=open&milestone=' + milestone.number,
-                    due: due_date,
-                    progress: parseInt(milestone.closed_issues / (milestone.closed_issues + milestone.open_issues) * 100, 10),
-                    delay: delay
-                    };
-
-                    $milestones.append(template(context));
-                });
-            } else {
-                $($milestones).append($('<p class="muted text-center">No milestones available.</p>'));
-            }
-        }
-    }
-
-    var pullRequestListTemplate = Handlebars.compile($('#pull-requests-list-template').html());
-
-    function drawOutstandingPullRequests() {
-        var url = App.BASE + '/outstanding_pull_requests';
-        App.utils.httpGet(url, function (data) {
+        addPullRequests: function(data) {
             var prs = data.data;
             prs.forEach(function (e) {
                 e.last_activity = moment().from(e.last_activity, true);
             });
-            var $widget = $(pullRequestListTemplate({
+            var widget = this.template({
                 prs: prs,
                 title: "Outstanding Pull Requests",
                 subtitle: "(max. 20 results)"
-            }));
-            $('#outstanding-pull-requests').append($widget);
-        }, displayFailMessage);
-    }
+            });
+            this.$el.empty().append(widget);
+        }
+    });
+
 
     //http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
     function extractLight(c) {
@@ -354,6 +316,54 @@
         var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         return luma < 70;
     }
+
+    App.Insights.Milestones = Backbone.View.extend({
+        el: $('#milestones'),
+
+        template: Handlebars.compile($('#insights-milestone').html()),
+
+        initialize: function() {
+            var endpoint = App.BASE + '/milestones';
+            var cb = this.addMilestones.bind(this);
+            App.utils.httpGet(endpoint, cb, displayFailMessage);
+        },
+
+        addMilestones: function displayData(data) {
+            var template = this.template;
+            var milestones = [];
+            $.each(data.data, function(idx, milestone) {
+
+                var due_date = 0;
+                var delay = false;
+
+                // determine if milestone goal is in the future
+                // or the date was missed. prefix with "in" or suffix "ago"
+                if (milestone.due_on) {
+                    var start = moment(new Date());
+                    var end = moment((new Date(milestone.due_on)).getTime());
+                    due_date = start.from(end, true);
+                    if ((new Date(milestone.due_on)).getTime() > (new Date()).getTime()) {
+                        due_date = 'in ' + due_date;
+                    } else {
+                        due_date += ' ago';
+                        delay = true;
+                    }
+                }
+
+                var context = {
+                    closed: milestone.closed_issues,
+                    opened: milestone.open_issues,
+                    title: milestone.title,
+                    url: 'https://github.com/' + App.REPO + '/issues?state=open&milestone=' + milestone.number,
+                    due: due_date,
+                    progress: parseInt(milestone.closed_issues / (milestone.closed_issues + milestone.open_issues) * 100, 10),
+                    delay: delay
+                };
+                milestones.push(context);
+            });
+            this.$el.empty().append(template({milestones: milestones}));
+        }
+    });
 
     window.drawInsights = function drawInsights () {
         drawIssuesActivity();
@@ -375,10 +385,10 @@
                 title: "Unassigned Issues"
             });
         });
-        drawOutstandingPullRequests();
         drawAvgIssueTime();
         drawIssuesInvolvement();
-        addMilestoneStatus();
+        var milestones = new App.Insights.Milestones();
+        var outstandingPullRequests = new App.Insights.outstandingPullRequests();
     };
 
 })();
