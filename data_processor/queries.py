@@ -172,16 +172,6 @@ def untouched_issues(index, label):
     untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
     untouched = untouched[:LIMIT]
 
-    if label:
-        # filter out the ones that don't have {label} as a label
-        new_q = []
-        for issue in untouched:
-            for label_item in issue['labels']:
-                if label_item['name'] == label:
-                    new_q.append(issue)
-                    break
-        untouched = new_q
-
     return untouched
 
 def recent_events(index, count=200, starting_from=0):
