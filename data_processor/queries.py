@@ -135,7 +135,7 @@ def total_events(index, start=None, end=None):
 
 def most_active_issues(index, start=None, end=None):
     """
-    Finds the 10 most active issues - by total number of events.
+    Finds the 10 most active open issues - by total number of events.
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q, filtered = apply_time_filter(q, start, end)
