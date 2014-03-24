@@ -368,12 +368,12 @@ function drawInsights () {
             drawIssuesWidget(labels, {
                 selector: '#untouched-issues',
                 endpoint: '/untouched_issues',
-                title: "Inactive Issues (2 weeks)"
+                title: "Untouched Issues"
             });
             drawIssuesWidget(labels, {
                 selector: '#inactive-issues',
                 endpoint: '/inactive_issues',
-                title: "Untouched Issues"
+                title: "Inactive Issues (2 weeks)"
             });
             drawIssuesWidget(labels, {
                 selector: '#unassigned-issues',
