@@ -344,8 +344,10 @@ def unassigned_issues(index, label=None):
     Open issues that are assigned to nobody.
     max LIMIT results.
     """
+    # A pull request can be an issue too so we need to remove those
     q = S().indexes(index).doctypes('IssueData') \
         .filter(state='open') \
+        .filter(pull_request=None) \
         .filter(assignee=None) \
         .values_dict()
     q = all(q)
