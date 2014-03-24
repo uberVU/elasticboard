@@ -74,11 +74,11 @@ function drawIssuesWidget(labels, options, label) {
     });
 
     var url = API_BASE + options.endpoint;
-    if (label) {
-        url +=  '?label=' + label;
-    }
+    var params = {
+        label: label
+    };
 
-    $.getJSON(url)
+    $.getJSON(url, params)
         .done(function(json) {
             var data = json.data;
             var context = {
