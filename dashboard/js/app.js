@@ -13,6 +13,11 @@
         }
         return origin;
     })();
+    App.Components = {
+        timeline: false,
+        graph: false,
+        insights: false
+    };
     App.DEBUG = true;
 
     // get wrapper, logs and calls the callback or fail fn
@@ -128,7 +133,10 @@
 
                 $('#user-repo').text(App.REPO);
 
-                drawInsights();
+                if (!App.Components.insights) {
+                    drawInsights();
+                    App.Components.insights = true;
+                }
                 $('.tab').hide();
                 $('#tab-3').show();
 
@@ -158,7 +166,10 @@
 
                 $('#user-repo').text(App.REPO);
 
-                drawGraphs();
+                if (!App.Components.graph) {
+                    drawGraphs();
+                    App.Components.graph = true;
+                }
                 $('.tab').hide();
                 $('#tab-2').show();
 
@@ -183,8 +194,12 @@
 
                 $('#user-repo').text(App.REPO);
 
-                initTimeline();
+                if (!App.Components.timeline) {
+                    initTimeline();
+                    App.Components.timeline = true;
+                }
                 initIssuePullBadges();
+                addScrollListener();
             } else {
                 console.error('No such repo');
             }
@@ -241,7 +256,6 @@
     function initTimeline() {
         emptyTimeline();
         populateTimeline();
-        addScrollListener();
     }
 
     function addScrollListener() {
@@ -281,6 +295,15 @@
     }
 
     Backbone.history.start();
+
+    $(window).on('hashchange', function(e) {
+        if (location.hash.match(App.REPO)) return;
+        App.Components = {
+            timeline: false,
+            graph: false,
+            insights: false
+        };
+    });
 
 })();
 
