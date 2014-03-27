@@ -13,7 +13,7 @@
         }
         return origin;
     })();
-    App.DEBUG = false;
+    App.DEBUG = true;
 
     // get wrapper, logs and calls the callback or fail fn
     App.utils.httpGet = function httpGet(url, success, fail, always) {
@@ -65,7 +65,17 @@
 
             if ($container.hasClass('hidden')) {
                 $('.show--fade-in').removeClass('show--fade-in');
+            } else {
+                var cb = this.hideTooltip.bind(this);
+                $(window).on('keydown', cb);
             }
+        },
+        hideTooltip: function(e) {
+            if (e.keyCode == 27) { // ESC
+                $(window).off('keydown');
+                this.toggle();
+            }
+
         },
         switchRepo: function(event) {
             // remove all the events in the timeline
