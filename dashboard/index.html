@@ -18,9 +18,9 @@
     <div class="large-7 small-12 columns">
         <a href="/"><h1>Elasticboard</h1></a>
         <ul class="menu text-center">
-            <li data-tab="tab-1">Timeline</li>
-            <li data-tab="tab-3" data-function="drawInsights">Insights</li>
-            <li data-tab="tab-2" data-function="drawGraphs">Graphs</li>
+            <li data-tab="tab-timeline">Timeline</li>
+            <li data-tab="tab-insights" data-function="drawInsights">Insights</li>
+            <li data-tab="tab-graphs" data-function="drawGraphs">Graphs</li>
             <li data-tab="github">
                 <iframe src="http://ghbtns.com/github-btn.html?user=uberVU&repo=elasticboard&type=watch&count=true"
                         allowtransparency="true" frameborder="0" scrolling="0" width="79" height="20"></iframe>
@@ -47,13 +47,13 @@
 <div class="container row full-width">
 
     <div class="small-12 large-12 columns" id="tab-container">
-        <div class="tab" id="tab-1">
+        <div class="tab" id="tab-timeline">
             <div id="timeline" class="large-centered">
                 <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
             </div>
         </div>
 
-        <div class="tab hide" id="tab-2">
+        <div class="tab hide" id="tab-insights">
             <div class="graph" id="most-active-issues"></div>
             <div class="graph" id="popularity-evolution"></div>
             <div class="graph" id="most-active-people"></div>
@@ -61,7 +61,7 @@
             <div class="row whitespace"></div>
         </div>
 
-        <div class="tab hide" id="tab-3">
+        <div class="tab hide" id="tab-graphs">
             <div id="milestones" class="graph-like"></div>
             <div class="graph-like" id="outstanding-pull-requests"></div>
             <div class="graph" id="issues-activity"></div>

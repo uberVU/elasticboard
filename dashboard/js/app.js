@@ -138,7 +138,7 @@
                     App.Components.insights = true;
                 }
                 $('.tab').hide();
-                $('#tab-3').show();
+                $('#tab-insights').show();
 
                 stopScrollListener();
                 initIssuePullBadges();
@@ -171,7 +171,7 @@
                     App.Components.graph = true;
                 }
                 $('.tab').hide();
-                $('#tab-2').show();
+                $('#tab-graphs').show();
 
                 stopScrollListener();
                 initIssuePullBadges();
@@ -187,7 +187,7 @@
                     console.log('[TIMELINE] ' + user + ' ' + repo);
                 }
                 $('.tab').hide();
-                $('#tab-1').show();
+                $('#tab-timeline').show();
 
                 App.REPO = user + '/' + repo;
                 App.BASE = App.HOST + '/' + App.REPO;
@@ -297,6 +297,7 @@
     Backbone.history.start();
 
     $(window).on('hashchange', function(e) {
+        // if hash has changed but it's the same repo
         if (location.hash.match(App.REPO)) return;
         App.Components = {
             timeline: false,
