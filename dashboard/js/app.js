@@ -138,7 +138,8 @@
                     App.Components.insights = true;
                 }
                 $('.tab').hide();
-                $('#tab-insights').show();
+                $('#tab-insights').removeClass('hide').show();
+                console.log($('#tab-insights')[0]);
 
                 stopScrollListener();
                 initIssuePullBadges();

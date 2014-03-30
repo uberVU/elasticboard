@@ -135,7 +135,7 @@ def total_events(index, start=None, end=None):
 
 def most_active_issues(index, start=None, end=None):
     """
-    Finds the 10 most active issues - by total number of events.
+    Finds the 10 most active open issues - by total number of events.
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
     q, filtered = apply_time_filter(q, start, end)
@@ -171,16 +171,6 @@ def untouched_issues(index, label):
 
     untouched = [i for i in list(issues) if i['updated_at'] == i['created_at']]
     untouched = untouched[:LIMIT]
-
-    if label:
-        # filter out the ones that don't have {label} as a label
-        new_q = []
-        for issue in untouched:
-            for label_item in issue['labels']:
-                if label_item['name'] == label:
-                    new_q.append(issue)
-                    break
-        untouched = new_q
 
     return untouched
 
@@ -354,8 +344,10 @@ def unassigned_issues(index, label=None):
     Open issues that are assigned to nobody.
     max LIMIT results.
     """
+    # A pull request can be an issue too so we need to remove those
     q = S().indexes(index).doctypes('IssueData') \
         .filter(state='open') \
+        .filter(pull_request=None) \
         .filter(assignee=None) \
         .values_dict()
     q = all(q)
