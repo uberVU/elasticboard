@@ -87,6 +87,7 @@
 
         },
         switchRepo: function(event) {
+            $('.menu li').removeClass('selected');
             // remove all the events in the timeline
             // leave in only the loading spinner
             var repo = $(event.target).text();
