@@ -231,7 +231,7 @@
         App.utils.makeXYGraph('#most-active-issues', {
             endpoint: '/most_active_issues',
             type: 'bar',
-            title: "Most active issues",
+            title: "Most active open issues",
             keyName: function (e) {
                 return App.utils.makeLink('http://github.com/' + App.REPO + '/issues/' + e.term,
                     "#" + e.term);
