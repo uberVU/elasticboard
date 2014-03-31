@@ -88,7 +88,7 @@ body {
     border-bottom: none;
 }
 
-.menu li:hover {
+.menu li:hover, .menu .selected {
     border-bottom:1px solid rgb(180, 180, 180);
 }
 
@@ -224,6 +224,13 @@ body {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+#user-repo {
+    background-image: url(../imgs/cog.svg);
+    background-repeat: no-repeat;
+    background-position: right 65%;
+    padding-right: 40px;
 }
 
 .repo-select {
@@ -437,7 +444,7 @@ body {
 }
 
 .insights-milestone {
-  background: #222;
+  background: #1F1F1F;
 }
 
   .milestone-title {
