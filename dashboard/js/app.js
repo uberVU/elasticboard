@@ -10,6 +10,8 @@
             origin = origin.split(':');
             origin.pop();
             origin = origin.join(':') + ':5000';
+        } else {
+            origin += ':5000';
         }
         return origin;
     })();
