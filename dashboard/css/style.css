@@ -226,6 +226,13 @@ body {
     user-select: none;
 }
 
+#user-repo {
+    background-image: url(../imgs/cog.svg);
+    background-repeat: no-repeat;
+    background-position: right 65%;
+    padding-right: 40px;
+}
+
 .repo-select {
     position: relative;
 }
@@ -437,7 +444,7 @@ body {
 }
 
 .insights-milestone {
-  background: #222;
+  background: #1F1F1F;
 }
 
   .milestone-title {
