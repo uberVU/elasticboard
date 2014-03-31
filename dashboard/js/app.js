@@ -141,7 +141,6 @@
                 }
                 $('.tab').hide();
                 $('#tab-insights').removeClass('hide').show();
-                console.log($('#tab-insights')[0]);
 
                 stopScrollListener();
                 initIssuePullBadges();
