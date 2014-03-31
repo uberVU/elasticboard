@@ -380,6 +380,7 @@
     }
 
     window.populateTimeline = function populateTimeline(count, starting_from) {
+        $('li[data-tab=tab-timeline]').addClass('selected');
         var $timeline = $('#timeline');
         var template = Handlebars.compile($('#timeline-item-template').html());
         var templateBasic = Handlebars.compile($('#timeline-item-basic').html());

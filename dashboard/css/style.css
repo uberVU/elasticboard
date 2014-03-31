@@ -88,7 +88,7 @@ body {
     border-bottom: none;
 }
 
-.menu li:hover {
+.menu li:hover, .menu .selected {
     border-bottom:1px solid rgb(180, 180, 180);
 }
 

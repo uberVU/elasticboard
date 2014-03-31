@@ -49,6 +49,8 @@
             var $el = $(item.target);
             var action = $el.text().toLowerCase();
             location.hash = '/' + App.REPO + '/' + action;
+            $('.menu li').removeClass('selected');
+            $('li[data-tab=tab-' + action + ']').addClass('selected');
         }
     });
 

@@ -223,6 +223,7 @@
     }
 
     window.drawGraphs = function drawGraphs() {
+        $('li[data-tab=tab-graphs]').addClass('selected');
         drawActivePeopleGraph();
         drawActivityGraph();
         drawPopularityEvolutionGraph();

@@ -391,6 +391,7 @@
         });
 
         window.drawInsights = function drawInsights () {
+            $('li[data-tab=tab-insights]').addClass('selected');
             var url = App.BASE + '/labels';
             App.utils.httpGet(url, function (labels) {
                 drawIssuesWidget(labels, {
