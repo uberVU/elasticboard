@@ -91,6 +91,9 @@
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
           <p class="timeline-item--username">{{ username.[username] }}</p>
+          {{#if collab}}
+            <p class="text-center"><span class="badge">repo collab</span></p>
+          {{/if}}
         </div>
         {{/if}}
         <div class="small-8 columns">
