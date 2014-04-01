@@ -5,6 +5,7 @@
     window.App.PER_PAGE = 40;
 
     var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
+    var collabs = null;
 
     Handlebars.registerHelper('eachCommit', function(context, options) {
         var ret = "";
@@ -365,6 +366,11 @@
             };
         }
 
+        // is the user a repo collab?
+        context.collab = collabs.some(function (u) {
+            return u.login === context.username.username;
+        });
+
         if (context.number && context.title) {
             if (mapping && mapping.issueURL) {
                 context.issueURL = mapping.issueURL(e);
@@ -379,12 +385,64 @@
         return context;
     }
 
-    window.populateTimeline = function populateTimeline(count, starting_from) {
-        $('li[data-tab=tab-timeline]').addClass('selected');
+    function processTimelineData(data) {
         var $timeline = $('#timeline');
         var template = Handlebars.compile($('#timeline-item-template').html());
         var templateBasic = Handlebars.compile($('#timeline-item-basic').html());
         var $loading = $('#timeline-loading');
+
+        var fragment = document.createDocumentFragment();
+        var mapping;
+        data.data.forEach(function(e) {
+            mapping = TIMELINE_MAPPING[e.type];
+            var context = formatContext(e);
+
+            if (!context) return;
+
+            if (mapping && mapping.link) {
+                context.link = mapping.link(e);
+            }
+
+            var $item;
+
+            if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
+                context.img = context.action == 'starred' ? 'starred' : 'forked';
+
+                if (e.type == 'CommitCommentEvent') context.img = 'comment';
+
+                $item = $(templateBasic(context));
+
+            } else {
+
+                $item = $(template(context));
+
+            }
+
+            fragment.appendChild($item[0]);
+        });
+
+        $(fragment).insertBefore($loading);
+
+        if (!data.data.length) {
+            mapping = TIMELINE_MAPPING.EndOfTimeline;
+            $(document).off('scroll');
+            var context = {
+                author: "Sorry!",
+                action: '',
+                object: mapping.object(),
+                timestamp: ""
+            };
+
+            var $item = $(template(context));
+            $loading.remove();
+            $timeline.append($item);
+            $('#tab-1').off('scroll');
+        }
+
+    }
+
+    window.populateTimeline = function populateTimeline(count, starting_from) {
+        $('li[data-tab=tab-timeline]').addClass('selected');
 
         if (!count) {
             count = App.PER_PAGE || 50;
@@ -393,57 +451,13 @@
             starting_from = 0;
         }
 
-        $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
+        App.utils.httpGet(App.BASE + '/collaborators')
             .success(function(data) {
-                var fragment = document.createDocumentFragment();
-                var mapping;
-                data.data.forEach(function(e) {
-                    mapping = TIMELINE_MAPPING[e.type];
-                    var context = formatContext(e);
-
-                    if (!context) return;
-
-                    if (mapping && mapping.link) {
-                        context.link = mapping.link(e);
-                    }
-
-                    var $item;
-
-                    if (e.type == 'CommitCommentEvent' || context.action == 'starred' || context.action == 'forked to') {
-                        context.img = context.action == 'starred' ? 'starred' : 'forked';
-
-                        if (e.type == 'CommitCommentEvent') context.img = 'comment';
-
-                        $item = $(templateBasic(context));
-
-                    } else {
-
-                        $item = $(template(context));
-
-                    }
-
-                    fragment.appendChild($item[0]);
-                });
-
-                $(fragment).insertBefore($loading);
-
-                if (!data.data.length) {
-                    mapping = TIMELINE_MAPPING.EndOfTimeline;
-                    $(document).off('scroll');
-                    var context = {
-                        author: "Sorry!",
-                        action: '',
-                        object: mapping.object(),
-                        timestamp: ""
-                    };
-
-                    var $item = $(template(context));
-                    $loading.remove();
-                    $timeline.append($item);
-                    $('#tab-1').off('scroll');
-                }
-
-            }).fail(displayFailMessage);
+                collabs = data.data;
+                $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
+                    .success(processTimelineData)
+                    .fail(displayFailMessage);
+            });
     };
 
     window.emptyTimeline = function() {
