@@ -451,14 +451,13 @@
             starting_from = 0;
         }
 
-        $.get(App.BASE + '/collaborators')
+        App.utils.httpGet(App.BASE + '/collaborators')
             .success(function(data) {
                 collabs = data.data;
                 $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
                     .success(processTimelineData)
                     .fail(displayFailMessage);
-            })
-            .fail(displayFailMessage);
+            });
     };
 
     window.emptyTimeline = function() {
