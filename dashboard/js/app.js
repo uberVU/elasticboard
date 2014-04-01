@@ -27,7 +27,7 @@
         if (App.DEBUG) {
             console.log('[GET] ' + url);
         }
-        return $.get(url).done(success).fail(fail || logFailure);
+        return $.get(url).done(success).fail(fail || displayFailMessage);
     };
 
     App.Router = Backbone.Router.extend({
