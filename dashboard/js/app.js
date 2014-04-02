@@ -20,7 +20,7 @@
         graph: false,
         insights: false
     };
-    App.DEBUG = true;
+    App.DEBUG = false;
 
     // get wrapper, logs and calls the callback or fail fn
     App.utils.httpGet = function httpGet(url, success, fail, always) {
