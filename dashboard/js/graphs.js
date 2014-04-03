@@ -201,16 +201,20 @@
     }
 
     window.drawPopularityEvolutionGraph = function drawPopularityEvolutionGraph() {
-        $.getJSON(App.BASE + '/popularity_evolution')
+        var mode = $('#popularity-evolution select')[0].value;
+        $.getJSON(App.BASE + '/popularity_evolution', {mode: mode})
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
                 var categories = data.data.map(function (e) {
+                    if (mode === 'weekly') {
+                        return e.weekStart + ' - ' + e.weekEnd;
+                    }
                     return e.month;
                 });
 
                 var options = {
                     type: 'column',
-            title: "Monthly Popularity Increase",
+            title: mode.charAt(0).toUpperCase() + mode.slice(1) +  " Popularity Increase",
             subtitle: "Number of new stars and forks",
             yTitle: 'Events',
             suffix: '',
@@ -220,7 +224,7 @@
                 return this.name;
             }
                 };
-                makeStackedGraph('#popularity-evolution', options);
+                makeStackedGraph('#popularity-evolution .graph-container', options);
             })
         .fail(displayFailMessage);
     }

@@ -55,7 +55,15 @@
 
         <div class="tab hide" id="tab-graphs">
             <div class="graph" id="most-active-issues"></div>
-            <div class="graph" id="popularity-evolution"></div>
+            <div class="graph" id="popularity-evolution">
+                <div class="graph-container"></div>
+                <div class="text-center">
+                    <select data-function="drawPopularityEvolutionGraph">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
             <div class="graph" id="total-events">
                 <div class="graph graph-container"></div>
                 <div class="row text-center">
