@@ -57,7 +57,15 @@
             <div class="graph" id="most-active-issues"></div>
             <div class="graph" id="popularity-evolution"></div>
             <div class="graph" id="most-active-people"></div>
-            <div class="graph" id="total-events-monthly"></div>
+            <div class="graph" id="total-events">
+                <div class="graph graph-container"></div>
+                <div class="row text-center">
+                    <select name="mode" data-function="drawActivityGraph">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
             <div class="row whitespace"></div>
         </div>
 

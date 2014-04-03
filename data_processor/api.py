@@ -46,12 +46,19 @@ def most_active_people(owner, repo):
     data = queries.most_active_people(index)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/total_events_monthly')
+@app.route('/<owner>/<repo>/total_events')
 @crossdomain(origin='*')
 @cached()
-def total_events_monthly(owner, repo):
+def total_events(owner, repo):
     index = index_name(owner, repo)
-    data = queries.past_n_months(index, queries.total_events, CHART_MONTHS)
+    mode = request.args.get('mode', 'weekly')
+
+    if mode == 'weekly':
+        data = queries.past_n_weeks(index, queries.total_events, CHART_INTERVALS)
+    elif mode == 'monthly':
+        data = queries.past_n_months(index, queries.total_events, CHART_INTERVALS)
+    else:
+        data = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/most_active_issues')

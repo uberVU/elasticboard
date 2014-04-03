@@ -32,6 +32,10 @@ body {
     margin-left: 2em;
 }
 
+.graph select {
+    width: 10rem;
+}
+
 .graph-like {
     background: rgb(31, 31, 31);
     padding: 5px;

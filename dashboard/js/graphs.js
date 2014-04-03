@@ -137,18 +137,22 @@
         $(container).highcharts(graph);
     }
 
-    function drawActivityGraph() {
-        $.getJSON(App.BASE + '/total_events_monthly')
+    window.drawActivityGraph = function drawActivityGraph() {
+        var mode = $('#total-events select')[0].value;
+        $.getJSON(App.BASE + '/total_events', {mode: mode})
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
                 var categories = data.data.map(function (e) {
+                    if (mode == 'weekly') {
+                        return e.weekStart + ' - ' + e.weekEnd;
+                    }
                     return e.month;
                 });
 
                 var options = {
                     type: 'column',
                     title: "Activity",
-                    subtitle: "Total monthly events",
+                    subtitle: "Total " + mode + " events",
                     yTitle: 'Events',
                     suffix: 'events',
                     series: series,
@@ -162,7 +166,7 @@
                         return label.substr(0, idx);
                     }
                 };
-                makeStackedGraph('#total-events-monthly', options);
+                makeStackedGraph('#total-events .graph-container', options);
             })
         .fail(displayFailMessage);
     }
