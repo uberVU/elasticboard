@@ -24,11 +24,13 @@
         App.Insights.IssuesBurndown = Backbone.View.extend({
             el: $('#issues-activity'),
             title: 'Issues Burndown',
-            subtitle: '# of issues opened vs closed, monthly',
+            subtitle: '# of issues opened vs closed',
             data: [],
             initialize: function() {
                 var cb = this.drawIssuesActivity.bind(this);
-                App.utils.httpGet(App.BASE + '/issues_activity', cb, displayFailMessage);
+                this.mode = $(this.el).find('select')[0].value;
+                this.subtitle = '# of issues opened vs closed, ' + this.mode
+                App.utils.httpGet(App.BASE + '/issues_activity?mode=' + this.mode, cb, displayFailMessage);
             },
             drawIssuesActivity: function(data) {
                 this.data = data.data;
@@ -37,7 +39,8 @@
                 var title = this.title;
                 var subtitle = this.subtitle;
 
-                this.$el.highcharts({
+                var that = this;
+                $(this.$el).find('.graph-container').highcharts({
                         chart: {
                             type: 'spline'
                         },
@@ -48,7 +51,12 @@
                             text: subtitle
                         },
                         xAxis: {
-                            categories: opened.map(function(e) { return e.month; })
+                            categories: opened.map(function(e) {
+                                if (that.mode === 'weekly') {
+                                    return e.weekStart + ' - ' + e.weekEnd;
+                                }
+                                return e.month;
+                            })
                         },
                         yAxis: {
                             min: 0,
@@ -411,10 +419,19 @@
                 });
             });
             drawAvgIssueTime();
-            var issueInvolvement = new App.Insights.IssueInvolvement();
-            var milestones = new App.Insights.Milestones();
-            var outstandingPullRequests = new App.Insights.outstandingPullRequests();
-            var issuesBurndown = new App.Insights.IssuesBurndown();
+            window.widgets = {
+                issueInvolvement: new App.Insights.IssueInvolvement(),
+                milestones: new App.Insights.Milestones(),
+                outstandingPullRequests: new App.Insights.outstandingPullRequests(),
+                issuesBurndown: new App.Insights.IssuesBurndown()
+            }
+
+            // register handlers for weekly/monthly select
+            $('.insight-select').on('change', function (e) {
+                var $select = $(e.target);
+                var widget = $select.data('widget');
+                window.widgets[widget].initialize();
+            });
         };
 
     })();

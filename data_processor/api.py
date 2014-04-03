@@ -99,9 +99,17 @@ def available_repos():
 @cached()
 def issues_activity(owner, repo):
     index = index_name(owner, repo)
-    opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), CHART_INTERVALS)
-    closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), CHART_INTERVALS)
-    data = {'opened': opened, 'closed': closed}
+    mode = request.args.get('mode', 'weekly')
+    if mode == 'weekly':
+        opened = queries.past_n_weeks(index, partial(queries.issue_events_count, action='opened'), CHART_INTERVALS)
+        closed = queries.past_n_weeks(index, partial(queries.issue_events_count, action='closed'), CHART_INTERVALS)
+        data = {'opened': opened, 'closed': closed}
+    elif mode == 'monthly':
+        opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), CHART_INTERVALS)
+        closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), CHART_INTERVALS)
+        data = {'opened': opened, 'closed': closed}
+    else:
+        data = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/issues_count')
