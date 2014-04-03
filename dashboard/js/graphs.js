@@ -143,7 +143,7 @@
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
                 var categories = data.data.map(function (e) {
-                    if (mode == 'weekly') {
+                    if (mode === 'weekly') {
                         return e.weekStart + ' - ' + e.weekEnd;
                     }
                     return e.month;
