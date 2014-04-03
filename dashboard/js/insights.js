@@ -41,36 +41,36 @@
 
                 var that = this;
                 $(this.$el).find('.graph-container').highcharts({
-                        chart: {
-                            type: 'spline'
-                        },
-                        title: {
-                            text: title
-                        },
-                        subtitle: {
-                            text: subtitle
-                        },
-                        xAxis: {
-                            categories: opened.map(function(e) {
-                                if (that.mode === 'weekly') {
-                                    return e.weekStart + ' - ' + e.weekEnd;
-                                }
-                                return e.month;
-                            })
-                        },
-                        yAxis: {
-                            min: 0,
-                        title: {
-                            text: '# Issues'
-                        }
-                        },
-                        legend: {
-                            enabled: true
-                        },
-                        tooltip: {
-                            shared: true
-                        },
-                        series: [
+                    chart: {
+                        type: 'spline'
+                    },
+                    title: {
+                        text: title
+                    },
+                    subtitle: {
+                        text: subtitle
+                    },
+                    xAxis: {
+                        categories: opened.map(function(e) {
+                            if (that.mode === 'weekly') {
+                                return e.weekStart + ' - ' + e.weekEnd;
+                            }
+                            return e.month;
+                        })
+                    },
+                    yAxis: {
+                        min: 0,
+                    title: {
+                        text: '# Issues'
+                    }
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    tooltip: {
+                        shared: true
+                    },
+                    series: [
                         {
                             name: 'Opened',
                             data: opened.map(function(e) { return e.value; }),
