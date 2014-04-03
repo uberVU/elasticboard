@@ -24,7 +24,7 @@
         App.Insights.IssuesBurndown = Backbone.View.extend({
             el: $('#issues-activity'),
             title: 'Issues Burndown',
-            subtitle: '# of issues opened vs closed, montly',
+            subtitle: '# of issues opened vs closed, monthly',
             data: [],
             initialize: function() {
                 var cb = this.drawIssuesActivity.bind(this);
