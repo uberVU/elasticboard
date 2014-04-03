@@ -171,7 +171,7 @@
         .fail(displayFailMessage);
     }
 
-    function drawActivePeopleGraph() {
+    window.drawActivePeopleGraph = function drawActivePeopleGraph() {
         $.getJSON(App.BASE + '/most_active_people')
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'events');
@@ -200,7 +200,7 @@
             }).fail(displayFailMessage);
     }
 
-    function drawPopularityEvolutionGraph() {
+    window.drawPopularityEvolutionGraph = function drawPopularityEvolutionGraph() {
         $.getJSON(App.BASE + '/popularity_evolution')
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
