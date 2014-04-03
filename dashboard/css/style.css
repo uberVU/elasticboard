@@ -24,6 +24,10 @@ body {
     margin-top: 30px;
 }
 
+.graph .graph-container {
+    height: 94%;
+}
+
 .graph:first-child {
     margin-top: auto;
 }
@@ -33,7 +37,7 @@ body {
 }
 
 .graph select {
-    width: 10rem;
+    width: auto;
 }
 
 .graph-like {
