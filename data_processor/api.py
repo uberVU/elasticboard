@@ -188,7 +188,13 @@ def outstanding_pull_requests(owner, repo):
 @cached()
 def popularity_evolution(owner, repo):
     index = index_name(owner, repo)
-    data = queries.past_n_months(index, queries.popularity_events, CHART_INTERVALS)
+    mode = request.args.get('mode', 'weekly')
+    if mode == 'weekly':
+        data = queries.past_n_weeks(index, queries.popularity_events, CHART_INTERVALS)
+    elif mode == 'monthly':
+        data = queries.past_n_months(index, queries.popularity_events, CHART_INTERVALS)
+    else:
+        data = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/collaborators')
