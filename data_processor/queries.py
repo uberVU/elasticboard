@@ -79,6 +79,36 @@ def past_n_months(index, query, n):
     data.reverse()
     return data
 
+def past_n_weeks(index, query, n):
+    """
+    Maps a query over time intervals corresponding to the past n months.
+    Returns a list of objects like
+    {'weekStart': day1.month1, 'weekEnd': day2.month2, 'data': query_data}.
+    """
+    # find the closest past Sunday
+    end = datetime.datetime.now()
+    while end.weekday() != 6:
+        end -= datetime.timedelta(days=1)
+
+    end.replace(hour=23, minute=59)
+    start = end - datetime.timedelta(days=6)
+    start.replace(hour=0, minute=0)
+
+    data = []
+    for i in range(n):
+        week_data = {
+            'weekStart': '%s.%s' % (start.day, start.month),
+            'weekEnd': '%s.%s' % (end.day, end.month),
+            'value': query(index=index, start=start, end=end)
+        }
+        data.append(week_data)
+
+        start -= datetime.timedelta(days=7)
+        end -= datetime.timedelta(days=7)
+
+    data.reverse()
+    return data
+
 def most_active_people(index, start=None, end=None):
     """
     Finds the 10 most active users - as actors in all the events,
