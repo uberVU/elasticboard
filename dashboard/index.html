@@ -58,7 +58,7 @@
             <div class="graph" id="popularity-evolution">
                 <div class="graph-container"></div>
                 <div class="text-center">
-                    <select data-function="drawPopularityEvolutionGraph">
+                    <select class="graph-select" data-function="drawPopularityEvolutionGraph">
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                     </select>
@@ -67,7 +67,7 @@
             <div class="graph" id="total-events">
                 <div class="graph-container"></div>
                 <div class="text-center">
-                    <select name="mode" data-function="drawActivityGraph">
+                    <select class="graph-select" data-function="drawActivityGraph">
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                     </select>
@@ -80,7 +80,15 @@
         <div class="tab hide" id="tab-insights">
             <div id="milestones" class="graph-like"></div>
             <div class="graph-like" id="outstanding-pull-requests"></div>
-            <div class="graph" id="issues-activity"></div>
+            <div class="graph" id="issues-activity">
+                <div class="graph-container"></div>
+                <div class="text-center">
+                    <select class="insight-select" data-widget="issuesBurndown">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
             <div class="graph" id="avg-issue-time"></div>
             <div class="graph-like" id="inactive-issues"></div>
             <div class="graph-like" id="unassigned-issues"></div>
