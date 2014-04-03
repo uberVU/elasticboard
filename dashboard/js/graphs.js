@@ -59,7 +59,6 @@
     function makeStackedSeries(data, valueKey) {
         // find all the series
         var seriesNames = [];
-        var seriesNames2 = [];
         var i, j;
         for (i = 0; i < data.length; ++i) {
             var values = data[i][valueKey];
