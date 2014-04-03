@@ -72,8 +72,8 @@ def past_n_months(index, query, n):
         end = datetime.datetime(year=year, month=month, day=last_day, hour=23, minute=59)
 
         month_data = {
-                'month': start.strftime('%B'),
-                'value': query(index=index, start=start, end=end)
+            'month': start.strftime('%B'),
+            'value': query(index=index, start=start, end=end)
         }
         data.append(month_data)
     data.reverse()
