@@ -226,7 +226,7 @@
     function checkForRepo(user, repo, fn) {
         var url = App.HOST + '/available_repos';
         var s = user + '/' + repo;
-        App.utils.httpGet(url, {name: 'andrei'}, function(data) {
+        App.utils.httpGet(url, function(data) {
             var r = data.data.some(function(repo) {
                 return repo.match(s);
             });
