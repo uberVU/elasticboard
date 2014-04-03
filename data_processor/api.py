@@ -16,7 +16,7 @@ CACHE_TIMEOUT = 1 * 60
 app = Flask(__name__)
 # app.debug = True
 
-CHART_MONTHS = 6
+CHART_INTERVALS = 6
 
 def index_name(user, repo):
     return '&'.join((user, repo))
@@ -51,12 +51,19 @@ def most_active_people(owner, repo):
     data = queries.most_active_people(index)
     return jsonify(data=data)
 
-@app.route('/<owner>/<repo>/total_events_monthly')
+@app.route('/<owner>/<repo>/total_events')
 @crossdomain(origin='*')
 @cached()
-def total_events_monthly(owner, repo):
+def total_events(owner, repo):
     index = index_name(owner, repo)
-    data = queries.past_n_months(index, queries.total_events, CHART_MONTHS)
+    mode = request.args.get('mode', 'weekly')
+
+    if mode == 'weekly':
+        data = queries.past_n_weeks(index, queries.total_events, CHART_INTERVALS)
+    elif mode == 'monthly':
+        data = queries.past_n_months(index, queries.total_events, CHART_INTERVALS)
+    else:
+        data = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/most_active_issues')
@@ -97,8 +104,8 @@ def available_repos():
 @cached()
 def issues_activity(owner, repo):
     index = index_name(owner, repo)
-    opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), CHART_MONTHS)
-    closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), CHART_MONTHS)
+    opened = queries.past_n_months(index, partial(queries.issue_events_count, action='opened'), CHART_INTERVALS)
+    closed = queries.past_n_months(index, partial(queries.issue_events_count, action='closed'), CHART_INTERVALS)
     data = {'opened': opened, 'closed': closed}
     return jsonify(data=data)
 
@@ -135,7 +142,7 @@ def inactive_issues(owner, repo):
 @cached()
 def avg_issue_time(owner, repo):
     index = index_name(owner, repo)
-    times = queries.past_n_months(index, queries.avg_issue_time, CHART_MONTHS)
+    times = queries.past_n_months(index, queries.avg_issue_time, CHART_INTERVALS)
     return jsonify(data=times)
 
 @app.route('/<owner>/<repo>/issues_involvement')
@@ -229,7 +236,13 @@ def outstanding_pull_requests(owner, repo):
 @cached()
 def popularity_evolution(owner, repo):
     index = index_name(owner, repo)
-    data = queries.past_n_months(index, queries.popularity_events, CHART_MONTHS)
+    mode = request.args.get('mode', 'weekly')
+    if mode == 'weekly':
+        data = queries.past_n_weeks(index, queries.popularity_events, CHART_INTERVALS)
+    elif mode == 'monthly':
+        data = queries.past_n_months(index, queries.popularity_events, CHART_INTERVALS)
+    else:
+        data = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=data)
 
 @app.route('/<owner>/<repo>/collaborators')

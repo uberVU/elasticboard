@@ -59,7 +59,6 @@
     function makeStackedSeries(data, valueKey) {
         // find all the series
         var seriesNames = [];
-        var seriesNames2 = [];
         var i, j;
         for (i = 0; i < data.length; ++i) {
             var values = data[i][valueKey];
@@ -138,18 +137,22 @@
         $(container).highcharts(graph);
     }
 
-    function drawActivityGraph() {
-        $.getJSON(App.BASE + '/total_events_monthly')
+    window.drawActivityGraph = function drawActivityGraph() {
+        var mode = $('#total-events select')[0].value;
+        $.getJSON(App.BASE + '/total_events', {mode: mode})
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
                 var categories = data.data.map(function (e) {
+                    if (mode === 'weekly') {
+                        return e.weekStart + ' - ' + e.weekEnd;
+                    }
                     return e.month;
                 });
 
                 var options = {
                     type: 'column',
                     title: "Activity",
-                    subtitle: "Total monthly events",
+                    subtitle: "Total " + mode + " events",
                     yTitle: 'Events',
                     suffix: 'events',
                     series: series,
@@ -163,12 +166,12 @@
                         return label.substr(0, idx);
                     }
                 };
-                makeStackedGraph('#total-events-monthly', options);
+                makeStackedGraph('#total-events .graph-container', options);
             })
         .fail(displayFailMessage);
     }
 
-    function drawActivePeopleGraph() {
+    window.drawActivePeopleGraph = function drawActivePeopleGraph() {
         $.getJSON(App.BASE + '/most_active_people')
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'events');
@@ -197,17 +200,21 @@
             }).fail(displayFailMessage);
     }
 
-    function drawPopularityEvolutionGraph() {
-        $.getJSON(App.BASE + '/popularity_evolution')
+    window.drawPopularityEvolutionGraph = function drawPopularityEvolutionGraph() {
+        var mode = $('#popularity-evolution select')[0].value;
+        $.getJSON(App.BASE + '/popularity_evolution', {mode: mode})
             .done(function(data) {
                 var series = makeStackedSeries(data.data, 'value');
                 var categories = data.data.map(function (e) {
+                    if (mode === 'weekly') {
+                        return e.weekStart + ' - ' + e.weekEnd;
+                    }
                     return e.month;
                 });
 
                 var options = {
                     type: 'column',
-            title: "Monthly Popularity Increase",
+            title: mode.charAt(0).toUpperCase() + mode.slice(1) +  " Popularity Increase",
             subtitle: "Number of new stars and forks",
             yTitle: 'Events',
             suffix: '',
@@ -217,7 +224,7 @@
                 return this.name;
             }
                 };
-                makeStackedGraph('#popularity-evolution', options);
+                makeStackedGraph('#popularity-evolution .graph-container', options);
             })
         .fail(displayFailMessage);
     }
@@ -241,5 +248,12 @@
             label: 'events'
         });
     };
+
+    // register handlers for weekly/monthly select
+    $('select').on('change', function (e) {
+        var $select = $(e.target);
+        var fn = $select.data('function');
+        window[fn]();
+    });
 
 })();

@@ -67,15 +67,45 @@ def past_n_months(index, query, n):
         if  month == 0:
             month = 12
             year -= 1
-        start = datetime.date(year=year, month=month, day=1)
+        start = datetime.datetime(year=year, month=month, day=1, hour=0, minute=0)
         last_day = calendar.monthrange(year, month)[1]
-        end = datetime.date(year=year, month=month, day=last_day)
+        end = datetime.datetime(year=year, month=month, day=last_day, hour=23, minute=59)
 
         month_data = {
-                'month': start.strftime('%B'),
-                'value': query(index=index, start=start, end=end)
+            'month': start.strftime('%B'),
+            'value': query(index=index, start=start, end=end)
         }
         data.append(month_data)
+    data.reverse()
+    return data
+
+def past_n_weeks(index, query, n):
+    """
+    Maps a query over time intervals corresponding to the past n months.
+    Returns a list of objects like
+    {'weekStart': Month1 day1, 'weekEnd': Month2 day2, 'data': query_data}.
+    """
+    # find the closest past Sunday
+    end = datetime.datetime.now()
+    while end.weekday() != 6:
+        end -= datetime.timedelta(days=1)
+
+    end.replace(hour=23, minute=59)
+    start = end - datetime.timedelta(days=6)
+    start.replace(hour=0, minute=0)
+
+    data = []
+    for i in range(n):
+        week_data = {
+            'weekStart': '%s %s' % (start.strftime('%B'), start.day),
+            'weekEnd': '%s %s' % (end.strftime('%B'), end.day),
+            'value': query(index=index, start=start, end=end)
+        }
+        data.append(week_data)
+
+        start -= datetime.timedelta(days=7)
+        end -= datetime.timedelta(days=7)
+
     data.reverse()
     return data
 

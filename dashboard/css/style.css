@@ -21,11 +21,23 @@ body {
 .graph {
     padding: 5px;
     height: 36rem;
-    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.graph .graph-container {
+    height: 94%;
+}
+
+.graph:first-child {
+    margin-top: auto;
 }
 
 .graph ul, .graph-like ul {
     margin-left: 2em;
+}
+
+.graph select {
+    width: auto;
 }
 
 .graph-like {
