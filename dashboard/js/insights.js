@@ -133,15 +133,22 @@
             endpoint: '/avg_issue_time',
             subtitle: 'From the time it\'s opened until it\'s closed',
             initialize: function() {
+                this.mode = $(this.el).find('select')[0].value;
                 this.drawAvgIssueTime();
             },
             drawAvgIssueTime: function drawAvgIssueTime() {
-                App.utils.makeXYGraph(this.sel, {
-                    endpoint: this.endpoint,
+                var that = this;
+                App.utils.makeXYGraph(this.sel + ' .graph-container', {
+                    endpoint: this.endpoint + '?mode=' + this.mode,
                     type: 'spline',
                     title: this.title,
                     subtitle: this.subtitle,
-                    keyName: 'month',
+                    keyName: function(e) {
+                        if (that.mode === 'weekly') {
+                            return e.weekStart + ' - ' + e.weekEnd;
+                        }
+                        return e.month;
+                    },
                     valueName: function(e) {
                         var m = moment.duration(e.value, 'seconds');
                         return {

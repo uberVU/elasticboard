@@ -145,7 +145,13 @@ def inactive_issues(owner, repo):
 @cached()
 def avg_issue_time(owner, repo):
     index = index_name(owner, repo)
-    times = queries.past_n_months(index, queries.avg_issue_time, CHART_INTERVALS)
+    mode = request.args.get('mode', 'weekly')
+    if mode == 'weekly':
+        times = queries.past_n_weeks(index, queries.avg_issue_time, CHART_INTERVALS)
+    elif mode == 'monthly':
+        times = queries.past_n_months(index, queries.avg_issue_time, CHART_INTERVALS)
+    else:
+        times = 'Mode not supported. Use ?mode=weekly or monthly'
     return jsonify(data=times)
 
 @app.route('/<owner>/<repo>/issues_involvement')
