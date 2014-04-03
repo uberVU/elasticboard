@@ -126,24 +126,34 @@
                 });
         }
 
-        function drawAvgIssueTime() {
-            App.utils.makeXYGraph('#avg-issue-time', {
-                endpoint: '/avg_issue_time',
-                type: 'spline',
-                title: "Average Issue Time",
-                subtitle: "From the time it's opened until it's closed",
-                keyName: 'month',
-                valueName: function(e) {
-                    var m = moment.duration(e.value, 'seconds');
-                    return {
-                        name: m.humanize(),
-                        y: Math.ceil(e.value / (3600 * 24))
-                    };
-                },
-                yTitle: 'Days',
-                label: 'days'
-            });
-        }
+        App.Insights.avgIssueTime = Backbone.View.extend({
+            el: $('#avg-issue-time'),
+            sel: '#avg-issue-time',
+            title: 'Average issue time',
+            endpoint: '/avg_issue_time',
+            subtitle: 'From the time it\'s opened until it\'s closed',
+            initialize: function() {
+                this.drawAvgIssueTime();
+            },
+            drawAvgIssueTime: function drawAvgIssueTime() {
+                App.utils.makeXYGraph(this.sel, {
+                    endpoint: this.endpoint,
+                    type: 'spline',
+                    title: this.title,
+                    subtitle: this.subtitle,
+                    keyName: 'month',
+                    valueName: function(e) {
+                        var m = moment.duration(e.value, 'seconds');
+                        return {
+                            name: m.humanize(),
+                            y: Math.ceil(e.value / (3600 * 24))
+                        };
+                    },
+                    yTitle: 'Days',
+                    label: 'days'
+                });
+            }
+        });
 
         function makeD3Graph(issues_data) {
             var nodes = [];
@@ -418,12 +428,13 @@
                     title: "Unassigned Issues"
                 });
             });
-            drawAvgIssueTime();
+
             window.widgets = {
                 issueInvolvement: new App.Insights.IssueInvolvement(),
                 milestones: new App.Insights.Milestones(),
                 outstandingPullRequests: new App.Insights.outstandingPullRequests(),
-                issuesBurndown: new App.Insights.IssuesBurndown()
+                issuesBurndown: new App.Insights.IssuesBurndown(),
+                avgIssueTime: new App.Insights.avgIssueTime()
             }
 
             // register handlers for weekly/monthly select
