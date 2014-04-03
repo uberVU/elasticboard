@@ -245,4 +245,11 @@
         });
     };
 
+    // register handlers for weekly/monthly select
+    $('select').on('change', function (e) {
+        var $select = $(e.target);
+        var fn = $select.data('function');
+        window[fn]();
+    });
+
 })();
