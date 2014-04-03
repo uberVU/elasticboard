@@ -83,7 +83,7 @@ def past_n_weeks(index, query, n):
     """
     Maps a query over time intervals corresponding to the past n months.
     Returns a list of objects like
-    {'weekStart': day1.month1, 'weekEnd': day2.month2, 'data': query_data}.
+    {'weekStart': Month1 day1, 'weekEnd': Month2 day2, 'data': query_data}.
     """
     # find the closest past Sunday
     end = datetime.datetime.now()
@@ -97,8 +97,8 @@ def past_n_weeks(index, query, n):
     data = []
     for i in range(n):
         week_data = {
-            'weekStart': '%s.%s' % (start.day, start.month),
-            'weekEnd': '%s.%s' % (end.day, end.month),
+            'weekStart': '%s %s' % (start.strftime('%B'), start.day),
+            'weekEnd': '%s %s' % (end.strftime('%B'), end.day),
             'value': query(index=index, start=start, end=end)
         }
         data.append(week_data)
