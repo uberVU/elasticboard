@@ -62,9 +62,9 @@ def past_n_months(index, query, n):
     year = now.year
     month = now.month
     for i in range(n):
-        month = month - 1
+        month -= 1
         # handle first months of the year special case
-        if  month == 0:
+        if month == 0:
             month = 12
             year -= 1
         start = datetime.datetime(year=year, month=month, day=1, hour=0, minute=0)
