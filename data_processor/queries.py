@@ -25,7 +25,7 @@ def all(query):
     return query[:count]
 
 def make_datetime(utctime):
-    return datetime.datetime.strptime(utctime,'%Y-%m-%dT%H:%M:%SZ')
+    return datetime.datetime.strptime(utctime, '%Y-%m-%dT%H:%M:%SZ')
 
 def fit_time_range(start, end):
     """
@@ -34,14 +34,14 @@ def fit_time_range(start, end):
 
     field can be 'created_at' or 'closed_at'
     """
-    if start == None and end == None:
-        return (None, None)
-    if start == None:
+    if start is None and end is None:
+        return None, None
+    if start is None:
         start = datetime.datetime(year=1970, month=1, day=1)
-    if end == None:
+    if end is None:
         end = datetime.datetime.now()
 
-    return (start, end)
+    return start, end
 
 def apply_time_filter(query, start, end, field='created_at'):
     start, end = fit_time_range(start, end)
@@ -62,9 +62,9 @@ def past_n_months(index, query, n):
     year = now.year
     month = now.month
     for i in range(n):
-        month = month - 1
+        month -= 1
         # handle first months of the year special case
-        if  month == 0:
+        if month == 0:
             month = 12
             year -= 1
         start = datetime.datetime(year=year, month=month, day=1, hour=0, minute=0)
@@ -125,7 +125,7 @@ def most_active_people(index, start=None, end=None):
     data = []
     for p in people:
         events = S().indexes(index)
-        events, _ = apply_time_filter(q, start, end)
+        events, _ = apply_time_filter(events, start, end)
         events = events \
             .filter(**{'actor.login': p}) \
             .facet('type', size=100, filtered=True).facet_counts()['type']
@@ -211,7 +211,7 @@ def recent_events(index, count=200, starting_from=0):
     """
     q = S().indexes(index)
     q = q.order_by('-created_at')
-    q = q[starting_from : starting_from + count]
+    q = q[starting_from: starting_from + count]
     q = q.values_dict()
     return list(q)
 
@@ -309,7 +309,7 @@ def avg_issue_time(index, start=None, end=None):
     issues = q.values_dict()
     issues = all(issues)
 
-    sum = 0 # using seconds, int is fine
+    sum = 0  # using seconds, int is fine
     count = 0
     for i in issues:
         start = make_datetime(i['created_at'])
@@ -338,7 +338,7 @@ def issues_involvement(index, start=None, end=None):
     active_issues = [i['term'] for i in active_issues][:5]
 
     issues = {}
-    added_users = {} # scratch dict to keep track of duplicate users
+    added_users = {}  # scratch dict to keep track of duplicate users
     for event in q.values_dict():
         issue = event['payload']['issue']
         number = issue['number']
