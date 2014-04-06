@@ -238,7 +238,7 @@ body {
 
 #repo-select-trigger {
     cursor: pointer;
-    -moz-user-select: none; 
+    -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
