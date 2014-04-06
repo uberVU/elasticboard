@@ -202,6 +202,10 @@ body {
     display: inline-block;
 }
 
+.completely-hidden {
+  display: none;
+}
+
 .cog {
     display: inline-block;
 }
@@ -220,24 +224,21 @@ body {
     border-bottom: none;
 }
 
-    .loading:after {
-        content: "";
-        height: .5rem;
-        width: 1rem;
-        margin: 0 0 .4rem .5rem;
-        display: inline-block;
-        border: 3px solid #1E8CE2;
-        border-bottom: 0;
-        border-radius: 40px 40px 0 0;
-        -webkit-transform-origin: bottom center;
-        -webkit-animation: spinner .4s infinite linear;
-        -moz-transform-origin: bottom center;
-        -moz-animation: spinner .4s infinite linear;
-    }
+  .loading:after {
+      content: "";
+      display: inline-block;
+      height:40px;
+      width: 40px;
+      background: url('../imgs/loading.png') no-repeat;
+      -webkit-animation: spinner .8s infinite linear;
+      -moz-animation: spinner .8s infinite linear;
+      background-size: 40px;
+      margin: 0 0 -16px 10px;
+  }
 
 #repo-select-trigger {
     cursor: pointer;
-    -moz-user-select: none;
+    -moz-user-select: none; 
     -webkit-user-select: none;
     user-select: none;
 }
