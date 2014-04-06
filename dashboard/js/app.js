@@ -23,11 +23,23 @@
     App.DEBUG = false;
 
     // get wrapper, logs and calls the callback or fail fn
-    App.utils.httpGet = function httpGet(url, success, fail, always) {
+    App.utils.httpGet = function httpGet(url, params, success, fail) {
         if (App.DEBUG) {
             console.log('[GET] ' + url);
         }
-        return $.get(url).done(success).fail(fail || displayFailMessage);
+        if (typeof params === 'function') {
+            params = {};
+            success = arguments[1];
+            fail = arguments[2];
+        } else {
+            if (App.DEBUG) {
+                console.log('[GET] params: ', params);
+            }
+        }
+        if (!success) {
+            console.error('[GET]', url, ' no success handler supplied');
+        }
+        return $.get(url, params || {}).done(success).fail(fail || displayFailMessage);
     };
 
     App.Router = Backbone.Router.extend({
