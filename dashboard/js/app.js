@@ -37,7 +37,7 @@
             }
         }
         if (!success) {
-            console.error('[GET] no success handler supplied');
+            console.error('[GET]', url, ' no success handler supplied');
         }
         return $.get(url, params || {}).done(success).fail(fail || displayFailMessage);
     };

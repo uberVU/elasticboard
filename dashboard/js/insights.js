@@ -100,30 +100,27 @@
                 url += '?label=' + label;
             }
 
-            $.getJSON(url)
-                .done(function(json) {
-                    var data = json.data;
-                    var context = {
-                        title: options.title,
-                    subtitle: "(max. 20 results)",
-                    label: labels.data
-                    };
-                    if (!data.length) {
-                        context.issues = [{
-                            title: 'No issues matching your request'
-                        }];
-                    } else {
-                        context.issues = data;
-                    }
-                    var $list = $(issuesListTemplate(context));
-                    $(options.selector).empty().append($list);
-                })
-            .fail(displayFailMessage)
-                .complete(function() {
-                    $(options.selector + ' .widget-label--label-item').on('click', function() {
-                        drawIssuesWidget(labels, options, $(this).data('label'));
-                    });
+            App.utils.httpGet(url, function(json) {
+                var data = json.data;
+                var context = {
+                    title: options.title,
+                subtitle: "(max. 20 results)",
+                label: labels.data
+                };
+                if (!data.length) {
+                    context.issues = [{
+                        title: 'No issues matching your request'
+                    }];
+                } else {
+                    context.issues = data;
+                }
+                var $list = $(issuesListTemplate(context));
+                $(options.selector).empty().append($list);
+            }).complete(function() {
+                $(options.selector + ' .widget-label--label-item').on('click', function() {
+                    drawIssuesWidget(labels, options, $(this).data('label'));
                 });
+            });
         }
 
         App.Insights.avgIssueTime = Backbone.View.extend({
