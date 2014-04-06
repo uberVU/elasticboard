@@ -202,10 +202,6 @@ body {
     display: inline-block;
 }
 
-.completely-hidden {
-  display: none;
-}
-
 .cog {
     display: inline-block;
 }

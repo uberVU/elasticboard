@@ -394,7 +394,7 @@
         var fragment = document.createDocumentFragment();
         var mapping;
 
-        $loading.removeClass('completely-hidden'); // show timeline loading
+        $loading.removeClass('hide'); // show timeline loading
 
         data.data.forEach(function(e) {
             mapping = TIMELINE_MAPPING[e.type];
@@ -442,7 +442,7 @@
             $('#tab-1').off('scroll');
         }
 
-        $loading.addClass('completely-hidden'); // hide timeline loading
+        $loading.addClass('hide'); // hide timeline loading
 
     }
 
