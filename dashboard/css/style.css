@@ -169,6 +169,8 @@ body {
 }
 
 .timeline-item--read-more {
+  position: relative;
+  display: inline-block;
   margin: -.5rem 0 0 0;
 }
   .timeline-item--read-more a {
@@ -251,14 +253,14 @@ body {
     padding-right: 40px;
 }
 
-.repo-select {
+.repo-select,
+.timeline-item--read-more {
     position: relative;
 }
 
-    .repo-select ul {
+    .repo-select ul,
+    .timeline-item--event-controls {
         position: absolute;
-        right: 5px;
-        top:-20px;
         background: #fff;
         border: 1px solid #ddd;
         z-index: 1;
@@ -269,7 +271,13 @@ body {
         min-height:30px;
     }
 
-        .repo-select ul:after {
+    .repo-select ul {
+      right: 5px;
+      top:-20px;
+    }
+
+        .repo-select ul:after,
+        .timeline-item--event-controls:after {
             content: '';
             display: block;
             position: absolute;
@@ -284,7 +292,8 @@ body {
             border-left: 1px solid #ddd;
         }
 
-    .repo-select ul li {
+    .repo-select ul li,
+    .timeline-item--event-controls li {
         list-style: none;
         font-size: 1.2rem;
         padding: .5rem 1rem;
@@ -525,6 +534,45 @@ body {
   margin: .2rem 0;
   border-bottom: 1px solid #333;
 }
+
+.timeline-item--event-controls {
+  display: inline-block;
+  bottom: -65px;
+  left: 1px;
+  margin:0;
+  opacity:0;
+  pointer-events: none;
+  border-radius: 3px;
+  width: 230px;
+}
+
+  .timeline-item--read-more img {
+    visibility: hidden;
+  }
+
+  .timeline-item:hover .timeline-item--read-more img {
+    visibility: visible;
+  }
+
+  .timeline-item--read-more:hover .timeline-item--event-controls {
+    opacity: 1;
+    bottom: -68px;
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    transition-duration: .3s;
+    pointer-events: auto;
+  }
+
+  .timeline-item--event-controls:after {
+    top: -.5rem;
+    left: 3px;
+  }
+
+  .timeline-item--event-controls li {
+    padding: .25rem .5rem;
+    font-size: .9rem;
+    text-align: center;
+  }
 
 .tooltip-template img {
     max-width: 64px;
