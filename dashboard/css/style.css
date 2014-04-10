@@ -113,12 +113,17 @@ body {
 }
 
 #timeline {
-    overflow: auto;
     margin-bottom: 30px;
     padding: 20px 40px;
     padding-top: 0;
 }
 
+.timeline-filter--toggle {
+    margin: .5rem 0;
+    padding: .2rem;
+    text-align: center;
+    background: #444;
+}
 
 .timeline-item {
     padding: 10px;
