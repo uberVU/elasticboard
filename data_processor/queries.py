@@ -90,9 +90,9 @@ def past_n_weeks(index, query, n):
     while end.weekday() != 6:
         end -= datetime.timedelta(days=1)
 
-    end.replace(hour=23, minute=59)
+    end = end.replace(hour=23, minute=59)
     start = end - datetime.timedelta(days=6)
-    start.replace(hour=0, minute=0)
+    start = start.replace(hour=0, minute=0)
 
     data = []
     for i in range(n):
