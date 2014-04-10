@@ -211,6 +211,11 @@
 
                 $('#user-repo').text(App.REPO);
 
+                // clear any filtering options
+                App.Timeline.filter = [];
+                App.Timeline.exclusive = '';
+                $('.timeline-filter--toggle').addClass('hide');
+
                 if (!App.Components.timeline) {
                     initTimeline();
                     App.Components.timeline = true;
