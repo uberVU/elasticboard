@@ -393,6 +393,9 @@
 
         var fragment = document.createDocumentFragment();
         var mapping;
+
+        $loading.removeClass('hide'); // show timeline loading
+
         data.data.forEach(function(e) {
             mapping = TIMELINE_MAPPING[e.type];
             var context = formatContext(e);
@@ -439,6 +442,8 @@
             $('#tab-1').off('scroll');
         }
 
+        $loading.addClass('hide'); // hide timeline loading
+
     }
 
     window.populateTimeline = function populateTimeline(count, starting_from) {
@@ -451,13 +456,12 @@
             starting_from = 0;
         }
 
-        App.utils.httpGet(App.BASE + '/collaborators')
-            .success(function(data) {
-                collabs = data.data;
-                $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
-                    .success(processTimelineData)
-                    .fail(displayFailMessage);
-            });
+        App.utils.httpGet(App.BASE + '/collaborators', function(data) {
+            collabs = data.data;
+            $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
+                .success(processTimelineData)
+                .fail(displayFailMessage);
+        });
     };
 
     window.emptyTimeline = function() {

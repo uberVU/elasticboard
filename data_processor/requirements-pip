@@ -1,8 +1,7 @@
-elasticsearch==1.0.0
-elasticutils==0.8.2
-greenlet==0.4.2
-eventlet==0.14.0
-requests==2.0.1
-Flask==0.10.1
-gunicorn==18.0
-python-memcached==1.53
+elasticutils==0.9.1
+greenlet>=0.4.2
+eventlet>=0.14.0
+requests>=2.0.1
+Flask>=0.10.1
+gunicorn>=18.0
+python-memcached>=1.53
