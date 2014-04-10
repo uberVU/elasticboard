@@ -47,10 +47,10 @@ def apply_time_filter(query, start, end, field='created_at'):
     start, end = fit_time_range(start, end)
     if start and end:
         if field == 'created_at':
-            return query.filter(created_at__range=(start, end)), True
+            return query.filter(created_at__range=(start, end))
         elif field == 'closed_at':
-            return query.filter(closed_at__range=(start, end)), True
-    return query, False
+            return query.filter(closed_at__range=(start, end))
+    return query
 
 def past_n_months(index, query, n):
     """
@@ -118,14 +118,14 @@ def most_active_people(index, start=None, end=None):
      {'events': {u'watchevent': 1}, 'login': u'someone'},
     """
     q = S().indexes(index)
-    q, filtered = apply_time_filter(q, start, end)
-    people = q.facet('actor.login', size=10, filtered=filtered).facet_counts()['actor.login']
+    q = apply_time_filter(q, start, end)
+    people = q.facet('actor.login', size=10, filtered=True).facet_counts()['actor.login']
     people = [p['term'] for p in people]
 
     data = []
     for p in people:
         events = S().indexes(index)
-        events, _ = apply_time_filter(events, start, end)
+        events = apply_time_filter(events, start, end)
         events = events \
             .filter(**{'actor.login': p}) \
             .facet('type', size=100, filtered=True).facet_counts()['type']
@@ -156,8 +156,8 @@ def total_events(index, start=None, end=None):
       }
     """
     q = S().indexes(index)
-    q, filtered = apply_time_filter(q, start, end)
-    q = q.facet('type', size=100, filtered=filtered).facet_counts()['type']
+    q = apply_time_filter(q, start, end)
+    q = q.facet('type', size=100, filtered=True).facet_counts()['type']
     counts = {}
     for c in q:
         counts[c['term']] = c['count']
@@ -168,8 +168,8 @@ def most_active_issues(index, start=None, end=None):
     Finds the 10 most active open issues - by total number of events.
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
-    q, filtered = apply_time_filter(q, start, end)
-    counts = q.facet('payload.issue.number', filtered=filtered, size=1000).facet_counts()['payload.issue.number']
+    q = apply_time_filter(q, start, end)
+    counts = q.facet('payload.issue.number', filtered=True, size=1000).facet_counts()['payload.issue.number']
 
     # keep only open issues
     open_issues = S().indexes(index).doctypes('IssueData') \
@@ -248,7 +248,7 @@ def issue_events_count(index, action, start=None, end=None):
     else:
         field = 'closed_at'
         q = q.filter(state='closed')
-    q, filtered = apply_time_filter(q, start, end, field)
+    q = apply_time_filter(q, start, end, field)
 
     return q.count()
 
@@ -305,7 +305,7 @@ def avg_issue_time(index, start=None, end=None):
     Average time from opening until closing for issues in the given timeframe.
     """
     q = S().indexes(index).doctypes('IssueData').filter(state='closed')
-    q, filtered = apply_time_filter(q, start, end, field='closed_at')
+    q = apply_time_filter(q, start, end, field='closed_at')
     issues = q.values_dict()
     issues = all(issues)
 
@@ -330,7 +330,7 @@ def issues_involvement(index, start=None, end=None):
     ! only for the 10 most popular during this time period
     """
     q = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent')
-    q, filtered = apply_time_filter(q, start, end)
+    q = apply_time_filter(q, start, end)
     q = all(q)
 
     active_issues = most_active_issues(index, start, end)
@@ -476,10 +476,10 @@ def outstanding_pull_requests(index, limit=20):
 
 def popularity_events(index, start=None, end=None):
     q1 = S().indexes(index).doctypes('ForkEvent')
-    q1, _ = apply_time_filter(q1, start, end)
+    q1 = apply_time_filter(q1, start, end)
 
     q2 = S().indexes(index).doctypes('WatchEvent')
-    q2, _ = apply_time_filter(q2, start, end)
+    q2 = apply_time_filter(q2, start, end)
 
     counts = {
         'forks': q1.count(),
