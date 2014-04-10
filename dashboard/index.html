@@ -48,6 +48,7 @@
 
     <div class="small-12 large-12 columns" id="tab-container">
         <div class="tab" id="tab-timeline">
+            <div class="timeline-filter--toggle hide">Clear filters</div>
             <div id="timeline" class="large-centered">
                 <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
             </div>
@@ -118,7 +119,7 @@
 </div>
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
-    <div class="timeline-item row">
+    <div class="timeline-item row" data-event="{{ type }}">
         {{#if avatar }}
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
@@ -181,6 +182,13 @@
               <a href="{{ link }}">Read more</a>
             </p>
             {{/if}}
+            <div class="timeline-item--read-more">
+              <img src="/imgs/eye.svg">
+              <ul class="timeline-item--event-controls">
+                <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{ type }}</a></li>
+                <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{ type }}</a></li>
+              </ul>
+            </div>
         </div>
         <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
@@ -197,7 +205,7 @@
 </script>
 
 <script id="timeline-item-basic" type="text/x-handlebars-template">
-  <div class="timeline-item row">
+  <div class="timeline-item row" data-event="{{ type }}">
     <div class="small-2 columns text-centered">
       <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
     </div>
@@ -206,6 +214,13 @@
       {{#with username}}
         <a href="{{ url }}">{{ username }}</a>
       {{/with}} {{ action }} {{{ object }}}</p>
+      <div class="timeline-item--read-more">
+        <img src="/imgs/eye.svg">
+        <ul class="timeline-item--event-controls">
+          <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{ type }}</a></li>
+          <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{ type }}</a></li>
+        </ul>
+      </div>
     </div>
     <div class="small-2 columns text-right">
         <p class="timestamp muted">{{ timestamp }}</p>
