@@ -3,6 +3,10 @@
     'use strict';
     window.App = window.App || {};
     window.App.PER_PAGE = 40;
+    window.App.Timeline = {
+        filter: [], // filter out items
+        exclusive: '' // allow just one item
+    }; // filter out timeline items
 
     var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
     var collabs = null;
@@ -344,7 +348,8 @@
                 action: 'commented: ',
                 object: '',
                 timestamp: moment(e.created_at).fromNow(),
-                title: e.title
+                title: e.title,
+                type: e.type
             };
         } else {
             context = {
@@ -362,7 +367,8 @@
                 action: mapping.action(e),
                 object: mapping.object(e),
                 timestamp: moment(e.created_at).fromNow(),
-                title: mapping.title ? mapping.title(e) : ''
+                title: mapping.title ? mapping.title(e) : '',
+                type: e.type
             };
         }
 
@@ -421,7 +427,17 @@
 
             }
 
-            fragment.appendChild($item[0]);
+            if (App.Timeline.filter.length) { // if there are filters
+                if ($item.data('event') && App.Timeline.filter.indexOf($item.data('event')) == -1) { // if the current item is not filtered out
+                    console.log($item.data('event'));
+                    fragment.appendChild($item[0]);
+                }
+            } else if (App.Timeline.exclusive) {
+                if ($item.data('event') && App.Timeline.exclusive == $item.data('event'))
+                    fragment.appendChild($item[0]);
+            } else {
+                fragment.appendChild($item[0]);
+            }
         });
 
         $(fragment).insertBefore($loading);
@@ -460,9 +476,49 @@
             collabs = data.data;
             $.get(App.BASE + '/recent_events', {count: count, starting_from: starting_from})
                 .success(processTimelineData)
-                .fail(displayFailMessage);
+                .fail(displayFailMessage)
+                .done(attachListeners);
         });
     };
+
+    function attachListeners() {
+        $('.js-handler--mute-all').on('click', muteAllEvents);
+        $('.js-handler--mute-event').on('click', muteEvent);
+    }
+
+    // mute all events except the one selected
+    function muteAllEvents(e) {
+        e.preventDefault();
+        $('.timeline-filter--toggle').removeClass('hide');
+        var $this = $(this);
+        var eventType = $this.data('event');
+        var items = $('.timeline-item');
+        items.each(function (idx, el) {
+            var ev = $(el).data('event');
+            if (ev != eventType) {
+                $(el).hide();
+            }
+        });
+        App.Timeline.filter = [];
+        App.Timeline.exclusive = eventType;
+    }
+
+    // mute the selected event
+    function muteEvent(e) {
+        e.preventDefault();
+        $('.timeline-filter--toggle').removeClass('hide');
+        var $this = $(this);
+        var eventType = $this.data('event');
+        var items = $('.timeline-item');
+        items.each(function (idx, el) {
+            var ev = $(el).data('event');
+            if (ev == eventType) {
+                $(el).hide();
+            }
+        });
+        App.Timeline.exclusive = '';
+        App.Timeline.filter.push(eventType);
+    }
 
     window.emptyTimeline = function() {
         var $timeline = $('#timeline');

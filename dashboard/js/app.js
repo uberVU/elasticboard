@@ -273,6 +273,17 @@
     function initTimeline() {
         emptyTimeline();
         populateTimeline();
+        $('.timeline-filter--toggle').on('click', function() {
+            if (App.Timeline) {
+                App.Timeline.filter = [];
+                App.Timeline.exclusive = '';
+                var items = $('.timeline-item');
+                items.each(function (idx, el) {
+                    $(el).show();
+                });
+            }
+            $(this).addClass('hide');
+        });
     }
 
     function addScrollListener() {
