@@ -217,8 +217,8 @@
       <div class="timeline-item--read-more">
         <img src="/imgs/eye.svg">
         <ul class="timeline-item--event-controls">
-          <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{ type }}</a></li>
-          <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{ type }}</a></li>
+          <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{parseEventType type }}</a></li>
+          <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{parseEventType type }}</a></li>
         </ul>
       </div>
     </div>
