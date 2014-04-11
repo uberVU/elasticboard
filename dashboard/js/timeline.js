@@ -22,7 +22,6 @@
     });
 
     Handlebars.registerHelper('parseEventType', function(event) {
-        console.log(event);
         if (!event) {
             return 'unkown events';
         }
@@ -438,7 +437,6 @@
 
             if (App.Timeline.filter.length) { // if there are filters
                 if ($item.data('event') && App.Timeline.filter.indexOf($item.data('event')) == -1) { // if the current item is not filtered out
-                    console.log($item.data('event'));
                     fragment.appendChild($item[0]);
                 }
             } else if (App.Timeline.exclusive) {
