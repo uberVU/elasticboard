@@ -21,6 +21,15 @@
         return ret;
     });
 
+    Handlebars.registerHelper('parseEventType', function(event) {
+        console.log(event);
+        if (!event) {
+            return 'unkown events';
+        }
+        var l = event.length;
+        return event.substr(0, l-5).toLowerCase() + ' events';
+    });
+
     function formatAuthor(author) {
         var login = author.login;
         var avatarURL = author.avatar_url;
