@@ -267,5 +267,13 @@ def collaborators(owner, repo):
     data = queries.collaborators(index)
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/pull_requests')
+@crossdomain(origin='*')
+@cached()
+def pull_requests(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.pull_requests(index)
+    return jsonify(data=data)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

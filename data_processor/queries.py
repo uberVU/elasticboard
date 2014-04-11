@@ -263,6 +263,14 @@ def pulls_count(index):
     q = S().indexes(index).doctypes('PullRequestData')
     return q.count()
 
+def pull_requests(index):
+    """
+    All pull requests.
+    """
+    q = S().indexes(index).doctypes('PullRequestData').values_dict()
+    q = all(q)
+    return list(q)
+
 def inactive_issues(index, label):
     """
     Open issues that haven't seen any activity in the past 2 weeks.

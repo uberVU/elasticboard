@@ -80,6 +80,7 @@
         <div class="tab hide" id="tab-insights">
             <div id="milestones" class="graph-like"></div>
             <div class="graph-like" id="outstanding-pull-requests"></div>
+            <div class="graph-like" id="non-mergeable-pull-requests"></div>
             <div class="graph" id="issues-activity">
                 <div class="graph-container"></div>
                 <div class="text-center">
@@ -226,7 +227,7 @@
         <p class="graph-title">{{ title }}</p>
         <p class="graph-subtitle">{{ subtitle }}</p>
         {{#unless prs.length}}
-            <p class="graph-subtitle">No pull requests</p>
+            <p class="graph-subtitle">No results</p>
         {{/unless}}
     </div>
     <div class="row">
@@ -342,7 +343,8 @@
         </div>
     {{/each}}
 {{#unless milestones.length}}
-    <h6 class="graph-title">No milestones</h6>
+    <br/>
+    <p class="text-center graph-subtitle">No milestones</p>
 {{/unless}}
 </script>
 

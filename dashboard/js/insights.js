@@ -352,6 +352,34 @@
             }
         });
 
+        App.Insights.nonMergeablePullRequests = Backbone.View.extend({
+            el: $('#non-mergeable-pull-requests'),
+
+            template: Handlebars.compile($('#pull-requests-list-template').html()),
+
+            initialize: function() {
+                var endpoint = App.BASE + '/pull_requests';
+                var cb = this.addPullRequests.bind(this);
+                App.utils.httpGet(endpoint, cb, displayFailMessage);
+            },
+
+            addPullRequests: function(data) {
+                var prs = data.data;
+                prs = prs.filter(function (e) {
+                    return e.merge_commit_sha === null;
+                });
+                prs.forEach(function (e) {
+                    e.last_activity = moment().from(e.last_activity, true);
+                });
+                var widget = this.template({
+                    prs: prs,
+                    title: "Non Mergeable Pull Requests",
+                    subtitle: "(max. 20 results)"
+                });
+                this.$el.empty().append(widget);
+            }
+        });
+
 
         //http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black
         function extractLight(c) {
@@ -437,6 +465,7 @@
                 issueInvolvement: new App.Insights.IssueInvolvement(),
                 milestones: new App.Insights.Milestones(),
                 outstandingPullRequests: new App.Insights.outstandingPullRequests(),
+                nonMergeablePullRequests: new App.Insights.nonMergeablePullRequests(),
                 issuesBurndown: new App.Insights.IssuesBurndown(),
                 avgIssueTime: new App.Insights.avgIssueTime()
             }
