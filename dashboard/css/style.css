@@ -556,7 +556,7 @@ body {
 
   .timeline-item--read-more:hover .timeline-item--event-controls {
     opacity: 1;
-    bottom: -68px;
+    bottom: -65px;
     -webkit-transition-duration: .3s;
     -moz-transition-duration: .3s;
     transition-duration: .3s;
