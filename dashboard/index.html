@@ -48,9 +48,17 @@
 
     <div class="small-12 large-12 columns" id="tab-container">
         <div class="tab" id="tab-timeline">
-            <div class="timeline-filter--toggle hide">Clear filters</div>
-            <div id="timeline" class="large-centered">
-                <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+            <div class="row">
+                <div class="small-12 large-10 columns">
+                    <div id="timeline" class="large-centered">
+                        <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+                    </div>
+                </div>
+                <div class="small-0 large-2 columns">
+                    <h2>Filters</h2>
+                    <ul class="js-handler--timeline-filters">
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -358,6 +366,10 @@
 {{#unless milestones.length}}
     <h6 class="graph-title">No milestones</h6>
 {{/unless}}
+</script>
+
+<script id="timeline-filter-item" type="text/x-handlebars-template">
+    <li class="timeline-filter--item"> {{ name }}</li>
 </script>
 
 <script src="/js/jquery.js"></script>
