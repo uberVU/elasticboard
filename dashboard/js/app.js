@@ -214,7 +214,6 @@
                 // clear any filtering options
                 App.Timeline.filter = [];
                 App.Timeline.exclusive = '';
-                $('.timeline-filter--toggle').addClass('hide');
 
                 if (!App.Components.timeline) {
                     initTimeline();
@@ -278,17 +277,7 @@
     function initTimeline() {
         emptyTimeline();
         populateTimeline();
-        $('.timeline-filter--toggle').on('click', function() {
-            if (App.Timeline) {
-                App.Timeline.filter = [];
-                App.Timeline.exclusive = '';
-                var items = $('.timeline-item');
-                items.each(function (idx, el) {
-                    $(el).show();
-                });
-            }
-            $(this).addClass('hide');
-        });
+        timelineShowAll();
     }
 
     function addScrollListener() {
