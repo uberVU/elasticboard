@@ -118,13 +118,6 @@ body {
     padding-top: 0;
 }
 
-.timeline-filter--toggle {
-    margin: .5rem 0;
-    padding: .2rem;
-    text-align: center;
-    background: #444;
-}
-
 .timeline-item {
     padding: 10px;
     border-bottom: 1px solid rgba(113, 113, 113, 0.36);
