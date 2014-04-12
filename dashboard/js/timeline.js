@@ -5,7 +5,8 @@
     window.App.PER_PAGE = 40;
     window.App.Timeline = {
         filter: [], // filter out items
-        exclusive: '' // allow just one item
+        exclusive: '', // allow just one item
+        coll: false // backbone filter collection
     }; // filter out timeline items
 
     var authorTemplate = Handlebars.compile($('#timeline-author-template').html());
@@ -496,35 +497,83 @@
     // mute all events except the one selected
     function muteAllEvents(e) {
         e.preventDefault();
-        $('.timeline-filter--toggle').removeClass('hide');
         var $this = $(this);
         var eventType = $this.data('event');
-        var items = $('.timeline-item');
-        items.each(function (idx, el) {
-            var ev = $(el).data('event');
-            if (ev != eventType) {
-                $(el).hide();
-            }
-        });
         App.Timeline.filter = [];
+        App.Timeline.coll.reset();
         App.Timeline.exclusive = eventType;
+
+        if (App.Timeline.filter.indexOf(eventType) == -1) {
+            App.Timeline.coll.add({name: eventType});
+            App.Timeline.filter.push(eventType);
+        }
+
+        filterTimeline();
     }
 
     // mute the selected event
     function muteEvent(e) {
         e.preventDefault();
-        $('.timeline-filter--toggle').removeClass('hide');
         var $this = $(this);
         var eventType = $this.data('event');
+
+        App.Timeline.exclusive = '';
+        if (App.Timeline.filter.indexOf(eventType) == -1) {
+            App.Timeline.coll.add({name: eventType});
+            App.Timeline.filter.push(eventType);
+        }
+
+        filterTimeline();
+    }
+
+    window.filterTimeline = function() {
+        var items = $('.timeline-item');
+        var visibileElements = items.length;
+
+        if (!App.Timeline.filter.length &&
+            !App.Timeline.exclusive) {
+            timelineShowAll();
+            return;
+        }
+
+        if (App.Timeline.filter.length) {
+            items.each(function (idx, el) {
+                var ev = $(el).data('event');
+                var $el = $(el);
+                if (App.Timeline.filter.indexOf(ev) != -1) {
+                    $el.hide();
+                } else {
+                    $el.show();
+                }
+                if (!$el.is(':visible')) visibileElements--;
+            });
+        }
+        if (App.Timeline.exclusive) {
+            items.each(function (idx, el) {
+                var ev = $(el).data('event');
+                var $el = $(el);
+                if (App.Timeline.exclusive != ev) {
+                    $el.hide();
+                } else {
+                    $el.show();
+                }
+                if (!$el.is(':visible')) visibileElements--;
+            });
+        }
+
+        // removing elements might leave too few on screen
+        if (visibileElements < 10) {
+            populateTimeline(50, items.length);
+        }
+    }
+
+    window.timelineShowAll = function() {
+        App.Timeline.filter = [];
+        App.Timeline.exclusive = '';
         var items = $('.timeline-item');
         items.each(function (idx, el) {
-            var ev = $(el).data('event');
-            if (ev == eventType) {
-                $(el).hide();
-            }
+            $(el).show();
         });
-        App.Timeline.exclusive = '';
-        App.Timeline.filter.push(eventType);
     }
 
     window.emptyTimeline = function() {
@@ -532,5 +581,77 @@
         var $loading = $('.timeline-item:last-child', $timeline).clone();
         $timeline.empty().append($loading);
     };
+
+    var filterModel = Backbone.Model.extend({
+        name: 'filter name'
+    });
+
+    var filterCollection = Backbone.Collection.extend({
+        model: filterModel
+    });
+
+    var filterView = Backbone.View.extend({
+        el: $('.js-handler--timeline-filters'),
+
+        template: $('#timeline-filter-item').html(),
+
+        events: {
+            'click li': 'remove'
+        },
+        
+        initialize: function() {
+            this.render();
+            this.collection.on('add', this.addOne, this);
+            this.collection.on('remove', this.removeOne, this);
+            this.collection.on('reset', this.reset, this);
+        },
+
+        reset: function() {
+            this.$el.empty();
+        },
+
+        remove: function(e) {
+            var itemName = $(e.target).text().trim();
+            if (!itemName) return;
+
+            if (App.Timeline.filter.length == 1) {
+                App.Timeline.filter = [];
+            } else {
+                var pos = App.Timeline.filter.indexOf(itemName);
+                App.Timeline.filter.splice(pos, 1);
+            }
+
+            if (App.Timeline.exclusive) {
+                App.Timeline.exclusive = '';
+            }
+
+            this.collection.models.forEach(function(m) {
+                if (m.get('name') == itemName)
+                    App.Timeline.coll.remove(m);
+            });
+        },
+        
+        addOne: function(item) {
+            var markup = Handlebars.compile(this.template);
+            var $el = $(markup(item.toJSON()));
+            this.$el.append($el);
+        },
+        
+        removeOne: function(e) {
+            this.reset();
+            this.render();
+            filterTimeline();
+        },
+        
+        render: function() {
+            this.collection.each(this.addOne, this);
+        }
+    });
+
+    App.Timeline.coll = new filterCollection();
+    var filters = new filterView({
+        collection: App.Timeline.coll
+    });
+
 
 })();
