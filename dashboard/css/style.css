@@ -543,6 +543,10 @@ body {
   width: 230px;
 }
 
+  .timeline-item--event-controls li:hover {
+    background: #ddd;
+  }
+
   .timeline-item--read-more img {
     visibility: hidden;
   }
@@ -563,6 +567,7 @@ body {
   .timeline-item--event-controls:after {
     top: -.5rem;
     left: 3px;
+    z-index:-1;
   }
 
   .timeline-item--event-controls li {
