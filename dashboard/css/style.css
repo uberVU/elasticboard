@@ -628,3 +628,26 @@ body {
     opacity: 0.4;
     margin-left: 0.5rem;
 }
+
+.js-handler--timeline-filters {
+  padding: 0;
+  margin: 0;
+}
+
+.timeline-filter--item {
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: .5rem;
+  margin: .5rem 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+  .timeline-filter--item:hover {
+    background: #444;
+  }
+
+  .timeline-filter--item:hover:after {
+    content: "\00d7";
+    margin: 0 .5rem;
+  }
