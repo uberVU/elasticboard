@@ -554,7 +554,9 @@
     App.Timeline.Timeline = Backbone.View.extend({
         $el: $('#timeline'),
         initialize: function() {
-            this.collection.on('add remove reset', this.filter, this);
+            this.collection.on('add', this.filter, this);
+            this.collection.on('remove', this.filter, this);
+            this.collection.on('reset', this.filter, this);
         },
         showAll: function() {
             App.Timeline.filter = [];
@@ -574,16 +576,20 @@
                 };
             });
 
-            items.each(function(idx, el) {
-                var $el = $(el);
-                var attr = $el.data('event');
-                if (filterItem(attr)) {
-                    $el.show();
-                } else {
-                    $el.hide();
-                    visibileElements--;
-                }
-            });
+            if (filters.length) {
+                items.each(function(idx, el) {
+                    var $el = $(el);
+                    var attr = $el.data('event');
+                    if (filterItem(attr)) {
+                        $el.show();
+                    } else {
+                        $el.hide();
+                        visibileElements--;
+                    }
+                });
+            } else {
+                this.showAll();
+            }
 
             // removing elements might leave too few on screen
             if (visibileElements < 10) {
@@ -616,6 +622,8 @@
             'click li': 'remove'
         },
         
+        placeholderText: 'No filters added',
+
         initialize: function() {
             this.render();
             this.collection.on('add', this.addOne, this);
