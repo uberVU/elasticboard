@@ -277,7 +277,6 @@
     function initTimeline() {
         emptyTimeline();
         populateTimeline();
-        timelineShowAll();
     }
 
     function addScrollListener() {

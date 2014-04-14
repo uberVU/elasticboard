@@ -436,14 +436,8 @@
 
             }
 
-            if (App.Timeline.filter.length) { // if there are filters
-                if ($item.data('event') && App.Timeline.filter.indexOf($item.data('event')) == -1) { // if the current item is not filtered out
-                    fragment.appendChild($item[0]);
-                }
-            } else if (App.Timeline.exclusive) {
-                if ($item.data('event') && App.Timeline.exclusive == $item.data('event'))
-                    fragment.appendChild($item[0]);
-            } else {
+            // check items before inserting in the DOM
+            if (filterItem($item.data('event'))) {
                 fragment.appendChild($item[0]);
             }
         });
@@ -470,7 +464,38 @@
 
     }
 
+    function filterItem(evt) {
+        // get array of filters from collection
+        var filters = App.Timeline.coll.map(function(c) {
+            return {
+                name: c.get('name'),
+                exclusive: c.get('exclusive')
+            };
+        });
+
+        if (!filters.length) return true;
+
+        if (filters.length == 1 && filters[0].exclusive) {
+            if (evt == filters[0].name) {
+                return true;
+            }
+        } else {
+            if (filters.length) {
+                var found = filters.some(function(el) {
+                    return el.name == evt;
+                });
+                if (!found) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
     window.populateTimeline = function populateTimeline(count, starting_from) {
+
         $('li[data-tab=tab-timeline]').addClass('selected');
 
         if (!count) {
@@ -478,6 +503,10 @@
         }
         if (!starting_from) {
             starting_from = 0;
+        }
+
+        if (starting_from == 0) {
+            App.Timeline.coll.reset(); // empty out the filter collection
         }
 
         App.utils.httpGet(App.BASE + '/collaborators', function(data) {
@@ -504,11 +533,9 @@
         App.Timeline.exclusive = eventType;
 
         if (App.Timeline.filter.indexOf(eventType) == -1) {
-            App.Timeline.coll.add({name: eventType});
+            App.Timeline.coll.add({name: eventType, exclusive: 1});
             App.Timeline.filter.push(eventType);
         }
-
-        filterTimeline();
     }
 
     // mute the selected event
@@ -522,59 +549,48 @@
             App.Timeline.coll.add({name: eventType});
             App.Timeline.filter.push(eventType);
         }
-
-        filterTimeline();
     }
 
-    window.filterTimeline = function() {
-        var items = $('.timeline-item');
-        var visibileElements = items.length;
-
-        if (!App.Timeline.filter.length &&
-            !App.Timeline.exclusive) {
-            timelineShowAll();
-            return;
-        }
-
-        if (App.Timeline.filter.length) {
+    App.Timeline.Timeline = Backbone.View.extend({
+        $el: $('#timeline'),
+        initialize: function() {
+            this.collection.on('add remove reset', this.filter, this);
+        },
+        showAll: function() {
+            App.Timeline.filter = [];
+            App.Timeline.exclusive = '';
+            var items = $('.timeline-item');
             items.each(function (idx, el) {
-                var ev = $(el).data('event');
-                var $el = $(el);
-                if (App.Timeline.filter.indexOf(ev) != -1) {
-                    $el.hide();
-                } else {
-                    $el.show();
-                }
-                if (!$el.is(':visible')) visibileElements--;
+                $(el).show();
             });
-        }
-        if (App.Timeline.exclusive) {
-            items.each(function (idx, el) {
-                var ev = $(el).data('event');
-                var $el = $(el);
-                if (App.Timeline.exclusive != ev) {
-                    $el.hide();
-                } else {
-                    $el.show();
-                }
-                if (!$el.is(':visible')) visibileElements--;
+        },
+        filter: function() {
+            var items = $('.timeline-item');
+            var visibileElements = items.length;
+            var filters = this.collection.map(function(c) {
+                return {
+                    name: c.get('name'),
+                    exclusive: c.get('exclusive')
+                };
             });
-        }
 
-        // removing elements might leave too few on screen
-        if (visibileElements < 10) {
-            populateTimeline(50, items.length);
-        }
-    }
+            items.each(function(idx, el) {
+                var $el = $(el);
+                var attr = $el.data('event');
+                if (filterItem(attr)) {
+                    $el.show();
+                } else {
+                    $el.hide();
+                    visibileElements--;
+                }
+            });
 
-    window.timelineShowAll = function() {
-        App.Timeline.filter = [];
-        App.Timeline.exclusive = '';
-        var items = $('.timeline-item');
-        items.each(function (idx, el) {
-            $(el).show();
-        });
-    }
+            // removing elements might leave too few on screen
+            if (visibileElements < 10) {
+                populateTimeline(50, items.length);
+            }
+        }
+    });
 
     window.emptyTimeline = function() {
         var $timeline = $('#timeline');
@@ -583,7 +599,8 @@
     };
 
     var filterModel = Backbone.Model.extend({
-        name: 'filter name'
+        name: 'filter name',
+        exclusive: 0
     });
 
     var filterCollection = Backbone.Collection.extend({
@@ -640,7 +657,6 @@
         removeOne: function(e) {
             this.reset();
             this.render();
-            filterTimeline();
         },
         
         render: function() {
@@ -650,6 +666,9 @@
 
     App.Timeline.coll = new filterCollection();
     var filters = new filterView({
+        collection: App.Timeline.coll
+    });
+    var timeline = new App.Timeline.Timeline({
         collection: App.Timeline.coll
     });
 
