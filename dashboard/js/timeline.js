@@ -1,3 +1,5 @@
+/* globals Handlebars, $, moment, Backbone, App */
+
 (function(){
 
     'use strict';
@@ -13,7 +15,7 @@
     var collabs = null;
 
     Handlebars.registerHelper('eachCommit', function(context, options) {
-        var ret = "";
+        var ret = '';
 
         for(var i=0, j=context.length; i<j; i++) {
             ret = ret + options.fn(context[i]);
@@ -92,7 +94,7 @@
     var TIMELINE_MAPPING = {
         'CommitCommentEvent': {
             action: function(e) {
-                return "commented on";
+                return 'commented on';
             },
             object: function(e) {
                 var url = e.payload.comment.html_url;
@@ -107,11 +109,11 @@
         },
         'CreateEvent': {
             action: function(e) {
-                var s = "created";
+                var s = 'created';
                 if (e.payload.ref_type == 'branch') {
-                    return s + " branch";
+                    return s + ' branch';
                 } else if (e.payload.ref_type == 'tag') {
-                    return s + " tag";
+                    return s + ' tag';
                 }
                 return s;
             },
@@ -121,11 +123,11 @@
         },
         'DeleteEvent': {
             action: function(e) {
-                var s = "deleted";
+                var s = 'deleted';
                 if (e.payload.ref_type == 'branch') {
-                    return s + " branch";
+                    return s + ' branch';
                 } else if (e.payload.ref_type == 'tag') {
-                    return s + " tag";
+                    return s + ' tag';
                 }
                 return s;
             },
@@ -135,7 +137,7 @@
         },
         'ForkEvent': {
             action: function(e) {
-                return "forked to";
+                return 'forked to';
             },
             object: function(e) {
                 var name = e.payload.forkee.full_name;
@@ -150,7 +152,7 @@
             },
             object: function(e) {
                 var page = e.payload.pages[0];
-                return "wiki page " + formatLink(page.html_url, page.page_name);
+                return 'wiki page ' + formatLink(page.html_url, page.page_name);
             }
         },
         'IssueCommentEvent': {
@@ -158,7 +160,7 @@
                 return e.payload.issue.title;
             },
             action: function(e) {
-                return "commented on";
+                return 'commented on';
             },
             object: function(e) {
                 return formatIssue(e.payload.issue);
@@ -224,19 +226,19 @@
         },
         'MemberEvent': {
             action: function(e) {
-                return "added";
+                return 'added';
             },
             object: function(e) {
                 var user = e.payload.member;
-                return formatLink(user.html_url, user.login) + " as a collaborator";
+                return formatLink(user.html_url, user.login) + ' as a collaborator';
             }
         },
         'PublicEvent': {
             action: function(e) {
-                return "open sourced";
+                return 'open sourced';
             },
             object: function(e) {
-                return "the repository";
+                return 'the repository';
             }
         },
         'PullRequestEvent': {
@@ -245,7 +247,7 @@
             },
             object: function(e) {
                 var pullReq = e.payload.pull_request;
-                return "pull request " + formatIssue(pullReq);
+                return 'pull request ' + formatIssue(pullReq);
             },
             title: function(e) {
                 return e.payload.pull_request.title;
@@ -268,14 +270,14 @@
         },
         'PullRequestReviewCommentEvent': {
             action: function(e) {
-                return "reviewed";
+                return 'reviewed';
             },
             object: function(e) {
                 var url = e.payload.comment.pull_request_url;
                 var number = url.substring(url.lastIndexOf('/') + 1);
                 var htmlURL = e.payload.comment.html_url;
                 var pullReqURL = htmlURL.substring(0, htmlURL.lastIndexOf('#'));
-                return "pull request " + App.utils.makeLink(pullReqURL, '#' + number);
+                return 'pull request ' + App.utils.makeLink(pullReqURL, '#' + number);
             },
             link: function(e) {
                 return e.payload.comment.html_url;
@@ -291,11 +293,11 @@
         },
         'PushEvent': {
             action: function(e) {
-                return "pushed";
+                return 'pushed';
             },
             object: function(e) {
                 var count = e.payload.size;
-                return count + " commits";
+                return count + ' commits';
             },
             link: function(e) {
                 var head = e.payload.head;
@@ -322,10 +324,10 @@
         },
         'EndOfTimeline': {
             action: function (e) {
-                return "No more events available";
+                return 'No more events available';
             },
             object: function (e) {
-                return "<p class='text-centered'>No more events available</p>";
+                return '<p class="text-centered">No more events available</p>';
             }
         }
     };
@@ -448,10 +450,10 @@
             mapping = TIMELINE_MAPPING.EndOfTimeline;
             $(document).off('scroll');
             var context = {
-                author: "Sorry!",
+                author: 'Sorry!',
                 action: '',
                 object: mapping.object(),
-                timestamp: ""
+                timestamp: ''
             };
 
             var $item = $(template(context));
@@ -604,16 +606,16 @@
         $timeline.empty().append($loading);
     };
 
-    var filterModel = Backbone.Model.extend({
+    var FilterModel = Backbone.Model.extend({
         name: 'filter name',
         exclusive: 0
     });
 
-    var filterCollection = Backbone.Collection.extend({
-        model: filterModel
+    var FilterCollection = Backbone.Collection.extend({
+        model: FilterModel
     });
 
-    var filterView = Backbone.View.extend({
+    var FilterView = Backbone.View.extend({
         el: $('.js-handler--timeline-filters'),
 
         template: $('#timeline-filter-item').html(),
@@ -633,36 +635,42 @@
 
         reset: function() {
             this.$el.empty();
+            this.placeholder();
         },
 
         remove: function(e) {
             var itemName = $(e.target).text().trim();
-            if (!itemName) return;
-
-            if (App.Timeline.filter.length == 1) {
-                App.Timeline.filter = [];
-            } else {
-                var pos = App.Timeline.filter.indexOf(itemName);
-                App.Timeline.filter.splice(pos, 1);
-            }
-
-            if (App.Timeline.exclusive) {
-                App.Timeline.exclusive = '';
-            }
+            if (!itemName || itemName == this.placeholderText) return;
 
             this.collection.models.forEach(function(m) {
                 if (m.get('name') == itemName)
                     App.Timeline.coll.remove(m);
             });
+
+            if (!this.collection.length) {
+                this.collection.reset();
+            }
+        },
+
+        placeholder: function() {
+            var markup = Handlebars.compile(this.template);
+            var $el = $(markup({name: this.placeholderText}));
+            this.$el.append($el);
         },
         
         addOne: function(item) {
+
+            // remove `no filters added` msg
+            if (this.collection.length == 1) {
+                this.$el.empty();
+            }
+
             var markup = Handlebars.compile(this.template);
             var $el = $(markup(item.toJSON()));
             this.$el.append($el);
         },
         
-        removeOne: function(e) {
+        removeOne: function() {
             this.reset();
             this.render();
         },
@@ -672,8 +680,8 @@
         }
     });
 
-    App.Timeline.coll = new filterCollection();
-    var filters = new filterView({
+    App.Timeline.coll = new FilterCollection();
+    var filters = new FilterView({
         collection: App.Timeline.coll
     });
     var timeline = new App.Timeline.Timeline({
