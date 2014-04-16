@@ -163,6 +163,24 @@ def total_events(index, start=None, end=None):
         counts[c['term']] = c['count']
     return counts
 
+
+def active_issues(index):
+    """
+    Find the issues that have been active during the past week
+    """
+    now = datetime.datetime.now()
+    limit = now - datetime.timedelta(weeks=1)
+    issues = S().indexes(index).doctypes('IssuesEvent', 'IssueCommentEvent', 'PullRequestEvent', 'PullRequestReviewCommentEvent') \
+        .filter(updated_at__gt=limit).values_dict()
+
+    issues = all(issues)
+
+    active_issues = [i for i in list(issues)]
+    active_issues = active_issues[:LIMIT]
+
+    return active_issues
+
+
 def most_active_issues(index, start=None, end=None):
     """
     Finds the 10 most active open issues - by total number of events.
