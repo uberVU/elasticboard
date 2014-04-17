@@ -274,7 +274,7 @@ body {
     }
 
         .repo-select ul:after,
-        .timeline-item--event-controls:after {
+        .timeline-item--event-controls--tip {
             content: '';
             display: block;
             position: absolute;
@@ -558,6 +558,10 @@ body {
     background: #ddd;
   }
 
+  .timeline-item--event-controls li:first-child:hover ~ .timeline-item--event-controls--tip {
+    background: #ddd;
+  }
+
   .timeline-item--read-more img {
     visibility: hidden;
   }
@@ -575,7 +579,7 @@ body {
     pointer-events: auto;
   }
 
-  .timeline-item--event-controls:after {
+  .timeline-item--event-controls--tip {
     top: -.5rem;
     left: 3px;
     z-index:-1;
