@@ -543,7 +543,18 @@ body {
   width: 230px;
 }
 
-  .timeline-item--event-controls li:hover {
+  .timeline-item--event-controls li {
+    padding: 0;
+  }
+
+  .timeline-item--event-controls a {
+    display: block;
+    font-size: .9rem;
+    padding: .25rem .5rem;
+    text-align: center;
+  }
+
+  .timeline-item--event-controls a:hover {
     background: #ddd;
   }
 
@@ -568,12 +579,6 @@ body {
     top: -.5rem;
     left: 3px;
     z-index:-1;
-  }
-
-  .timeline-item--event-controls li {
-    padding: .25rem .5rem;
-    font-size: .9rem;
-    text-align: center;
   }
 
 .tooltip-template img {
