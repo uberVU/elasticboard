@@ -1,8 +1,8 @@
 import calendar
 import datetime
 
-from es import ES, ES_NODE, CONFIG
-from elasticutils import S as _S
+from es import ES, ES_NODE
+from elasticutils import S as _S, F
 
 class S(_S):
     def __call__(self):
@@ -499,3 +499,25 @@ def collaborators(index):
     q = S().indexes(index).doctypes('CollaboratorData').values_dict()
     q = all(q)
     return list(q)
+
+def issue_distribution(index):
+    q = S().indexes(index).doctypes('IssueData') \
+        .filter(state='open') \
+        .filter(~F(assignee=None)) \
+        .values_dict()
+    q = all(q)
+    # open, assigned
+    issues = list(q)
+
+    distribution = {}
+    for issue in issues:
+        login = issue['assignee']['login']
+        if login not in distribution:
+            distribution[login] = {
+                'person': issue['assignee'],
+                'issues': [issue]
+            }
+        else:
+            distribution[login]['issues'].append(issue)
+
+    return distribution
