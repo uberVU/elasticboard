@@ -14,6 +14,10 @@ body {
     display:inline-block;
 }
 
+.heading--white {
+  color: white;
+}
+
 #topbar h1 {
   font-size: 2rem;
 }
@@ -113,12 +117,10 @@ body {
 }
 
 #timeline {
-    overflow: auto;
     margin-bottom: 30px;
     padding: 20px 40px;
     padding-top: 0;
 }
-
 
 .timeline-item {
     padding: 10px;
@@ -164,6 +166,8 @@ body {
 }
 
 .timeline-item--read-more {
+  position: relative;
+  display: inline-block;
   margin: -.5rem 0 0 0;
 }
   .timeline-item--read-more a {
@@ -246,14 +250,14 @@ body {
     padding-right: 40px;
 }
 
-.repo-select {
+.repo-select,
+.timeline-item--read-more {
     position: relative;
 }
 
-    .repo-select ul {
+    .repo-select ul,
+    .timeline-item--event-controls {
         position: absolute;
-        right: 5px;
-        top:-20px;
         background: #fff;
         border: 1px solid #ddd;
         z-index: 1;
@@ -264,7 +268,13 @@ body {
         min-height:30px;
     }
 
-        .repo-select ul:after {
+    .repo-select ul {
+      right: 5px;
+      top:-20px;
+    }
+
+        .repo-select ul:after,
+        .timeline-item--event-controls--tip {
             content: '';
             display: block;
             position: absolute;
@@ -279,7 +289,8 @@ body {
             border-left: 1px solid #ddd;
         }
 
-    .repo-select ul li {
+    .repo-select ul li,
+    .timeline-item--event-controls li {
         list-style: none;
         font-size: 1.2rem;
         padding: .5rem 1rem;
@@ -521,6 +532,59 @@ body {
   border-bottom: 1px solid #333;
 }
 
+.timeline-item--event-controls {
+  display: inline-block;
+  bottom: -65px;
+  left: 1px;
+  margin:0;
+  opacity:0;
+  pointer-events: none;
+  border-radius: 3px;
+  width: 230px;
+}
+
+  .timeline-item--event-controls li {
+    padding: 0;
+  }
+
+  .timeline-item--event-controls a {
+    display: block;
+    font-size: .9rem;
+    padding: .25rem .5rem;
+    text-align: center;
+  }
+
+  .timeline-item--event-controls a:hover {
+    background: #ddd;
+  }
+
+  .timeline-item--event-controls li:first-child:hover ~ .timeline-item--event-controls--tip {
+    background: #ddd;
+  }
+
+  .timeline-item--read-more img {
+    visibility: hidden;
+  }
+
+  .timeline-item:hover .timeline-item--read-more img {
+    visibility: visible;
+  }
+
+  .timeline-item--read-more:hover .timeline-item--event-controls {
+    opacity: 1;
+    bottom: -65px;
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    transition-duration: .3s;
+    pointer-events: auto;
+  }
+
+  .timeline-item--event-controls--tip {
+    top: -.5rem;
+    left: 3px;
+    z-index:-1;
+  }
+
 .tooltip-template img {
     max-width: 64px;
 }
@@ -573,3 +637,26 @@ body {
     opacity: 0.4;
     margin-left: 0.5rem;
 }
+
+.js-handler--timeline-filters {
+  padding: 0;
+  margin: 0;
+}
+
+.timeline-filter--item {
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: .5rem;
+  margin: .5rem 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+  .timeline-filter--item:hover {
+    background: #444;
+  }
+
+  .timeline-filter--item:hover:after {
+    content: "\00d7";
+    margin: 0 .5rem;
+  }

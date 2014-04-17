@@ -48,8 +48,17 @@
 
     <div class="small-12 large-12 columns" id="tab-container">
         <div class="tab" id="tab-timeline">
-            <div id="timeline" class="large-centered">
-                <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+            <div class="row">
+                <div class="small-12 large-10 columns">
+                    <div id="timeline" class="large-centered">
+                        <div class="timeline-item loading" id="timeline-loading">Loading more events</div>
+                    </div>
+                </div>
+                <div class="small-0 large-2 columns">
+                    <h4 class="heading--white">Filters</h4>
+                    <ul class="js-handler--timeline-filters">
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -119,7 +128,7 @@
 </div>
 
 <script id="timeline-item-template" type="text/x-handlebars-template">
-    <div class="timeline-item row">
+    <div class="timeline-item row" data-event="{{ type }}">
         {{#if avatar }}
         <div class="small-2 columns position-relative">
           <img src="{{ avatar }}" class="timeline-item--avatar">
@@ -182,6 +191,14 @@
               <a href="{{ link }}">Read more</a>
             </p>
             {{/if}}
+            <div class="timeline-item--read-more">
+              <img src="/imgs/eye.svg">
+              <ul class="timeline-item--event-controls">
+                <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{parseEventType type }}</a></li>
+                <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{parseEventType type }}</a></li>
+                <li class="timeline-item--event-controls--tip"></li>
+              </ul>
+            </div>
         </div>
         <div class="small-2 columns text-right timeline-aside">
             <p class="timestamp muted">{{ timestamp }}</p>
@@ -198,7 +215,7 @@
 </script>
 
 <script id="timeline-item-basic" type="text/x-handlebars-template">
-  <div class="timeline-item row">
+  <div class="timeline-item row" data-event="{{ type }}">
     <div class="small-2 columns text-centered">
       <img src="/imgs/{{ img }}.svg" alt="{{ action }}" />
     </div>
@@ -207,6 +224,14 @@
       {{#with username}}
         <a href="{{ url }}">{{ username }}</a>
       {{/with}} {{ action }} {{{ object }}}</p>
+      <div class="timeline-item--read-more">
+        <img src="/imgs/eye.svg">
+        <ul class="timeline-item--event-controls">
+          <li><a data-event="{{ type }}" class="js-handler--mute-all" href="#">View only {{parseEventType type }}</a></li>
+          <li><a data-event="{{ type }}" class="js-handler--mute-event" href="#">Mute all {{parseEventType type }}</a></li>
+          <li class="timeline-item--event-controls--tip"></li>
+        </ul>
+      </div>
     </div>
     <div class="small-2 columns text-right">
         <p class="timestamp muted">{{ timestamp }}</p>
@@ -345,6 +370,15 @@
     <br/>
     <p class="text-center graph-subtitle">No milestones</p>
 {{/unless}}
+</script>
+
+<script id="timeline-filter-item" type="text/x-handlebars-template">
+    <li class="timeline-filter--item" title="click to remove">
+        {{ name }}
+        {{#if exclusive}}
+            <img src="/imgs/eye.svg">
+        {{/if}}
+    </li>
 </script>
 
 <script src="/js/jquery.js"></script>
