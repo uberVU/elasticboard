@@ -4,7 +4,9 @@ import datetime
 from es import ES, ES_NODE
 from elasticutils import S as _S, F
 
-class S(_S):
+
+# custom wrapper so we can have different ES host and port
+class CustomS(_S):
     def __call__(self):
         return _S().es(urls=['http://%s:%d' % (ES_NODE['host'], ES_NODE['port'])])
 
@@ -15,6 +17,9 @@ class S(_S):
         if not self.count():
             return self
         return _S.order_by(self, *args, **kwargs)
+
+# keep API names
+S = CustomS()
 
 # for queries where it makes sense
 LIMIT = 20
