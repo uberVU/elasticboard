@@ -4,6 +4,7 @@ import requests
 import queries
 import time
 
+from es import CONFIG
 from utils import crossdomain
 from flask import Flask, jsonify, request
 from werkzeug.contrib.cache import MemcachedCache
@@ -203,8 +204,8 @@ def add_temporary_river():
         'created_at': time.time()
     }
 
-    if 'demo_authentication' in queries.CONFIG:
-        body['github']['authentication'] = queries.CONFIG['demo_authentication']
+    if 'demo_authentication' in CONFIG:
+        body['github']['authentication'] = CONFIG['demo_authentication']
 
     index_name = '%s&%s' % (owner, repository)
 
