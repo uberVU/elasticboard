@@ -235,5 +235,13 @@ def issue_distribution(owner, repo):
     data = queries.issue_distribution(index)
     return jsonify(data=data)
 
+@app.route('/<owner>/<repo>/active_issues')
+@crossdomain(origin='*')
+@cached()
+def active_issues(owner, repo):
+    index = index_name(owner, repo)
+    data = queries.active_issues(index)
+    return jsonify(data=data)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
