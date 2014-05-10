@@ -352,6 +352,103 @@
             }
         });
 
+        App.Insights.IssueDistribution = Backbone.View.extend({
+            $el: $('#issue-distribution'),
+            endpoint: '/issue_distribution',
+            userData: [],
+            drilldownData: [],
+            initialize: function() {
+                var url = App.BASE + this.endpoint;
+                var parseIssues = this.parseIssues.bind(this);
+                var renderCharts = this.renderCharts.bind(this);
+                $.get(url)
+                    .success(parseIssues)
+                    .fail(displayFailMessage)
+                    .done(renderCharts);
+            },
+            parseIssues: function(data) {
+                var usernames = Object.keys(data.data);
+                var now = new Date();
+                now = moment([now.getFullYear(), now.getMonth(), now.getDay()]);
+                var total = usernames.map(function(user) {
+                    return data.data[user].issues.length;
+                }).reduce(function(issueCount, t) {
+                    return issueCount + t;
+                }, 0);
+                var userData = usernames.map(function(user) {
+                    return {
+                        drilldown: user,
+                        name: user,
+                        y: data.data[user].issues.length * 100 / total
+                    };
+                });
+                var drilldownData = usernames.map(function(user) {
+                    return {
+                        data: data.data[user].issues.map(function(issue) {
+                            var dateCreated = new Date(issue.created_at);
+                            dateCreated = moment([dateCreated.getFullYear(), dateCreated.getMonth(), dateCreated.getDay()]);
+                            return [issue.title, now.diff(dateCreated) / (1000 * 60 * 60 * 24) ];
+                        }).slice(0, 5),
+                        id: user,
+                        name: user
+                    };
+                });
+                console.log(drilldownData);
+                this.userData = userData;
+                this.drilldownData = drilldownData;
+            },
+            renderCharts: function() {
+                var userData = this.userData;
+                var drilldownData = this.drilldownData;
+                console.log(userData, drilldownData);
+                $('#issue-distribution').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Issue distribution'
+                    },
+                    subtitle: {
+                        text: 'Click the columns to view.'
+                    },
+                    xAxis: {
+                        type: 'category'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Total issues'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            borderWidth: 0,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y:.1f}%'
+                            }
+                        }
+                    },
+
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                    },
+
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: userData
+                    }],
+                    drilldown: {
+                        series: drilldownData
+                    }
+                });
+            }
+        });
+
         App.Insights.nonMergeablePullRequests = Backbone.View.extend({
             el: $('#non-mergeable-pull-requests'),
 
@@ -460,6 +557,8 @@
                     title: "Unassigned Issues"
                 });
             });
+
+            var issueDistribution = new App.Insights.IssueDistribution();
 
             window.widgets = {
                 issueInvolvement: new App.Insights.IssueInvolvement(),
